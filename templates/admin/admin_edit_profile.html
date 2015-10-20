@@ -1,0 +1,28 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% block title %}
+    Edit Profile
+{% endblock %}
+{% block content_header %}
+    <div class="col-lg-5 col-lg-offset-3">
+        <span class="text-blue">Edit Profile</span>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-5 col-lg-offset-3">
+            <form action="" method="post" class="form-group">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group {% if field.errors %} has-error {% endif %} has-feedback">
+                        <span class="text-success">{{ field.name }}</span>
+                        <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}"
+                               class="form-control" placeholder="{{ field.name }}" value="{{ field.value }}">
+                        <span class="help-block">{{ field.errors }}</span>
+                    </div>
+                {% endfor %}
+                <button role="button" type="submit" class="btn btn-info">Edit</button>
+                <a href="{% url 'admin:admin_detail_profile' user.id %}" role="button" class="btn btn-danger">Cancel</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'admin/layout/base_admin.html' %}
+
+{% block header %}
+    header
+{% endblock %}
+{% block main-sidebar %}{% endblock %}
+{% block content %}
+    <div class="login-box">
+        <div class="login-logo ">
+            <a href=""><b>Book Review System</b></a>
+        </div>
+        <div class="login-box-body ">
+            <p class="login-box-msg ">Login And Manager</p>
+            <div class="row">
+                <div class="col-sm-offset-1">
+                    <form action="{% url 'admin:admin_login' %}" method="post" role="form" class="form-inline">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group {% if field.errors %} has-error {% endif %} has-feedback">
+                                <span class="text-success">{{ field.name }}</span>
+                                <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}"
+                                       class="form-control"
+                                       placeholder="{{ field.name }}">
+                                <span class="help-block">{{ field.errors }}</span>
+                            </div>
+                        {% endfor %}
+{#                        <p><input type="hidden" name="next" value="{{ request.GET.next|default:'' }}"></p>#}
+
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-offset-2">
+                        <button type="submit" class="btn btn-primary ">Sign In</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

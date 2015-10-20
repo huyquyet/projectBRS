@@ -1,0 +1,19 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% block title %}
+    Profile admin
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-5 col-lg-offset-3">
+            <p><h4><span class="text-info"> ID : {{ user.pk }}</span></h4></p>
+
+            <p><h4><span class="text-info"> Username : {{ user.username }}</span></h4></p>
+
+            <p><h4><span class="text-info"> Full name : {{ user.first_name }} {{ user.last_name }}</span></h4></p>
+
+            <p><h4><span class="text-info"> Email : {{ user.email }}</span></h4></p>
+            <a href="{%  url 'admin:admin_edit_profile' user.id %}" role="button" class="btn btn-info">Edit</a>
+            <a href="{% url 'admin:admin_index' %}" role="button" class="btn btn-danger">Cancel</a>
+        </div>
+    </div>
+{% endblock %}
