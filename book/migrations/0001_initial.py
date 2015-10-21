@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             name='Book',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
-                ('slug', models.SlugField(max_length=500)),
+                ('slug', models.SlugField(max_length=200)),
                 ('title', models.TextField()),
                 ('cover', models.ImageField(default='', upload_to='books', max_length=255)),
                 ('description', models.TextField(blank=True, default='')),
