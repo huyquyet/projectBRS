@@ -184,7 +184,7 @@
                                            class="btn btn-default btn-flat">Profile</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="{% url 'admin:admin_logout'  %}" class="btn btn-default btn-flat">Sign
+                                        <a href="{% url 'admin:admin_logout' %}" class="btn btn-default btn-flat">Sign
                                             out</a>
                                     </div>
                                 </li>
@@ -235,12 +235,12 @@
                 <ul class="sidebar-menu">
                     <li class="header">MANAGE</li>
                     <!-- Optionally, you can add icons to the links -->
-                    <li class="active"><a href="#"><i class="fa fa-link"></i>
-                        <span>Course</span></a></li>
-                    <li class="active"><a href="#"><i class="fa fa-link"></i>
-                        <span>Lesson</span></a></li>
-                    <li class="active"><a href="#"><i class="fa fa-link"></i>
-                        <span>Word</span></a></li>
+                    <li class="active">
+                        <a href="{% url 'admin:admin_category_index' %}"><i class="fa fa-link"></i> <span>Category</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'admin:admin_book_index' %}"><i class="fa fa-link"></i> <span>Book</span></a>
+                    </li>
                     <li class="treeview">
                         <a href="#"><i class="fa fa-link"></i> <span>User</span>
                             <i
@@ -249,6 +249,9 @@
                             <li><a href="#">User</a></li>
                             <li><a href="#">Manager</a></li>
                         </ul>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'admin:admin_category_index' %}"><i class="fa fa-link"></i> <span>Request Book</span></a>
                     </li>
                 </ul>
                 <!-- /.sidebar-menu -->
@@ -294,5 +297,7 @@
 
     <div class="control-sidebar-bg"></div>
 </div>
+{% block js %}
+{% endblock %}
 </body>
 </html>

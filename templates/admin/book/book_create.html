@@ -1,0 +1,51 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% load staticfiles %}
+{% block title %}
+    Create Book
+{% endblock %}
+{% block content_header %}
+    <div class="col-lg-5 col-lg-offset-3">
+        <span class="text-blue">Create Book</span>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-4 col-lg-offset-3">
+            <form action="" method="post" class="form-group" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div style=""></div>
+                {{ form.as_ul }}
+                {#                {% for field in form %}#}
+                {#                    <div class="form-group {% if field.errors %} has-error {% endif %} has-feedback">#}
+                {#                        <span class="text-success">{{ field.name }}</span>#}
+                {#                        <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="form-control" placeholder="{{ field.name }}">#}
+                {#                        <span class="help-block">{{ field.errors }}</span>#}
+                {#                    </div>#}
+                {##}
+                {#                {% endfor %}#}
+                <button role="button" type="submit" class="btn btn-info">Create</button>
+                <a href="{% url 'admin:admin_book_index' %}" role="button" class="btn btn-danger">Cancel</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $("#id_title").keyup(function () {
+            var str = $(this).val();
+            str = str.toLowerCase();
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+            str = str.replace(/đ/g, "d");
+            str = str.replace(/!|@|\$|%|\^|\*|\(|\)|\+|\=|\&lt;|\&gt;|\?|\/|,|\.|\:|\'| |\"|\&amp;|\#|\[|\]|~/g, "-");
+            str = str.replace(/-+-/g, "-"); //thay thế 2- thành 1-
+            str = str.replace(/^\-+|\-+$/g, "");//cắt bỏ ký tự - ở đầu và cuối chuỗi
+            str = str.replace(/[^a-zA-Z0-9]+/g, '-');
+            $("#id_slug").val(str);
+        });
+    </script>
+{% endblock %}

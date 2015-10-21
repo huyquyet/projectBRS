@@ -1,0 +1,52 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% load staticfiles %}
+{% block title %}
+    Edit Category
+{% endblock %}
+{% block content_header %}
+    <div class="col-lg-5 col-lg-offset-3">
+        <span class="text-blue">Edit Category</span>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-5 col-lg-offset-3">
+            <form action="" method="post" class="form-group">
+                {% csrf_token %}
+                <div class="form-group {% if form.name.errors %} has-error {% endif %} has-feedback">
+                    <span class="text-success">{{ form.name.name }}</span>
+                    <input id="id_name" type="{{ form.name.field.widget.input_type }}" name="{{ form.name.name }}" class="form-control" placeholder="{{ form.name.name }}"
+                           value="{{ form.name.value }}">
+                    <span class="help-block">{{ form.name.errors }}</span>
+                </div>
+                <div class="form-group {% if form.slug.errors %} has-error {% endif %} has-feedback">
+                    <span class="text-success">{{ form.slug.name }}</span>
+                    <input id="id_slug" type="{{ form.name.field.widget.input_type }}" name="{{ form.slug.name }}" class="form-control" placeholder="{{ form.slug.name }}" value="{{ form.slug.value }}">
+                    <span class="help-block">{{ form.slug.errors }}</span>
+                </div>
+                <button role="button" type="submit" class="btn btn-info">Edit</button>
+                <a href="{% url 'admin:admin_category_index' %}" role="button" class="btn btn-danger">Cancel</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $("#id_name").keyup(function () {
+            var str = $(this).val();
+            str = str.toLowerCase();
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+            str = str.replace(/đ/g, "d");
+            str = str.replace(/!|@|\$|%|\^|\*|\(|\)|\+|\=|\&lt;|\&gt;|\?|\/|,|\.|\:|\'| |\"|\&amp;|\#|\[|\]|~/g, "-");
+            str = str.replace(/-+-/g, "-"); //thay thế 2- thành 1-
+            str = str.replace(/^\-+|\-+$/g, "");//cắt bỏ ký tự - ở đầu và cuối chuỗi
+            str = str.replace(/[^a-zA-Z0-9]+/g, '-');
+            $("#id_slug").val(str);
+        });
+    </script>
+{% endblock %}

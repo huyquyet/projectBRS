@@ -1,0 +1,74 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% block title %}
+    Book Index
+{% endblock %}
+{% block content_header %}
+    <div class="col-lg-5 col-lg-offset-3">
+        <span class="text-blue">Book Index</span>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th class="col-lg-1">ID</th>
+                <th class="col-lg-3">Title</th>
+                <th class="col-lg-1">Category</th>
+                <th class="col-lg-2">Author</th>
+                <th class="col-lg-2">Publish</th>
+                <th class="col-lg-1">page</th>
+                <th class="col-lg-1">Price</th>
+                <th class="col-lg-1"><a href="{% url 'admin:admin_book_create' %}" role="button"
+                                        class="btn btn-danger btn-sm">Create New</a></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in page_obj %}
+                <tr>
+                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.id }}</a>
+                    </td>
+                    <td class="col-lg-3"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.title }}</a>
+                    </td>
+                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.category }}</a>
+                    </td>
+                    <td class="col-lg-2"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.author }}</a>
+                    </td>
+                    <td class="col-lg-2"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.publish }}</a>
+                    </td>
+                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.page }}</a>
+                    </td>
+                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.price }}</a>
+                    </td>
+                    <td class="col-lg-1">
+                        <a href="{% url 'admin:admin_book_edit' obj.slug %}" class="btn btn-success btn-xs no-margin" role="button">Edit</a>
+
+                        <form action="#" method="post"
+                              style="float: right;">
+                            {% csrf_token %}
+                            <input type="hidden" name="id_course" value="{{ obj.slug }}">
+                            <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want remover user ?')"> Delete</button>
+                        </form>
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination">
+                <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                    <span class="current">
+                    Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+                </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    {% endif %}
+                </span>
+        </div>
+    </div>
+{% endblock %}

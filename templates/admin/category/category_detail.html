@@ -1,0 +1,35 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% block title %}
+    Detial Category
+{% endblock %}
+{% block content_header %}
+    <div class="col-lg-5 col-lg-offset-3">
+        <span class="text-blue">Detial Category</span>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-7 col-lg-offset-3">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Name category</label>
+                </div>
+                <div class="col-sm-5">
+                    <input id="id_name" type="text" name="{{ object.slug }}" class="form-control " placeholder="{{ object.slug }}" value="{{ object.slug }}" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Slug category</label>
+                </div>
+                <div class="col-sm-5">
+                    <input id="id_name" type="text" name="{{ object.slug }}" class="form-control" placeholder="{{ object.slug }}" value="{{ object.slug }}" disabled>
+                </div>
+
+
+            </div>
+            <a role="button" href="{% url 'admin:admin_category_edit' object.slug %}" class="btn btn-info">Edit</a>
+            <a href="{% url 'admin:admin_category_index' %}" role="button" class="btn btn-danger">Cancel</a>
+        </div>
+    </div>
+{% endblock %}

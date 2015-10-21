@@ -15,6 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 
+from projectBRS import settings
+
 urlpatterns = [
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': settings.DEBUG}),
     url(r'^admin/', include('admin.urls', namespace='admin')),
+    url(r'^/', include('user.urls', namespace='user')),
+    # url(r'^category/', include('category.urls', namespace='category')),
+    # url(r'^book/', include('book.urls', namespace='book')),
 ]

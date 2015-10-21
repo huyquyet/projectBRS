@@ -8,6 +8,8 @@ from projectBRS import settings
 
 
 
+
+
 # Create your models here.
 from user.models import UserProfile
 
@@ -16,7 +18,7 @@ class Book(models.Model):
     title = models.TextField()
     slug = models.SlugField(max_length=200)
     category = models.ForeignKey(Category, related_name='book')
-    cover = models.ImageField(upload_to=settings.BOOK_DIR, max_length=255, default='', blank=False)
+    cover = models.ImageField(upload_to=settings.BOOK_DIR, max_length=255, default='', blank =False)
     description = models.TextField(blank=True, default='')
     author = models.TextField()
     publish = models.TextField()

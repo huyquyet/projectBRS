@@ -1,0 +1,56 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% load staticfiles %}
+{% block title %}
+    Detail Book
+{% endblock %}
+{% block content_header %}
+    <div class="col-lg-9 col-lg-offset-1">
+        <legend>
+            <span class="text-blue">Detail Book</span>
+        </legend>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-9 col-lg-offset-1 bg-gray-light">
+            <div class="row">
+                <div class="col-lg-2">
+                    <img src="{{ object.cover.url }}" class="" alt="{{ object.title }}" width="100%"/>
+                </div>
+                <div class="col-lg-6">
+                    <div><span class="text-success text-bold "><h3>{{ object.title }}</h3></span></div>
+                    <div>
+                        <h4> Category : <a href="{% url 'admin:admin_category_detail' object.slug_category %}"> {{ object.category }}</a></h4>
+                    </div>
+                    <div>
+                        Author : <span class=" text-danger">{{ object.author }}</span>&nbsp;&nbsp;
+                        Publish by : <span class=" text-danger">{{ object.publish }}</span>
+                    </div>
+                    <div>
+                        <span class="text-success">{{ object.point_rating }}</span>
+                        <span class="text-danger">point</span> -
+                        <span class="text-success">{{ object.rating }}</span>
+                        <span class="text-danger">rating</span> -
+                        <span class="text-success">{{ object.review }}</span>
+                        <span class="text-danger">review </span> ------
+                        <span class="text-danger">Page : </span>
+                        <span class="text-success">{{ object.page }}</span>&nbsp;&nbsp;
+                        <span class="text-danger">Price : </span>
+                        <span class="text-success">{{ object.price }} $</span>
+                    </div>
+                    <div>
+                        {{ object.description }}
+                    </div>
+                    <div>
+                        <h1>chua lam phan review</h1>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <a role="button" href="{% url 'admin:admin_book_edit' object.slug %}" class="btn btn-info">Edit</a>
+                    <a href="{% url 'admin:admin_book_index' %}" role="button" class="btn btn-danger">Back</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

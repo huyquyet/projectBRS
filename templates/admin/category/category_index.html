@@ -1,0 +1,65 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% block title %}
+    Category Index
+{% endblock %}
+{% block content_header %}
+    <div class="col-lg-5 col-lg-offset-3">
+        <span class="text-blue">Create Category</span>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th class="col-lg-1">ID</th>
+                <th class="col-lg-3">Name</th>
+                <th class="col-lg-6">Slug</th>
+                <th class="col-lg-1"><a href="{% url 'admin:admin_category_create' %}" role="button"
+                                        class="btn btn-danger btn-sm">Create New</a></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in page_obj %}
+                <tr>
+                    <td class="col-lg-1"><a class=" text-info"
+                                            href="{% url 'admin:admin_category_detail' obj.slug %}">{{ obj.id }}</a>
+                    </td>
+                    <td class="col-lg-4"><a class=" text-info"
+                                            href="{% url 'admin:admin_category_detail' obj.slug %}">{{ obj.name }}</a>
+                    </td>
+                    <td class="col-lg-6"><a class=" text-info"
+                                            href="{% url 'admin:admin_category_detail' obj.slug %}">{{ obj.slug }}</a>
+                    </td>
+                    <td class="col-lg-1">
+                        <a  href="#" class="btn btn-success btn-xs no-margin" role="button">Edit</a>
+
+                        <form action="#" method="post"
+                              style="float: right;">
+                            {% csrf_token %}
+                            <input type="hidden" name="id_course" value="{{ obj.slug }}">
+                            <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want remover user ?')"> Delete</button>
+                        </form>
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination">
+                <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                    <span class="current">
+                    Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+                </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    {% endif %}
+                </span>
+        </div>
+    </div>
+{% endblock %}
