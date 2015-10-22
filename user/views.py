@@ -1,25 +1,23 @@
 # Create your views here.
 from django.contrib import auth
-
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
-
 from django.views.generic import TemplateView, FormView, View, UpdateView
 
-from book.models import Book
 from user.models import UserProfile
 
 
 class UserIndex(TemplateView):
-    model = Book
-    template_name = ''
+    # model = Book
+    # template_name = 'user/user_index.html'
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(reverse('book:book_index'))
 
 
 UserIndexView = UserIndex.as_view()
@@ -72,9 +70,8 @@ UserRegisterView = UserRegister.as_view()
 
 
 class UserEditProfile(UpdateView):
-    model = UserProfile
+    model = User
     template_name = 'user/user_edit_profile.html'
-
     fields = ['first_name', 'last_name', 'email']
 
     @method_decorator(login_required)
@@ -85,7 +82,7 @@ class UserEditProfile(UpdateView):
         return super(UserEditProfile, self).dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
-        self.object = User.objes.get(username=self.kwargs['username'])
+        self.object = User.objects.get(username=self.kwargs['username'])
         return self.object
 
     def get_success_url(self):
