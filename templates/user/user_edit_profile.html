@@ -1,0 +1,32 @@
+{% extends 'user/layout/base_user.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-6 col-lg-offset-3">
+            <div class="login-box-body">
+                <div class="login-logo">
+                    <a href="#"><b>Book Review System</b></a>
+                </div>
+                <p class="login-box-msg">Register User</p>
+
+                <div class="row">
+                    <div class="col-lg-6 ">
+                        <form action="{% url 'user:user_edit_profile' object.username %}" method="post" role="form" class="form-inline">
+                            {% csrf_token %}
+                            {% for field in form %}
+                                <div class="form-group {% if field.errors %} has-error {% endif %} has-feedback">
+                                    <span class="text-success">{{ field.name }}</span>
+                                    <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="form-control" placeholder="{{ field.name }}" value="{{ field.value }}">
+                                    <span class="help-block">{{ field.errors }}</span>
+                                </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary ">Update</button>
+                            <button type="reset" class="btn btn-default">Reset</button>
+                            <a href="{%  url 'user:user_index' %}" role="button" class="btn btn-default">Cancel</a>
+                        </form>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

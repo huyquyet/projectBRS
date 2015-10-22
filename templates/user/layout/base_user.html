@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'user/style_user.css' %}"/>
+    {#    <!--<script rel="stylesheet"  href="{% static 'bootstrap/js/bootstrap.min.js' %}"/></script>-->#}
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    {#    <link rel="stylesheet" href="{% static 'admin/dist/css/AdminLTE.min.css' %}">#}
+    {#    <link rel="stylesheet" href="{% static 'admin/dist/css/skins/skin-blue.min.css' %}">#}
+    <!-- Theme style -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %} Trang index {% endblock %}</title>
+</head>
+<body>
+<div class="container-fluid ">
+    <div class="row">
+        <header>
+            <div id="site_header">
+                <div class="mainContent">
+                    {#                    <div class="hold-transition skin-blue sidebar-mini">#}
+                    <div class="col-lg-2">
+                        <img src="{% static 'user/image/logo.png' %}" class="thumbnail" width="90%" height="47px;">
+                    </div>
+                    <div class="col-lg-7">
+                        <nav class="navbar navbar-static-top">
+                            {#                                role="navigation"#}
+                            <ul class=" nav navbar-nav" style="float: right;">
+                                <li><h4>Home &nbsp;&nbsp;&nbsp;</h4></li>
+                                <li><h4>Book &nbsp;&nbsp;&nbsp;</h4></li>
+                                <li><h4>Category &nbsp;&nbsp;&nbsp;</h4></li>
+                                <li><h4>Follow &nbsp;&nbsp;&nbsp;</h4></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col-lg-3">
+                        {% if user.is_authenticated %}
+                            <nav class="navbar navbar-static-top" role="navigation">
+                                <div id="navbar" class="navbar-collapse collapse">
+                                    <ul class="nav navbar-nav">
+                                        <li class="dropdown">
+                                            <!-- Menu Toggle Button -->
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                <span>{{ user.first_name }} {{ user.last_name }}</span><span class="caret"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>dsklfklsdflkd</li>
+                                                <li>dsklfklsdflkd</li>
+                                                <li>dsklfklsdflkd</li>
+                                                <li>dsklfklsdflkd</li>
+
+                                            </ul>
+                                        </li>
+                                        <!-- Control Sidebar Toggle Button -->
+                                    </ul>
+                                </div>
+                            </nav>
+                        {% else %}
+                            <h5><a href="{% url 'user:user_register' %}" class="text-danger ">Register</a> &nbsp;&nbsp;&nbsp;<a href="{% url 'user:user_login' %}" class="text-success">Sign in</a></h5>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="col-lg-12 brs-content">
+            <section>
+                {% block content %}
+
+                {% endblock %}
+            </section>
+            <footer>
+                {% include  'user/layout/footer_user.html' %}
+            </footer>
+        </div>
+    </div>
+    {% block is %}{% endblock %}
+</div>
+</body>
+</html>
