@@ -22,5 +22,5 @@ urlpatterns = [
     url(r'^admin/', include('admin.urls', namespace='admin')),
     url(r'^user/', include('user.urls', namespace='user')),
     # url(r'^category/', include('category.urls', namespace='category')),
-    # url(r'^book/', include('book.urls', namespace='book')),
+    url(r'^book/', include('book.urls', namespace='book')),
 ]

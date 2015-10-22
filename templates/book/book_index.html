@@ -1,0 +1,60 @@
+{% extends 'user/layout/base_user.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="row" style="background-color: #F7F7F7; padding-top: 5px;">
+                {% for obj in page_obj %}
+                    <div class=" col-lg-3 ">
+                        <div class="thumbnail" style="height: 450px;">
+                            <img src="{{ obj.cover.url }}" width="200" height="auto">
+
+                            <div class="caption">
+                                <div>
+                                    {#                                        <h4 class="pull-right">$24.99</h4>#}
+                                    <h5><a href="{% url 'book:book_detail' obj.slug %}">{{ obj.title| truncatewords:10 }}</a></h5>
+
+                                    <p>See more snippets like this online store item at <a target="_blank" href="http://www.bootsnipp.com">Bootsnipp - http://bootsnipp.com</a>.</p>
+                                </div>
+                            </div>
+                            <div class="ratings">
+                                <p class="pull-right">15 reviews</p>
+
+                                <p>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="row">
+                <div class="col-lg-offset-3">
+                    <div class="pagination">
+                <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-default">Previous</a>
+                {% endif %}
+
+                    <span class="current">
+                    Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+                </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-default">Next</a>
+                    {% endif %}
+                </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-3">
+            pha chung chua lam
+        </div>
+    </div>
+{% endblock %}

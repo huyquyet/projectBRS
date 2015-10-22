@@ -3,9 +3,9 @@ body, ol, ul, td, th {
     margin: 0px;
 }
 
-body {
-    color: #181818;
-}
+/*body {*/
+    /*background-color: #CCC;*/
+/*}*/
 
 body, p, ol, ul, td, th {
     font-family: Georgia, "Times New Roman", serif;
@@ -14,7 +14,7 @@ body, p, ol, ul, td, th {
 }
 
 body {
-    background-color: #FFF;
+    background-color: #CCCCCC;
 }
 
 #site_header {
@@ -39,7 +39,7 @@ body {
     /*margin-right: auto;*/
     margin: 5px 300px;
     text-align: left;
-    background: beige;
+    /*background: beige;*/
 }
 
 

@@ -59,7 +59,11 @@ class UserRegister(FormView):
 
     def form_valid(self, form):
         form.instance.is_staff = False
-        form.save()
+
+        user = form.save()
+        user_profile = UserProfile.objects.create(user=user)
+        user_profile.save()
+        # user_profile.save()
         return super(UserRegister, self).form_valid(form)
 
     def get_success_url(self):

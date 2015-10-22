@@ -1,0 +1,112 @@
+{% extends 'user/layout/base_user.html' %}
+{% block content %}
+    <div class="row" style="padding-top: 5px;background-color: #FFFFFF;">
+        {#        <div class="col-lg-9 col-lg-offset-1 bg-gray-light">#}
+        {#            <div class="row">#}
+        <div class="col-lg-9 thumbnail" style="padding-bottom: 10px;">
+            <div class="col-lg-4 ">
+                <img src="{{ object.cover.url }}" class="" alt="{{ object.title }}" width="100%"/>
+
+                <form action="{% url 'book:book_rating' %}" method="post" id="rating-form-1" style="margin: 5px 0 0 10px;float: left;">
+                    {% csrf_token %}
+                    <a href="#" class="btn-lg" style="padding: 0;" onclick="document.forms['rating-form-1'].submit();return false;">
+                        {% if object.rate_book >= 1 %}
+                            <span class="glyphicon glyphicon-star" style="color: red">
+                        {% else %}
+                            <span class="glyphicon glyphicon-star-empty">
+                        {% endif %}
+                        </span></a>
+                    <input type="hidden" value="1" name="point_rating">
+                    <input type="hidden" value="{{ object.pk }}" name="book_id">
+                </form>
+                <form action="{% url 'book:book_rating' %}" method="post" id="rating-form-2" style="margin: 5px 0 0 10px;float: left;">
+                    {% csrf_token %}
+                    <a href="#" class="btn-lg" style="padding: 0;" onclick="document.forms['rating-form-2'].submit();return false;">
+                        {% if object.rate_book >= 2 %}
+                            <span class="glyphicon glyphicon-star" style="color: red">
+                        {% else %}
+                            <span class="glyphicon glyphicon-star-empty">
+                        {% endif %}
+                        </span></a>
+                    <input type="hidden" value="2" name="point_rating">
+                    <input type="hidden" value="{{ object.pk }}" name="book_id">
+                </form>
+
+                <form action="{% url 'book:book_rating' %}" method="post" id="rating-form-3" style="margin: 5px 0 0 10px;float: left;">
+                    {% csrf_token %}
+                    <a href="#" class="btn-lg" style="padding: 0;" onclick="document.forms['rating-form-3'].submit();return false;">
+                        {% if object.rate_book >= 3 %}
+                            <span class="glyphicon glyphicon-star" style="color: red">
+                        {% else %}
+                            <span class="glyphicon glyphicon-star-empty">
+                        {% endif %}
+                        </span></a>
+                    <input type="hidden" value="3" name="point_rating">
+                    <input type="hidden" value="{{ object.pk }}" name="book_id">
+                </form>
+
+                <form action="{% url 'book:book_rating' %}" method="post" id="rating-form-4" style="margin: 5px 0 0 10px;float: left;">
+                    {% csrf_token %}
+                    <a href="#" class="btn-lg" style="padding: 0;" onclick="document.forms['rating-form-4'].submit();return false;">
+                        {% if object.rate_book >= 4 %}
+                            <span class="glyphicon glyphicon-star" style="color: red">
+                        {% else %}
+                            <span class="glyphicon glyphicon-star-empty">
+                        {% endif %}
+                        </span></a>
+                    <input type="hidden" value="4" name="point_rating">
+                    <input type="hidden" value="{{ object.pk }}" name="book_id">
+                </form>
+
+                <form action="{% url 'book:book_rating' %}" method="post" id="rating-form-5" style="margin: 5px 0 0 10px;float: left;">
+                    {% csrf_token %}
+                    <a href="#" class="btn-lg" style="padding: 0;" onclick="document.forms['rating-form-5'].submit();return false;">
+                        {% if object.rate_book >= 5 %}
+                            <span class="glyphicon glyphicon-star" style="color: red">
+                        {% else %}
+                            <span class="glyphicon glyphicon-star-empty">
+                        {% endif %}
+                        </span></a>
+                    <input type="hidden" value="5" name="point_rating">
+                    <input type="hidden" value="{{ object.pk }}" name="book_id">
+                </form>
+            </div>
+            <div class="col-lg-8">
+                <div><span class="text-success text-bold "><h3>{{ object.title }}</h3></span></div>
+                <div>
+                    <h4> Category : <a href="#"> {{ object.category }}</a></h4>
+                </div>
+                <div>
+                    <h5>Author : <span class="text-danger">{{ object.author }}</span></h5>
+                    <h5>Publish date : {{ object.date|date:'d-m-Y' }} by <span class=" text-danger">{{ object.publish }}</span></h5>
+                </div>
+                <div>
+                    <span class="text-success">{{ object.point_rating }}</span>
+                    <span class="text-danger">point</span> -
+                    <span class="text-success">{{ object.rating }}</span>
+                    <span class="text-danger">rating</span> -
+                    <span class="text-success">{{ object.review }}</span>
+                    <span class="text-danger">review </span> ------
+                    <span class="text-danger">Page : </span>
+                    <span class="text-success">{{ object.page }}</span>&nbsp;&nbsp;
+                    <span class="text-danger">Price : </span>
+                    <span class="text-success">{{ object.price }} $</span>
+                </div>
+                <div>
+                    {{ object.description }}
+                </div>
+                <div>
+                    <h1>chua lam phan review</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3" style="background-color: black;">
+
+            Phan chung
+
+        </div>
+        {#            </div>#}
+        {#        </div>#}
+
+    </div>
+{% endblock %}
