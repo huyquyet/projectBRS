@@ -9,7 +9,7 @@ from user.models import UserProfile
 class Review(models.Model):
     book = models.ForeignKey(Book, related_name='review_book')
     user_profile = models.ForeignKey(UserProfile, related_name='review_user')
-    content = models.TextField()
+    content = models.TextField(default='')
     date = models.DateTimeField(default=timezone.now)
     like = models.ManyToManyField(UserProfile, related_name='like_review', through='LikeReview')
 
@@ -24,3 +24,4 @@ class LikeReview(models.Model):
     user_profile = models.ForeignKey(UserProfile, related_name='like_review_user')
     review = models.ForeignKey(Review, related_name='like_review')
     date = models.DateTimeField(default=timezone.now)
+

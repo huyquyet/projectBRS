@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView
 
 from book.models import Book, Rating, ReadReading, Favorite
+from review.models import Review
+from review.views import return_all_of_book
 
 """
 ------------------------------------------------------------------------------
@@ -37,10 +39,13 @@ class BookDetail(DetailView):
         ctx['object'].rate_book = return_rating_book(self.request.user, self.object)
         ctx['object'].read_book = return_read_book(self.request.user, self.object)
         ctx['favorite'] = return_favorite_book(self.request.user, self.object)
+        ctx['object'].review = return_number_review(self.object)
+        ctx['review_all_book'] = return_all_of_book(self.object)
         return ctx
 
-        # def post(self, request, *args, **kwargs):
-        #     return add_rating(request)
+    # def post(self, request, *args, **kwargs):
+    #     view = ReviewCreateView
+    #     return view(request, *args, **kwargs)
 
 
 BookDetailView = BookDetail.as_view()
@@ -168,3 +173,16 @@ def return_favorite_book(user, book):
             return False
     except:
         return False
+
+
+"""
+-----------------------------------------------------------------------------------
+
+Review book
+
+-----------------------------------------------------------------------------------
+"""
+
+
+def return_number_review(book):
+    return book.review_book.all().count()
