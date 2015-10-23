@@ -11,16 +11,18 @@
     }
 
 </style>
-<div class='mainContent'>
-    <div class="hold-transition skin-blue sidebar-mini">
+<div id="site_header">
+    <div class="mainContent">
+        {#                    <div class="hold-transition skin-blue sidebar-mini">#}
         <div class="col-lg-2">
             <img src="{% static 'user/image/logo.png' %}" class="thumbnail" width="90%" height="47px;">
         </div>
         <div class="col-lg-7">
-            <nav class="navbar navbar-static-top" role="navigation">
+            <nav class="navbar navbar-static-top">
+                {#                                role="navigation"#}
                 <ul class=" nav navbar-nav" style="float: right;">
-                    <li><h4>Home &nbsp;&nbsp;&nbsp;</h4></li>
-                    <li><h4>Book &nbsp;&nbsp;&nbsp;</h4></li>
+                    <li><h4> Home &nbsp;&nbsp;&nbsp;</h4></li>
+                    <li><h4><a href="{% url 'book:book_index' %}">Book</a> &nbsp;&nbsp;&nbsp;</h4></li>
                     <li><h4>Category &nbsp;&nbsp;&nbsp;</h4></li>
                     <li><h4>Follow &nbsp;&nbsp;&nbsp;</h4></li>
                 </ul>
@@ -28,90 +30,30 @@
         </div>
         <div class="col-lg-3">
             {% if user.is_authenticated %}
-                {#            <nav class="navbar navbar-static-top" role="navigation">#}
-                {#                <div class="navbar-custom-menu">#}
-                {#                    <ul class=" nav navbar-nav">#}
-                {#                        <li class="dropdown user user-menu">#}
-                {#                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">#}
-                {#                                <span class="hidden-xs"><h4>{{ user.first_name }} {{ user.last_name }}</h4></span>#}
-                {#                            </a>#}
-                {#                            <ul class="dropdown-menu">#}
-                {#                                <!-- The user image in the menu -->#}
-                {#                                <li class="user-header">#}
-                {#                                    <p>#}
-                {#                                        {{ user.first_name }} {{ user.last_name }}#}
-                {#                                    </p>#}
-                {#                                </li>#}
-                {##}
-                {#                                <li class="user-footer">#}
-                {#                                    <div class="pull-left">#}
-                {#                                        <a href="{% url 'admin:admin_detail_profile' user.id %}"#}
-                {#                                           class="btn btn-default btn-flat">Profile</a>#}
-                {#                                    </div>#}
-                {#                                    <div class="pull-right">#}
-                {#                                        <a href="{% url 'admin:admin_logout' %}" class="btn btn-default btn-flat">Sign#}
-                {#                                            out</a>#}
-                {#                                    </div>#}
-                {#                                </li>#}
-                {#                            </ul>#}
-                {#                        </li>#}
-                {#                    </ul>#}
-                {#                </div>#}
-                {#            </nav>#}
-                <div class="navbar-wrapper">
-                    {#                    <div class="container">#}
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <!-- Menu Toggle Button -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <span>{{ user.first_name }} {{ user.last_name }}</span><span class="caret"></span>
+                                    <a href="{% url 'user:user_logout' %}"> Singout</a>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>dsklfklsdflkd</li>
+                                    <li>dsklfklsdflkd</li>
+                                    <li>dsklfklsdflkd</li>
+                                    <li>dsklfklsdflkd</li>
 
-                    <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-                        {#                            <div class="container">#}
-                        <div id="navbar" class="navbar-collapse collapse">
-                            <ul class="nav navbar-nav">
-                                <li class="dropdown">
-                                    <!-- Menu Toggle Button -->
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <span>{{ user.first_name }} {{ user.last_name }}</span><span class="caret"></span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <!-- The user image in the menu -->
-                                        {#                                        <li class="user-header">#}
-                                        {#                                            <p>#}
-                                        {#                                                {{ user.first_name }} {{ user.last_name }}#}
-                                        {#                                                Web Developer#}
-                                        {#                                            </p>#}
-                                        {#                                        </li>#}
-                                        <li>dsklfklsdflkd</li>
-                                        <li>dsklfklsdflkd</li>
-                                        <li>dsklfklsdflkd</li>
-                                        <li>dsklfklsdflkd</li>
-
-                                        {#                                        <li class="user-footer">#}
-                                        {#                                            <div class="pull-left">#}
-                                        {#                                                <a href="#"#}
-                                        {#                                                   class="btn btn-default btn-sm">Profile</a>#}
-                                        {#                                            </div>#}
-                                        {#                                            <div class="pull-left" style="margin: 0 0 0 3px">#}
-                                        {#                                                <a href="#"#}
-                                        {#                                                   class="btn btn-default btn-sm">Word list</a>#}
-                                        {#                                            </div>#}
-                                        {#                                            <div class="pull-left" style="margin: 0 0 0 3px">#}
-                                        {#                                                <a href="#"#}
-                                        {#                                                   class="btn btn-default btn-sm">My exam</a>#}
-                                        {#                                            </div>#}
-                                        {#                                            <div class="pull-right">#}
-                                        {#                                                <a href="#" class="btn btn-default btn-sm">Sign#}
-                                        {#                                                    out</a>#}
-                                        {#                                            </div>#}
-                                        {#                                        </li>#}
-                                    </ul>
-                                </li>
-                                <!-- Control Sidebar Toggle Button -->
-                            </ul>
-                            {#                                </div>#}
-                        </div>
-                    </nav>
-                    {#                    </div>#}
-                </div>
+                                </ul>
+                            </li>
+{#                            <li><a href="{% url 'user:user_logout' %}"> Singout</a></li>#}
+                            <!-- Control Sidebar Toggle Button -->
+                        </ul>
+                    </div>
+                </nav>
             {% else %}
-                <h5><a href="#" class="text-danger ">Register</a> &nbsp;&nbsp;&nbsp;<a href="#" class="text-success">Sign in</a></h5>
+                <h5><a href="{% url 'user:user_register' %}" class="text-danger ">Register</a> &nbsp;&nbsp;&nbsp;<a href="{% url 'user:user_login' %}" class="text-success">Sign in</a></h5>
             {% endif %}
         </div>
     </div>

@@ -8,7 +8,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, FormView, View, UpdateView
+from django.views.generic import TemplateView, FormView, UpdateView
 
 from user.models import UserProfile
 
@@ -33,7 +33,7 @@ class UserLogin(FormView):
         return super(UserLogin, self).form_valid(form)
 
     def get_success_url(self):
-        link = self.request.POST.get('link', '')
+        link = self.request.POST.get('next', '')
         if link:
             return link
         else:
@@ -43,14 +43,16 @@ class UserLogin(FormView):
 UserLoginView = UserLogin.as_view()
 
 
-class UserLogout(View):
-    # @login_required()
-    def post(self, request, *args, **kwargs):
-        auth.logout(request)
-        return HttpResponseRedirect(reverse('user:user_index'))
+# class UserLogout(View):
+#     # @login_required()
+#     def post(self, request, *args, **kwargs):
+
+def UserLogoutView(request):
+    auth.logout(request)
+    return HttpResponseRedirect(reverse('user:user_index'))
 
 
-UserLogoutView = UserLogout.as_view()
+# UserLogoutView = UserLogout.as_view()
 
 
 class UserRegister(FormView):
