@@ -127,3 +127,10 @@ class UserChangePass(UpdateView):
 
 
 UserChangePassView = UserChangePass.as_view()
+
+
+class UserHomePage(TemplateView):
+    pass
+
+
+UserHomePageView = UserHomePage.as_view(0)

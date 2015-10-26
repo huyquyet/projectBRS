@@ -34,9 +34,9 @@ class BookIndex(BaseView, ListView):
     def get_queryset(self):
         search = self.request.GET.get('search', '')
         if search == '':
-            return Book.objects.filter()
+            return Book.objects.filter().order_by('-id')
         else:
-            return Book.objects.filter(title__contains=search)
+            return Book.objects.filter(title__contains=search).order_by('-id')
 
 
 BookIndexView = BookIndex.as_view()

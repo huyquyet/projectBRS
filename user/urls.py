@@ -16,6 +16,10 @@ urlpatterns = [
     url(r'^(?P<username>[\w-]+)/edit$', views.UserEditProfileView, name='user_edit_profile'),
     url(r'^(?P<username>[\w-]+)/change_pass$', views.UserChangePassView, name='user_change_pass'),
 
+    url(r'^home/(?P<username>[\w-]+)$', views.UserHomePageView, name='user_home_page'),
+    url(r'^home/(?P<username>[\w-]+)/follow$', views.UserHomePageView, name='user_follow'),
+    url(r'^home/(?P<username>[\w-]+)/un_follow$', views.UserHomePageView, name='user_un_follow'),
+    url(r'^home/(?P<username>[\w-]+)/book$', views.UserHomePageView, name='user_f_book'),
 
     # url(r'^(?P<username>[\w-]+)/follow$', views., name='user_manager_follow'),
 ]
