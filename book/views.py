@@ -4,8 +4,8 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView
 
+from base.views import BaseView
 from book.models import Book, Rating, ReadReading, Favorite
-from review.models import Review
 from review.views import return_all_of_book
 
 """
@@ -17,16 +17,30 @@ Book
 """
 
 
-class BookIndex(ListView):
+class BookIndex(BaseView, ListView):
     model = Book
     template_name = 'book/book_index.html'
     paginate_by = 12
 
+    def get_context_data(self, **kwargs):
+        ctx = super(BookIndex, self).get_context_data(**kwargs)
+        for i in ctx['page_obj']:
+            i.rate = i.get_rating_book()
+            i.count_review = i.review_book.all().count()
+        return ctx
 
-BookIndexView = BookIndex.as_view();
+    def get_queryset(self):
+        search = self.request.GET.get('search', '')
+        if search == '':
+            return Book.objects.filter()
+        else:
+            return Book.objects.filter(title__contains=search)
 
 
-class BookDetail(DetailView):
+BookIndexView = BookIndex.as_view()
+
+
+class BookDetail(BaseView, DetailView):
     model = Book
     template_name = 'book/book_detail.html'
 
@@ -41,11 +55,12 @@ class BookDetail(DetailView):
         ctx['favorite'] = return_favorite_book(self.request.user, self.object)
         ctx['object'].review = return_number_review(self.object)
         ctx['review_all_book'] = return_all_of_book(self.object)
+        # ctx['check_like_review'] = return_check_like_review(self.request.user, self.object)
         return ctx
 
-    # def post(self, request, *args, **kwargs):
-    #     view = ReviewCreateView
-    #     return view(request, *args, **kwargs)
+        # def post(self, request, *args, **kwargs):
+        #     view = ReviewCreateView
+        #     return view(request, *args, **kwargs)
 
 
 BookDetailView = BookDetail.as_view()

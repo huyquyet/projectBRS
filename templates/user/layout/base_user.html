@@ -11,6 +11,14 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
+    {#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>#}
+    {#    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>#}
+    <!-- jQuery 2.1.4 -->
+    <script src="{% static 'admin/plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src=" {% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static 'admin/dist/js/app.min.js' %}"></script>
     <!-- Theme style -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,16 +33,25 @@
 
         <div class="col-lg-12 brs-content">
             <section>
-                {% block content %}
+                <div class="col-lg-9">
+                    {% block content %}
 
-                {% endblock %}
+                    {% endblock %}
+                </div>
+                <div class="col-lg-3">
+
+                    {% include 'user/layout/base_user_right.html' %}
+                </div>
             </section>
             <footer>
                 {% include  'user/layout/footer_user.html' %}
             </footer>
         </div>
     </div>
-    {% block is %}{% endblock %}
+    {% block js %}
+
+
+    {% endblock %}
 </div>
 </body>
 </html>

@@ -1,40 +1,63 @@
 {% extends 'user/layout/base_user.html' %}
 {% block content %}
-    <div class="row">
-        <div class="col-lg-9">
-            <div class="row" style="background-color: #F7F7F7; padding-top: 5px;">
-                {% for obj in page_obj %}
-                    <div class=" col-lg-3 ">
-                        <div class="thumbnail" style="height: 470px;">
-                            <img src="{{ obj.cover.url }}" width="200" height="auto">
+    <div class="row" style="background-color: #F7F7F7; padding-top: 5px;">
+        {% for obj in page_obj %}
+            <div class=" col-lg-3 ">
+                <div class="thumbnail" style="height: 470px;">
+                    <a href="{% url 'book:book_detail' obj.slug %}"> <img src="{{ obj.cover.url }}" width="200" height="auto"></a>
 
-                            <div class="caption">
-                                <div>
-                                    {#                                        <h4 class="pull-right">$24.99</h4>#}
-                                    <h5><a href="{% url 'book:book_detail' obj.slug %}">{{ obj.title| truncatewords:10 }}</a></h5>
+                    <div class="caption">
+                        <div>
+                            <h5><a href="{% url 'book:book_detail' obj.slug %}">{{ obj.title| truncatewords:10 }}</a></h5>
 
-                                    <p>See more snippets like this online store item at <a target="_blank" href="http://www.bootsnipp.com">Bootsnipp - http://bootsnipp.com</a>.</p>
-                                </div>
-                            </div>
-                            <div class="ratings">
-                                <p class="pull-right">15 reviews</p>
-
-                                <p>
-                                    <span class="glyphicon glyphicon-star"></span>
-                                    <span class="glyphicon glyphicon-star"></span>
-                                    <span class="glyphicon glyphicon-star"></span>
-                                    <span class="glyphicon glyphicon-star"></span>
-                                    <span class="glyphicon glyphicon-star"></span>
-                                </p>
-                            </div>
+                            <p>{{ obj.description|truncatewords:20 }}</p>
                         </div>
                     </div>
-                {% endfor %}
-            </div>
+                    <div class="ratings" style="bottom: 20px;position: absolute;width: 75%;">
+                        <p class="pull-right">{{ obj.count_review }} reviews</p>
 
-            <div class="row">
-                <div class="col-lg-offset-3">
-                    <div class="pagination">
+                        <div style="margin: 0 0 0 2px">
+                            {% if obj.rate >= 1 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 2 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 3 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 4 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 5 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="row">
+        <div class="col-lg-offset-3">
+            <div class="pagination">
                 <span class="step-links">
                 {% if page_obj.has_previous %}
                     <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-default">Previous</a>
@@ -48,13 +71,7 @@
                         <a href="?page={{ page_obj.next_page_number }}" class="btn btn-default">Next</a>
                     {% endif %}
                 </span>
-                    </div>
-                </div>
             </div>
-
-        </div>
-        <div class="col-lg-3">
-            pha chung chua lam
         </div>
     </div>
 {% endblock %}

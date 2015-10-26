@@ -1,13 +1,16 @@
 {% load staticfiles %}
 <style>
-    a:focus, ul > li > a:hover {
+    a, a:focus, a:hover {
         background-color: transparent;
-        color: black;
+        border-color: #337AB7;
+        font-size: 14px;
     }
 
-    a {
-        font-size: 16px;
-        padding: 0;
+    .dropdown_menu {
+        background-color: #E0E0E0;
+        width: 230px;
+        right: 0;
+        left: -52px;
     }
 
 </style>
@@ -37,17 +40,47 @@
                                 <!-- Menu Toggle Button -->
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     <span>{{ user.first_name }} {{ user.last_name }}</span><span class="caret"></span>
-                                    <a href="{% url 'user:user_logout' %}"> Singout</a>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>dsklfklsdflkd</li>
-                                    <li>dsklfklsdflkd</li>
-                                    <li>dsklfklsdflkd</li>
-                                    <li>dsklfklsdflkd</li>
 
+                                </a>
+                                <ul class="dropdown-menu dropdown_menu">
+
+                                    <li class="divider"></li>
+                                    <li class="user-header">
+                                        <div class="row" style="margin: 0">
+                                            <div class="col-xs-4" style="padding:0;">
+                                                <img src="{{ user.user_profile.avata.url|default_if_none:'None' }}" alt="chua cos anh  id = {{ obj.user_profile.user.id }}" width="60px;">
+                                            </div>
+                                            <div class="col-xs-7" style="padding:0;">
+                                                <p style="font-size: 18px; text-align: left">
+                                                    {{ user.first_name }} {{ user.last_name }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="book-follow">
+                                            <div class="text-manage">
+                                                Manage account
+                                            </div>
+                                            <div class="pull-left">
+                                                <a href="" class="btn btn-default btn-flat" style="width: 100px;">Book</a>
+                                            </div>
+                                            <div class="pull-right">
+                                                <a href="" class="btn btn-default btn-flat" style="width: 100px">Follow</a>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li class="user-footer">
+                                        <div class="pull-left">
+                                            <a href="{% url 'user:user_edit_profile' user.username %}" class="btn btn-default btn-flat">Profile</a>
+                                        </div>
+                                        <div class="pull-right">
+                                            <a href="{% url 'user:user_logout' %}" class="btn btn-default btn-flat">Sign out</a>
+                                        </div>
+                                    </li>
                                 </ul>
+
                             </li>
-{#                            <li><a href="{% url 'user:user_logout' %}"> Singout</a></li>#}
+                            {#                            <li><a href="{% url 'user:user_logout' %}"> Singout</a></li>#}
                             <!-- Control Sidebar Toggle Button -->
                         </ul>
                     </div>

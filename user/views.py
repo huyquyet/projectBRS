@@ -98,8 +98,8 @@ class UserEditProfile(UpdateView):
 UserEditProfileView = UserEditProfile.as_view()
 
 
-class UserChangPass(UpdateView):
-    model = UserProfile
+class UserChangePass(UpdateView):
+    model = User
     template_name = 'user/user_change_pass.html'
     form_class = PasswordChangeForm
     # fields = ['first_name', 'last_name', 'email']
@@ -109,7 +109,7 @@ class UserChangPass(UpdateView):
         self.object = self.get_object()
         if self.object != request.user:
             raise PermissionDenied
-        return super(UserChangPass, self).dispatch(request, *args, **kwargs)
+        return super(UserChangePass, self).dispatch(request, *args, **kwargs)
 
     # def form_valid(self, form):
 
@@ -126,4 +126,4 @@ class UserChangPass(UpdateView):
         # return render(request, 'user/change_pass.html', {'form': form})
 
 
-UserChangPassView = UserChangPass.as_view()
+UserChangePassView = UserChangePass.as_view()

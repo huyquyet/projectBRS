@@ -8,10 +8,11 @@ from projectBRS import settings
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='user_profile')
-    avata = models.ImageField(upload_to=settings.AVATA_DIR, max_length=255, default='', blank=False)
+    avata = models.ImageField(upload_to=settings.AVATA_DIR, max_length=255, default='default.jpg', blank=False)
 
     follows = models.ManyToManyField('self', through='Follow', through_fields=('followee', 'follower'),
                                      related_name='following', symmetrical=False)
+
 
 class Follow(models.Model):
     follower = models.ForeignKey(UserProfile, related_name='follower')
