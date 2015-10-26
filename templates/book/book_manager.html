@@ -1,0 +1,173 @@
+{% extends 'user/layout/base_user.html' %}
+{% block content %}
+    <div class="row" style="background-color: #F7F7F7; padding-top: 5px;">
+        <legend>
+            <a href="{% url 'book:user_manager_book_reading' user.username %}" style="margin: 0 0 0 10px;font-size: 20px;">Reading</a>
+        </legend>
+
+        {% for obj in list_book_reading %}
+            <div class=" col-lg-2 " style="padding-left: 5px; padding-right: 5px;">
+                <div class="thumbnail" style="height: 270px;">
+                    <a href="{% url 'book:book_detail' obj.slug %}"> <img src="{{ obj.cover.url }}" width="100" height="auto"></a>
+
+                    <div class="caption" style="padding: 0;">
+                        <div>
+                            <h5><a href="{% url 'book:book_detail' obj.slug %}">{{ obj.title| truncatewords:10 }}</a></h5>
+                        </div>
+                    </div>
+                    <div class="ratings" style="bottom: 20px;position: absolute;width: 75%;">
+                        <div style="margin: 0 0 0 2px">
+                            {% if obj.rate >= 1 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 2 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 3 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 4 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 5 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                        </div>
+                        <p class="">{{ obj.count_review }} reviews</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <h4 class="text-danger" style="margin: 0 0 0 10px;">Data is not found</h4>
+        {% endfor %}
+    </div>
+    <div class="row" style="background-color: #F7F7F7; padding-top: 5px;">
+        <legend>
+            <a href="{% url 'book:user_manager_book_read' user.username %}" style="margin: 0 0 0 10px;font-size: 20px;">Read</a>
+        </legend>
+
+        {% for obj in list_book_read %}
+            <div class=" col-lg-2 " style="padding-left: 5px; padding-right: 5px;">
+                <div class="thumbnail" style="height: 270px;">
+                    <a href="{% url 'book:book_detail' obj.slug %}"> <img src="{{ obj.cover.url }}" width="100" height="auto"></a>
+
+                    <div class="caption" style="padding: 0;">
+                        <div>
+                            <h5><a href="{% url 'book:book_detail' obj.slug %}">{{ obj.title| truncatewords:10 }}</a></h5>
+                        </div>
+                    </div>
+                    <div class="ratings" style="bottom: 20px;position: absolute;width: 75%;">
+                        <div style="margin: 0 0 0 2px">
+                            {% if obj.rate >= 1 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 2 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 3 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 4 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 5 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                        </div>
+                        <p class="">{{ obj.count_review }} reviews</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <h4 class="text-danger" style="margin: 0 0 0 10px;">Data is not found</h4>
+        {% endfor %}
+    </div>
+    <div class="row" style="background-color: #F7F7F7; padding-top: 5px;">
+        <legend>
+            <a href="{% url 'book:user_manager_book_favorite' user.username %}" style="margin: 0 0 0 10px; font-size: 20px;">Favorite</a>
+        </legend>
+
+        {% for obj in list_book_favorite %}
+            <div class=" col-lg-2 " style="padding-left: 5px; padding-right: 5px;">
+                <div class="thumbnail" style="height: 270px;">
+                    <a href="{% url 'book:book_detail' obj.slug %}"> <img src="{{ obj.cover.url }}" width="100" height="auto"></a>
+
+                    <div class="caption" style="padding: 0;">
+                        <div>
+                            <h5><a href="{% url 'book:book_detail' obj.slug %}">{{ obj.title| truncatewords:10 }}</a></h5>
+                        </div>
+                    </div>
+                    <div class="ratings" style="bottom: 20px;position: absolute;width: 75%;">
+                        <div style="margin: 0 0 0 2px">
+                            {% if obj.rate >= 1 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 2 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 3 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 4 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 5 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                        </div>
+                        <p class="">{{ obj.count_review }} reviews</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <h4 class="text-danger" style="margin: 0 0 0 10px;">Data is not found</h4>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}

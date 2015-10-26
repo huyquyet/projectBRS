@@ -1,0 +1,78 @@
+{% extends 'user/layout/base_user.html' %}
+{% block content %}
+    <div class="row" style="background-color: #F7F7F7; padding-top: 5px;">
+        <legend>
+            <a href="{% url 'book:user_manager_book_reading' user.username %}" style="margin: 0 0 0 10px;font-size: 20px;">Reading</a>
+        </legend>
+
+        {% for obj in page_obj %}
+            <div class=" col-lg-3 " style="padding-left: 5px; padding-right: 5px;">
+                <div class="thumbnail" style="height: 330px;">
+                    <a href="{% url 'book:book_detail' obj.slug %}"> <img src="{{ obj.cover.url }}" width="150" height="auto"></a>
+
+                    <div class="caption" style="padding: 0;">
+                        <div>
+                            <h5><a href="{% url 'book:book_detail' obj.slug %}">{{ obj.title| truncatewords:10 }}</a></h5>
+                        </div>
+                    </div>
+                    <div class="ratings" style="bottom: 20px;position: absolute;width: 75%;">
+                        <p class="pull-right">{{ obj.count_review }} reviews</p>
+
+                        <div style="margin: 0 0 0 2px">
+                            {% if obj.rate >= 1 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 2 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 3 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 4 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                            {% if obj.rate >= 5 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty" style="color: #007fff">
+                            {% endif %}
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-lg-offset-3">
+            <div class="pagination">
+                <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-default">Previous</a>
+                {% endif %}
+
+                    <span class="current">
+                    Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+                </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-default">Next</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+{% endblock %}

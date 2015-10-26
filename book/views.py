@@ -1,8 +1,10 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView
+from django.views.generic.detail import SingleObjectMixin
 
 from base.views import BaseView
 from book.models import Book, Rating, ReadReading, Favorite
@@ -152,6 +154,23 @@ def return_read_book(user, book):
         return 0
 
 
+def read_finish(request):
+    book_id = request.POST.get('book_id', False)
+    if book_id and request.user:
+        obj, create = ReadReading.objects.get_or_create(user_profile=request.user.user_profile, book=Book.objects.get(pk=book_id))
+        obj.status = 2
+        obj.save()
+        slug_book = Book.objects.get(pk=book_id).slug
+        return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
+    elif request.user:
+        return HttpResponseRedirect(reverse("book:book_index"))
+    elif book_id:
+        slug_book = Book.objects.get(pk=book_id).slug
+        return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
+    else:
+        return HttpResponseRedirect(reverse("book:book_index"))
+
+
 """
 -----------------------------------------------------------------------------------
 
@@ -201,3 +220,137 @@ Review book
 
 def return_number_review(book):
     return book.review_book.all().count()
+
+
+"""
+-----------------------------------------------------------------------------------
+
+Manager book
+
+-----------------------------------------------------------------------------------
+"""
+
+"""
+status = 1 reading
+status = 2 read
+"""
+
+
+def return_list_book_read(user, status=None, count=None, search=None):
+    list_read = ReadReading.objects.filter(user_profile=user.user_profile, status=status).order_by('-date').values_list('book', flat=True)
+    if search is None:
+        list_book = Book.objects.filter(id__in=list_read)[0:count]
+    else:
+        list_book = Book.objects.filter(id__in=list_read, title__contains=search)[0:count]
+    for i in list_book:
+        i.rate = i.get_rating_book()
+        i.count_review = i.review_book.all().count()
+    return list_book
+
+
+def return_list_book_favorite(user, count=None, search=None):
+    list_favorite = Favorite.objects.filter(user_profile=user.user_profile).order_by('-date').values_list('book', flat=True)
+    if search is None:
+        list_book = Book.objects.filter(id__in=list_favorite)[0:count]
+    else:
+        list_book = Book.objects.filter(id__in=list_favorite, title__contains=search)[0:count]
+    for i in list_book:
+        i.rate = i.get_rating_book()
+        i.count_review = i.review_book.all().count()
+    return list_book
+
+
+class BookManager(BaseView, SingleObjectMixin, ListView):
+    model = User
+    template_name = 'book/book_manager.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        self.object = User.objects.get(username=self.kwargs['username'])
+        return self.object
+
+    def get_context_data(self, **kwargs):
+        search = self.request.GET.get('search', None)
+        count = 6
+        ctx = super(BookManager, self).get_context_data(**kwargs)
+        ctx['list_book_read'] = return_list_book_read(self.object, 2, count, search)
+        ctx['list_book_reading'] = return_list_book_read(self.object, 1, count, search)
+        ctx['list_book_favorite'] = return_list_book_favorite(self.object, count, search)
+        return ctx
+
+
+BookManagerView = BookManager.as_view()
+
+
+class BookManagerRead(BaseView, SingleObjectMixin, ListView):
+    model = User
+    template_name = 'book/book_manager_read.html'
+    paginate_by = 8
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        self.object = User.objects.get(username=self.kwargs['username'])
+        return self.object
+
+    def get_queryset(self):
+        count = None
+        status = 2
+        search = self.request.GET.get('search', None)
+        books = return_list_book_read(self.object, status, count, search)
+        return books
+
+
+BookManagerReadView = BookManagerRead.as_view()
+
+
+class BookManagerReading(BaseView, SingleObjectMixin, ListView):
+    model = User
+    template_name = 'book/book_manager_reading.html'
+    paginate_by = 8
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        self.object = User.objects.get(username=self.kwargs['username'])
+        return self.object
+
+    def get_queryset(self):
+        count = None
+        status = 1
+        search = self.request.GET.get('search', None)
+        books = return_list_book_read(self.object, status, count, search)
+        return books
+
+
+BookManagerReadingView = BookManagerReading.as_view()
+
+
+class BookManagerFavorite(BaseView, SingleObjectMixin, ListView):
+    model = User
+    template_name = 'book/book_manager_favorite.html'
+    paginate_by = 8
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        self.object = User.objects.get(username=self.kwargs['username'])
+        return self.object
+
+    def get_queryset(self):
+        count = None
+        search = self.request.GET.get('search', None)
+        books = return_list_book_favorite(self.object, count, search)
+        return books
+
+
+BookManagerFavoriteView = BookManagerFavorite.as_view()

@@ -22,10 +22,19 @@ urlpatterns = [
     # Read book
 
     url(r'^user/readbook$', views.want_read_book, name='read_book'),
+    url(r'^user/readfinish$', views.read_finish, name='read_finish'),
 
     #######################################################
     ######################################################
     # Favorite book
 
-    url(r'^user/favorite$', views.favorite_book, name='favorite_book'),
+    url(r'^user/add_favorite$', views.favorite_book, name='favorite_book'),
+
+    #######################################
+    #######################################
+    # User Mangger Book
+    url(r'^(?P<username>[\w-]+)/book$', views.BookManagerView, name='user_manager_book'),
+    url(r'^(?P<username>[\w-]+)/book/read$', views.BookManagerReadView, name='user_manager_book_read'),
+    url(r'^(?P<username>[\w-]+)/book/reading$', views.BookManagerReadingView, name='user_manager_book_reading'),
+    url(r'^(?P<username>[\w-]+)/book/favorite$', views.BookManagerFavoriteView, name='user_manager_book_favorite'),
 ]

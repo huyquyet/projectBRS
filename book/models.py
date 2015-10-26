@@ -7,6 +7,12 @@ from category.models import Category
 from projectBRS import settings
 
 
+
+
+
+
+
+
 # Create your models here.
 from user.models import UserProfile
 
@@ -55,6 +61,12 @@ class ReadReading(models.Model):
     date = models.DateTimeField(default=timezone.now)
     status = models.IntegerField(default=0)
 
+    """
+    0 : user not yet read or reading
+    1 : user reading
+    2 : user read
+    """
+
     class Meta:
         db_table = 'read_reading'
 
@@ -66,4 +78,3 @@ class Favorite(models.Model):
 
     class Meta:
         db_table = 'favorite'
-

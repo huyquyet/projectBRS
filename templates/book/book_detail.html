@@ -120,12 +120,29 @@
                                 <form action="{% url 'book:read_book' %}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" value="{{ object.id }}" name="book_id">
-                                    <button type="submit" class="btn btn-success " style="width:200px"><strong>Want to Read book !</strong></button>
+                                    <button type="submit" class="btn btn-success " style="width:160px"><strong>Want to Read book !</strong></button>
                                 </form>
                             {% elif object.read_book == 1 %}
-                                <a href="#" role="button" class="btn btn-info " style="width:200px"><strong>Reading book !</strong></a>
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="width:160px"><strong>Reading book !</strong>&nbsp;&nbsp;&nbsp;<span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <form action="{% url 'book:read_finish' %}" method="post" id="form-read-finish">
+                                                {% csrf_token %}
+                                                <input type="hidden" value="{{ object.id }}" name="book_id">
+                                                {#                                                <button type="submit" class="btn btn-link" style="width:160px;">Finish</button>#}
+                                            </form>
+                                            <a href="#" onclick="document.forms['form-read-finish'].submit();return false;">Finish !</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             {% elif object.read_book == 2 %}
-                                <a href="#" role="button" class="btn btn-info " style="width:200px"><strong> Read book !</strong></a>
+                                <div class=" dropdown">
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="width:160px"><strong>Read book !</strong>&nbsp;&nbsp;&nbsp;<span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Want to Read book !</a></li>
+                                    </ul>
+                                </div>
                             {% endif %}
                         </div>
                     </div>
