@@ -23,4 +23,5 @@
 		+ Can view send request new book
 	- Follow
 		+ Can view all followers and following
+
 ------- Admin -------

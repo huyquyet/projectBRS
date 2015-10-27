@@ -20,9 +20,10 @@
                         </button>
                         <ul class="dropdown-menu" style="min-width: 100px">
                             <li>
-                                <form action="" method="post" id="form-un-follow">
+                                <form action="{% url 'user:user_un_follow' %}" method="post" id="form-un-follow">
                                     {% csrf_token %}
-                                    <input type="hidden" value="{{ object.id }}" name="book_id">
+                                    <input type="hidden" value="user_home_page" name="location">
+                                    <input type="hidden" value="{{ UserName.id }}" name="user_id">
                                 </form>
                                 <a href="#" onclick="document.forms['form-un-follow'].submit();return false;">Unfollow !</a>
                             </li>

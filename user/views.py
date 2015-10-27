@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, UpdateView, ListView
 from django.views.generic.detail import SingleObjectMixin
@@ -262,3 +263,22 @@ def user_follower(request):
         return HttpResponseRedirect(reverse_lazy('user:user_home_page', kwargs={'username': User.objects.get(pk=followers_user_id).username}))
     else:
         return HttpResponseRedirect(reverse_lazy('user:user_home_page', kwargs={'username': User.objects.get(pk=followers_user_id).username}))
+
+
+@login_required()
+def user_un_follow(request):
+    user_follow_id = request.POST.get('user_id', False)
+    user = request.user
+    location = request.POST.get('location', '')
+    if user_follow_id and user is not None:
+        obj = get_object_or_404(Follow, follower=UserProfile.objects.get(user=request.user), followee=UserProfile.objects.get(user=User.objects.get(pk=user_follow_id)))
+        obj.delete()
+        if location == 'user_follow':
+            return HttpResponseRedirect(reverse_lazy('user:user_manager_follow', kwargs={'username': user.username}))
+        else:
+            return HttpResponseRedirect(reverse_lazy('user:user_home_page', kwargs={'username': User.objects.get(pk=user_follow_id).username}))
+    else:
+        if location == 'user_follow':
+            return HttpResponseRedirect(reverse_lazy('user:user_manager_follow', kwargs={'username': user.username}))
+        else:
+            return HttpResponseRedirect(reverse_lazy('user:user_home_page', kwargs={'username': User.objects.get(pk=user_follow_id).username}))

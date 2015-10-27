@@ -18,7 +18,7 @@ urlpatterns = [
 
     url(r'^home/(?P<username>[\w-]+)/$', views.UserHomePageView, name='user_home_page'),
     url(r'^home/follow$', views.user_follower, name='user_follow'),
-    url(r'^home/(?P<username>[\w-]+)/un_follow$', views.UserHomePageView, name='user_un_follow'),
+    url(r'^home/un_follow$', views.user_un_follow, name='user_un_follow'),
     url(r'^home/(?P<username>[\w-]+)/book$', views.UserHomePageView, name='user_f_book'),
 
     url(r'^(?P<username>[\w-]+)/following$', views.UserManageFollowView, name='user_manager_follow'),

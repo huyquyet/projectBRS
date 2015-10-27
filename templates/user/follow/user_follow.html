@@ -10,10 +10,10 @@
             <div class="col-lg-6 thumbnail" style="width: 47%; margin-left: 2%; ">
                 <div class="user-follow">
                     <div class="col-lg-4">
-                        <a href="{%  url 'user:user_home_page' obj.username %}"> <img src="{{ obj.user_profile.avata.url }}" class="thumbnail" width="100px" height="110px" style="margin-bottom: 5px;" alt="Avata"></a>
+                        <a href="{% url 'user:user_home_page' obj.username %}"> <img src="{{ obj.user_profile.avata.url }}" class="thumbnail" width="100px" height="110px" style="margin-bottom: 5px;" alt="Avata"></a>
                     </div>
                     <div class="col-lg-8">
-                        <div class="name-user text-success"><a href="{%  url 'user:user_home_page' obj.username %}"><strong style="font-size: 18px;">{{ obj.first_name }} {{ obj.last_name }}</strong></a></div>
+                        <div class="name-user text-success"><a href="{% url 'user:user_home_page' obj.username %}"><strong style="font-size: 18px;">{{ obj.first_name }} {{ obj.last_name }}</strong></a></div>
 
                         <div class="number-favorite">
                             <span class="text-danger">{{ obj.count_favorite }}</span> <span class="text-info">favorite book</span> -
@@ -34,9 +34,10 @@
                                 </button>
                                 <ul class="dropdown-menu" style="min-width: 100px">
                                     <li>
-                                        <form action="" method="post" id="form-un-follow">
+                                        <form action="{% url 'user:user_un_follow' %}" method="post" id="form-un-follow">
                                             {% csrf_token %}
-                                            <input type="hidden" value="{{ obj.id }}" name="book_id">
+                                            <input type="hidden" value="user_follow" name="location">
+                                            <input type="hidden" value="{{ obj.id }}" name="user_id">
                                         </form>
                                         <a href="#" onclick="document.forms['form-un-follow'].submit();return false;">Unfollow !</a>
                                     </li>
