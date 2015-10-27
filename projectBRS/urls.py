@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^book/', include('book.urls', namespace='book')),
     url(r'^review/', include('review.urls', namespace='review')),
     url(r'^comment/', include('comment.urls', namespace='comment')),
+    url(r'^send/', include('sendbybook.urls', namespace='send')),
 ]

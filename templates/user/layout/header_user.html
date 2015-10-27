@@ -25,7 +25,7 @@
             <nav class="navbar navbar-static-top">
                 {#                                role="navigation"#}
                 <ul class=" nav navbar-nav" style="float: right;">
-                    <li><h4><a href="{% url 'book:user_manager_book' user.username %}" style="font-size: 18px;">Home </a>&nbsp;&nbsp;&nbsp;</h4></li>
+                    <li><h4><a href="#" style="font-size: 18px;">Home </a>&nbsp;&nbsp;&nbsp;</h4></li>
                     <li><h4><a href="{% url 'book:book_index' %}" style="font-size: 18px;">Book</a> &nbsp;&nbsp;&nbsp;</h4></li>
                     <li><h4>Category &nbsp;&nbsp;&nbsp;</h4></li>
                     <li><h4>Follow &nbsp;&nbsp;&nbsp;</h4></li>
@@ -61,11 +61,16 @@
                                             <div class="text-manage">
                                                 Manage account
                                             </div>
-                                            <div class="pull-left">
-                                                <a href="{% url 'book:user_manager_book' user.username %}" class="btn btn-default btn-flat" style="width: 100px;">Book</a>
+                                            <div>
+                                                <div class="pull-left">
+                                                    <a href="{% url 'book:user_manager_book' user.username %}" class="btn btn-default btn-flat" style="width: 100px;">Book</a>
+                                                </div>
+                                                <div class="pull-right">
+                                                    <a href="{% url 'send:send_new_book' %}" class="btn btn-default btn-flat" style="width: 100px;">Send book</a>
+                                                </div>
                                             </div>
-                                            <div class="pull-right">
-                                                <a href="{% url 'user:user_manager_follow' user.username %}" class="btn btn-default btn-flat" style="width: 100px">Follow</a>
+                                            <div class="follow">
+                                                <a href="{% url 'user:user_manager_follow' user.username %}" class="btn btn-default btn-flat" style="width: 210px">Follow</a>
                                             </div>
                                         </div>
                                     </li>

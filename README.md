@@ -20,7 +20,7 @@
 	- Book
 		+ Can view all read books, reading book, favorite book (detail)
 		+ Send request new book
-		+ Can view send request new book
+		+ Can view send request new book ( delete )
 	- Follow
 		+ Can view all followers and following
 

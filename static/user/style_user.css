@@ -177,7 +177,7 @@ body {
 }
 
 .user-header {
-    height: 175px;
+    height: 210px;
     /*padding: 10px;*/
     /*padding-top: 5px;*/
     text-align: center;
@@ -200,10 +200,17 @@ body {
     padding: 10px;
 }
 
+.user-header > .book-follow > .follow {
+    float:left;
+    margin: 7px 0 0 0;
+}
+
 .user-header > .book-follow > .text-manage {
     font-size: 18px;
     margin-bottom: 10px;
 }
+
+
 
 .user-footer {
     background-color: #f9f9f9;

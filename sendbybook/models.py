@@ -11,6 +11,14 @@ class ByBook(models.Model):
     publish = models.TextField()
     page = models.IntegerField()
     date = models.DateTimeField()
+    status = models.IntegerField(default=0)
+
+    """
+    status
+    0 : Waiting
+    1 : Successful
+    2 : Fail
+    """
 
     class Meta:
         db_table = 'bybook'

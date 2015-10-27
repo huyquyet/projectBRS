@@ -32,7 +32,8 @@ urlpatterns = [
 
     #######################################
     #######################################
-    # User Mangger Book
+    # User Manager Book
+
     url(r'^(?P<username>[\w-]+)/book$', views.BookManagerView, name='user_manager_book'),
     url(r'^(?P<username>[\w-]+)/book/read$', views.BookManagerReadView, name='user_manager_book_read'),
     url(r'^(?P<username>[\w-]+)/book/reading$', views.BookManagerReadingView, name='user_manager_book_reading'),

@@ -1,0 +1,16 @@
+{% extends 'user/layout/base_user.html' %}
+{% block content %}
+    <div class="row" style="background-color: #F7F7F7;  padding:0 0 0 20px;">
+        <div><h3>Send new book</h3></div>
+    </div>
+    <div class="row" style="background-color: #F7F7F7;  padding:0 0 20px 20px;">
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_ul }}
+            <button type="submit" class="btn btn-info">Submit</button>
+            <button type="reset" class="btn btn-success">Reset</button>
+            <button type="button" class="btn btn-danger">Cancel</button>
+        </form>
+
+    </div>
+{% endblock %}
