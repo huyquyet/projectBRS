@@ -1,4 +1,4 @@
-- User
+------- User -------
 * Account
 	+ Can Sing in,sing out, register
 	+ Can update ptofile, change password
@@ -12,15 +12,15 @@
 	+ Can edit review book of me
 	+ Can write comment review book ( like, unlike, edit, delete comment )
 	+ Can add book favorite
-*Follow
+* Follow
 	+ Can follow user
 	+ Can view read book, reading book, favorite book of user following
 	+ Can unfollow user
-*Manager
+* Manager
 	- Book
 		+ Can view all read books, reading book, favorite book (detail)
 		+ Send request new book
 		+ Can view send request new book
 	- Follow
 		+ Can view all followers and following
-- Admin
+------- Admin -------
