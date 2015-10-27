@@ -18,7 +18,7 @@
 	+ Can unfollow user
 *Manager
 	- Book
-		+ Can view all read books, reading book, favorite book (detail)
+		+ Can view all read books, reading book, favorite book
 		+ Send request new book
 		+ Can view send request new book
 	- Follow
