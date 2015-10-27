@@ -263,6 +263,7 @@ def return_list_book_favorite(user, count=None, search=None):
 class BookManager(BaseView, SingleObjectMixin, ListView):
     model = User
     template_name = 'book/book_manager.html'
+    context_object_name = 'UserName'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -289,6 +290,7 @@ class BookManagerRead(BaseView, SingleObjectMixin, ListView):
     model = User
     template_name = 'book/book_manager_read.html'
     paginate_by = 8
+    context_object_name = 'UserName'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -313,6 +315,7 @@ class BookManagerReading(BaseView, SingleObjectMixin, ListView):
     model = User
     template_name = 'book/book_manager_reading.html'
     paginate_by = 8
+    context_object_name = 'UserName'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -337,6 +340,7 @@ class BookManagerFavorite(BaseView, SingleObjectMixin, ListView):
     model = User
     template_name = 'book/book_manager_favorite.html'
     paginate_by = 8
+    context_object_name = 'UserName'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()

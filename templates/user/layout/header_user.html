@@ -4,6 +4,7 @@
         background-color: transparent;
         border-color: #337AB7;
         font-size: 14px;
+        text-decoration: none;
     }
 
     .dropdown_menu {
@@ -24,8 +25,8 @@
             <nav class="navbar navbar-static-top">
                 {#                                role="navigation"#}
                 <ul class=" nav navbar-nav" style="float: right;">
-                    <li><h4> Home &nbsp;&nbsp;&nbsp;</h4></li>
-                    <li><h4><a href="{% url 'book:book_index' %}">Book</a> &nbsp;&nbsp;&nbsp;</h4></li>
+                    <li><h4><a href="{% url 'book:user_manager_book' user.username %}" style="font-size: 18px;">Home </a>&nbsp;&nbsp;&nbsp;</h4></li>
+                    <li><h4><a href="{% url 'book:book_index' %}" style="font-size: 18px;">Book</a> &nbsp;&nbsp;&nbsp;</h4></li>
                     <li><h4>Category &nbsp;&nbsp;&nbsp;</h4></li>
                     <li><h4>Follow &nbsp;&nbsp;&nbsp;</h4></li>
                 </ul>
@@ -64,7 +65,7 @@
                                                 <a href="{% url 'book:user_manager_book' user.username %}" class="btn btn-default btn-flat" style="width: 100px;">Book</a>
                                             </div>
                                             <div class="pull-right">
-                                                <a href="" class="btn btn-default btn-flat" style="width: 100px">Follow</a>
+                                                <a href="{% url 'user:user_manager_follow' user.username %}" class="btn btn-default btn-flat" style="width: 100px">Follow</a>
                                             </div>
                                         </div>
                                     </li>

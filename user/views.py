@@ -5,12 +5,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, FormView, UpdateView
+from django.views.generic import TemplateView, FormView, UpdateView, ListView
+from django.views.generic.detail import SingleObjectMixin
 
-from user.models import UserProfile
+from base.views import BaseView
+from book.views import return_list_book_read, return_list_book_favorite
+from user.models import UserProfile, Follow
 
 
 class UserIndex(TemplateView):
@@ -128,9 +131,134 @@ class UserChangePass(UpdateView):
 
 UserChangePassView = UserChangePass.as_view()
 
+"""
+--------------------------------------------------------------------------------
 
-class UserHomePage(TemplateView):
-    pass
+User Follow
+
+--------------------------------------------------------------------------------
+"""
 
 
-UserHomePageView = UserHomePage.as_view(0)
+def list_following_of_user(user):
+    try:
+        followee = Follow.objects.filter(follower=user.user_profile).values_list('followee', flat=True)
+        user_follwee = User.objects.filter(user_profile__id__in=followee)
+        return user_follwee
+    except:
+        return []
+
+
+def list_followers_of_user(user):
+    try:
+        followers = Follow.objects.filter(followee=user.user_profile).values_list('follower', flat=True)
+        user_followers = User.objects.filter(user_profile__id__in=followers)
+        return user_followers
+    except:
+        return []
+
+
+class UserManageFollow(BaseView, SingleObjectMixin, ListView):
+    model = User
+    template_name = 'user/follow/user_follow.html'
+    paginate_by = 12
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        self.object = User.objects.get(username=self.kwargs['username'])
+        return self.object
+
+    def get_context_data(self, **kwargs):
+        ctx = super(UserManageFollow, self).get_context_data(**kwargs)
+        ctx['list_follow'] = list_following_of_user(self.object)
+        ctx['check'] = 'following'
+        for i in ctx['list_follow']:
+            i.count_favorite = return_list_book_favorite(i).count()
+            i.count_reading_book = return_list_book_read(i, 1).count()
+            i.check_follow = False
+        return ctx
+
+
+UserManageFollowView = UserManageFollow.as_view()
+
+
+class UserManageFollowers(BaseView, SingleObjectMixin, ListView):
+    model = User
+    template_name = 'user/follow/user_follow.html'
+    paginate_by = 12
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        self.object = User.objects.get(username=self.kwargs['username'])
+        return self.object
+
+    def get_context_data(self, **kwargs):
+        ctx = super(UserManageFollowers, self).get_context_data(**kwargs)
+
+        """---------return list user following---------"""
+        list_following = list_following_of_user(self.object)
+        ctx['list_follow'] = list_followers_of_user(self.object)
+        ctx['check'] = 'followers'
+        for i in ctx['list_follow']:
+            i.count_favorite = return_list_book_favorite(i).count()
+            i.count_reading_book = return_list_book_read(i, 1).count()
+            if i in list_following:
+                i.check_follow = False
+            else:
+                i.check_follow = True
+        return ctx
+
+
+UserManageFollowersView = UserManageFollowers.as_view()
+
+
+class UserHomePage(BaseView, SingleObjectMixin, ListView):
+    model = User
+    template_name = 'user/follow/home_page.html'
+    context_object_name = 'UserName'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        self.object = User.objects.get(username=self.kwargs['username'])
+        return self.object
+
+    def get_context_data(self, **kwargs):
+        ctx = super(UserHomePage, self).get_context_data(**kwargs)
+        if self.object in list_following_of_user(self.request.user):
+            search = self.request.GET.get('search', None)
+            count = 6
+            ctx['check'] = True
+            ctx['count_favorite'] = return_list_book_favorite(self.object).count()
+            ctx['count_reading_book'] = return_list_book_read(self.object, 1).count()
+            ctx['list_book_read'] = return_list_book_read(self.object, 2, count, search)
+            ctx['list_book_reading'] = return_list_book_read(self.object, 1, count, search)
+            ctx['list_book_favorite'] = return_list_book_favorite(self.object, count, search)
+        else:
+            ctx['check'] = False
+            ctx['count_favorite'] = return_list_book_favorite(self.object).count()
+            ctx['count_reading_book'] = return_list_book_read(self.object, 1).count()
+        return ctx
+
+
+UserHomePageView = UserHomePage.as_view()
+
+
+@login_required()
+def user_follower(request):
+    followers_user_id = request.POST.get('followers_user_id', False)
+    user = request.user
+    if followers_user_id and user is not None:
+        obj, create = Follow.objects.get_or_create(follower=UserProfile.objects.get(user=request.user), followee=UserProfile.objects.get(user=User.objects.get(pk=followers_user_id)))
+        obj.save()
+        return HttpResponseRedirect(reverse_lazy('user:user_home_page', kwargs={'username': User.objects.get(pk=followers_user_id).username}))
+    else:
+        return HttpResponseRedirect(reverse_lazy('user:user_home_page', kwargs={'username': User.objects.get(pk=followers_user_id).username}))

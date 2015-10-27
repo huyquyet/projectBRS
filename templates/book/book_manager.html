@@ -1,5 +1,8 @@
 {% extends 'user/layout/base_user.html' %}
 {% block content %}
+    <div class="row" style="background-color: #F7F7F7;  padding:0 0 0 20px;">
+        <div><h3>Manage user book</h3></div>
+    </div>
     <div class="row" style="background-color: #F7F7F7; padding-top: 5px;">
         <legend>
             <a href="{% url 'book:user_manager_book_reading' user.username %}" style="margin: 0 0 0 10px;font-size: 20px;">Reading</a>
