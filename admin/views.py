@@ -4,17 +4,17 @@ from django.contrib.auth import login
 from django.contrib import auth
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, UpdateView, DetailView, ListView, \
     CreateView
 
 from admin.forms import BookCreateFormView
-
 from book.models import Book
-
 from category.models import Category
+from sendbybook.models import ByBook
 
 requirement_admin = user_passes_test(lambda u: u.is_staff, login_url='admin:admin_login')
 
@@ -215,3 +215,55 @@ class AdminBookDetail(DetailView):
 
 
 AdminBookDetailView = AdminBookDetail.as_view()
+
+"""
+---------------------------------------------------------
+Request Book
+---------------------------------------------------------
+"""
+
+
+def count_book_request(count=None):
+    if count is None:
+        result = ByBook.objects.all().count()
+    else:
+        result = ByBook.objects.filter(status=count).count()
+    return result
+
+
+class AdminListRequestBook(ListView):
+    model = ByBook
+    template_name = 'admin/book/request/request_book_list.html'
+    paginate_by = 15
+    context_object_name = 'list_request_book'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AdminListRequestBook, self).get_context_data(**kwargs)
+        for i in ctx['list_request_book']:
+            if i.status == 0:
+                i.status = 'Waiting'
+            elif i.status == 1:
+                i.status = 'Successful'
+            elif i.status == 2:
+                i.status = 'Fail'
+            else:
+                i.status = 'Fail'
+        ctx['total_send_book'] = count_book_request()
+        ctx['successful_book'] = count_book_request(1)
+        ctx['waiting_book'] = count_book_request(0)
+        ctx['fail_book'] = count_book_request(2)
+        return ctx
+
+
+AdminListRequestBookView = AdminListRequestBook.as_view()
+
+
+def admin_delete_request_book(request):
+    request_book_id = request.POST.get('request_book_id', False)
+    if request_book_id:
+        obj = get_object_or_404(ByBook, pk=request_book_id)
+        obj.delete()
+        return HttpResponseRedirect(reverse_lazy('admin:admin_list_request_book'))
+    else:
+        return HttpResponseRedirect(reverse_lazy('admin:admin_list_request_book'))
+

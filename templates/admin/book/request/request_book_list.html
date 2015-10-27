@@ -1,31 +1,43 @@
-{% extends 'user/layout/base_user.html' %}
-{% block content %}
-    <div class="row" style="background-color: #F7F7F7;  padding:0 0 0 20px;">
-        <div><h3>Send new book manager</h3></div>
-        <div>
-            Total : {{ total_send_book }}
-        </div>
-        <div>
-            Successful : {{ successful_book }}
-        </div>
-        <div>
-            Waiting : {{ waiting_book }}
-        </div>
-        <div>
-            Fail : {{ fail_book }}
+{% extends 'admin/layout/base_admin.html' %}
+{% block title %}
+    Book Index
+{% endblock %}
+{% block content_header %}
+    <div class="row">
+        <div class="col-lg-9 col-lg-offset-3">
+            <span class="text-blue">Book request index</span>
         </div>
     </div>
-    <div class="row" style="background-color: #F7F7F7;  padding:0 3px 0 3px;">
+{% endblock %}
+{% block content %}
+    <div class="row" style="background-color: #F7F7F7;  margin: 0 0 0 0;">
+        <div class="col-lg-12">
+            <div>
+                Total : {{ total_send_book }}
+            </div>
+            <div>
+                Successful : {{ successful_book }}
+            </div>
+            <div>
+                Waiting : {{ waiting_book }}
+            </div>
+            <div>
+                Fail : {{ fail_book }}
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding: 0 10px 0 10px">
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
                 <th class="col-lg-1">Stt</th>
-                <th class="col-lg-4">Name</th>
+                <th class="col-lg-4">Title</th>
                 <th class="col-lg-2">Author</th>
                 <th class="col-lg-2">Publish</th>
                 <th class="col-lg-1">Page</th>
                 <th class="col-lg-1">Status</th>
-                <th class="col-lg-1"><a href="{% url 'send:send_new_book' %}" role="button" class="btn btn-danger btn-sm">Create New</a></th>
+                <th class="col-lg-1"><a href="{% url 'admin:admin_book_create' %}" role="button"
+                                        class="btn btn-danger btn-sm">Create New</a></th>
             </tr>
             </thead>
             <tbody>
@@ -33,7 +45,7 @@
                 <tr>
                     <td class="col-lg-1"><span class=" text-info">{{ forloop.counter }}</span>
                     </td>
-                    <td class="col-lg-4"><a class=" text-info" href="{% url 'send:send_detail_book' obj.id %}">{{ obj.name| truncatewords:7 }}</a>
+                    <td class="col-lg-4"><a class=" text-info" href="">{{ obj.name| truncatewords:10 }}</a>
                     </td>
                     <td class="col-lg-2"><span class=" text-info">{{ obj.author }}</span>
                     </td>
@@ -44,10 +56,12 @@
                     <td class="col-lg-1"><span class=" text-info">{{ obj.status }}</span>
                     </td>
                     <td class="col-lg-1">
-                        <form action="{% url 'send:send_delete_book' %}" method="post">
+                        <a href="" class="btn btn-success btn-xs no-margin" role="button">Detail</a>
+
+                        <form action="{% url 'admin:admin_delete_request_book' %}" method="post" style="float: right; margin: 0 13px 0 0">
                             {% csrf_token %}
-                            <input type="hidden" name="send_book_id" value="{{ obj.id }}">
-                            <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want delete Book ?')"> Delete</button>
+                            <input type="hidden" name="request_book_id" value="{{ obj.id }}">
+                            <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want remover user ?')"> Delete</button>
                         </form>
                     </td>
 
