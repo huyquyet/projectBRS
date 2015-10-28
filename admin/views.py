@@ -161,7 +161,8 @@ class AdminBookIndex(ListView):
     def get(self, request, *args, **kwargs):
         search = self.request.GET.get('search', False)
         if search:
-            self.queryset = Book.objects.filter(Q(title__icontains=search) | Q(category__name__icontains=search) | Q(author__icontains=search) | Q(publish__icontains=search))
+            search_1 = search.strip()
+            self.queryset = Book.objects.filter(Q(title__icontains=search_1) | Q(category__name__icontains=search_1) | Q(author__icontains=search_1) | Q(publish__icontains=search_1))
         else:
             self.queryset = self.get_queryset()
         return super(AdminBookIndex, self).get(request, *args, **kwargs)

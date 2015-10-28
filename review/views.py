@@ -37,28 +37,52 @@ def return_check_like_review(user, review):
     return LikeReview.objects.filter(user_profile=user.user_profile, review=review).exists()
 
 
-def review_like(request):
+def review_like_unlike(request):
     review_id = request.POST.get('review_id', False)
     book_id = request.POST.get('book_id', False)
-    if review_id and request.user:
-        obj, create = LikeReview.objects.get_or_create(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id))
-        obj.save()
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
+    check = request.POST.get('check', False)
+
+    if review_id and request.user and check:
+        check_1 = check.strip()
+        if check_1 == 'like':
+            obj, create = LikeReview.objects.get_or_create(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id))
+            obj.save()
+            slug_book = Book.objects.get(pk=book_id).slug
+            return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
+        elif check_1 == 'unlike':
+            LikeReview.objects.get(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id)).delete()
+            slug_book = Book.objects.get(pk=book_id).slug
+            return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
+        else:
+            return HttpResponseRedirect(reverse_lazy("book:book_index"))
     elif request.user:
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
     else:
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
 
 
-def review_unlike(request):
-    review_id = request.POST.get('review_id', False)
-    book_id = request.POST.get('book_id', False)
-    if review_id and request.user:
-        LikeReview.objects.get(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id)).delete()
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
-    elif request.user:
-        return HttpResponseRedirect(reverse_lazy("book:book_index"))
-    else:
-        return HttpResponseRedirect(reverse_lazy("book:book_index"))
+# def review_like(request):
+#     review_id = request.POST.get('review_id', False)
+#     book_id = request.POST.get('book_id', False)
+#     if review_id and request.user:
+#         obj, create = LikeReview.objects.get_or_create(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id))
+#         obj.save()
+#         slug_book = Book.objects.get(pk=book_id).slug
+#         return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
+#     elif request.user:
+#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
+#     else:
+#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
+#
+#
+# def review_unlike(request):
+#     review_id = request.POST.get('review_id', False)
+#     book_id = request.POST.get('book_id', False)
+#     if review_id and request.user:
+#         LikeReview.objects.get(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id)).delete()
+#         slug_book = Book.objects.get(pk=book_id).slug
+#         return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
+#     elif request.user:
+#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
+#     else:
+#         return HttpResponseRedirect(reverse_lazy("book:book_index"))

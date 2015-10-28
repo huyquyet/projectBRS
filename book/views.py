@@ -32,12 +32,14 @@ class BookIndex(BaseView, ListView):
             i.count_review = i.review_book.all().count()
         return ctx
 
-    def get_queryset(self):
-        search = self.request.GET.get('search', '').strip()
-        if search == '':
-            return Book.objects.filter().order_by('-id')
+    def get(self, request, *args, **kwargs):
+        search = self.request.GET.get('search', False)
+        if search:
+            search_1 = search.strip()
+            self.queryset = Book.objects.filter(Q(title__icontains=search_1) | Q(category__name__icontains=search_1) | Q(author__icontains=search) | Q(publish__icontains=search_1)).order_by('-id')
         else:
-            return Book.objects.filter(Q(title__icontains=search) | Q(author__icontains=search) | Q(publish__icontains=search)).order_by('-id')
+            self.queryset = Book.objects.order_by('-id')
+        return super(BookIndex, self).get(request, *args, **kwargs)
 
 
 BookIndexView = BookIndex.as_view()
@@ -60,7 +62,6 @@ class BookDetail(BaseView, DetailView):
         ctx['review_all_book'] = return_all_of_book(self.object)
         # ctx['check_like_review'] = return_check_like_review(self.request.user, self.object)
         return ctx
-
 
 
 BookDetailView = BookDetail.as_view()

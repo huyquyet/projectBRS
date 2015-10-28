@@ -173,25 +173,24 @@
                             <div class="col-lg-10" style="width: 90%; padding: 5px;">
                                 <div style="width: 100%">
                                     <div style="width: 95%; float: left">
-                                        <span style="font-size: 14px;"><strong class="text-success"> {{ obj.user_profile.user.first_name }} {{ obj.user_profile.user.last_name }} : </strong>{{ obj.content }}</span>
+                                        <span style="font-size: 14px;">
+                                            <strong class="text-success"> {{ obj.user_profile.user.first_name }} {{ obj.user_profile.user.last_name }} : </strong>
+                                            {{ obj.content }}</span>
                                         <br>
-                                        {% if user.id in obj.id_like %}
-                                            <form action="{% url 'review:review_unlike' %}" method="post">
-                                                {% csrf_token %}
-                                                <input type="hidden" value="{{ obj.id }}" name="review_id">
-                                                <input type="hidden" value="{{ object.id }}" name="book_id">
+
+                                        <form action="{% url 'review:review_like_unlike' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" value="{{ obj.id }}" name="review_id">
+                                            <input type="hidden" value="{{ object.id }}" name="book_id">
+                                            {% if user.id in obj.id_like %}
+                                                <input type="hidden" value="unlike" name="check">
                                                 <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Unlike</button>
-                                                - <a href="#id_{{ obj.id }}">comment</a> - {{ obj.date|date:'d-m-Y' }}<br>
-                                            </form>
-                                        {% else %}
-                                            <form action="{% url 'review:review_like' %}" method="post">
-                                                {% csrf_token %}
-                                                <input type="hidden" value="{{ obj.id }}" name="review_id">
-                                                <input type="hidden" value="{{ object.id }}" name="book_id">
+                                            {% else %}
+                                                <input type="hidden" value="like" name="check">
                                                 <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Like</button>
-                                                - <a href="#id_{{ obj.id }}">comment</a> - {{ obj.date|date:'d-m-Y' }}<br>
-                                            </form>
-                                        {% endif %}
+                                            {% endif %}
+                                            - <a href="#id_{{ obj.id }}">comment</a> - {{ obj.date|date:'d-m-Y' }}<br>
+                                        </form>
 
                                         {{ obj.number_like_review }} like this<br>
                                     </div>
