@@ -2,6 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.detail import SingleObjectMixin
@@ -32,11 +33,11 @@ class BookIndex(BaseView, ListView):
         return ctx
 
     def get_queryset(self):
-        search = self.request.GET.get('search', '')
+        search = self.request.GET.get('search', '').strip()
         if search == '':
             return Book.objects.filter().order_by('-id')
         else:
-            return Book.objects.filter(title__contains=search).order_by('-id')
+            return Book.objects.filter(Q(title__icontains=search) | Q(author__icontains=search) | Q(publish__icontains=search)).order_by('-id')
 
 
 BookIndexView = BookIndex.as_view()
@@ -60,9 +61,6 @@ class BookDetail(BaseView, DetailView):
         # ctx['check_like_review'] = return_check_like_review(self.request.user, self.object)
         return ctx
 
-        # def post(self, request, *args, **kwargs):
-        #     view = ReviewCreateView
-        #     return view(request, *args, **kwargs)
 
 
 BookDetailView = BookDetail.as_view()

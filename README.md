@@ -5,6 +5,7 @@
 	
 * Book
 	+ Can view all book 
+	+ Can search book by title, author, publish
 	+ Can view detail book (number rating, number review)
 	+ Can choice Readbook,Finish read with books are reading
 	+ Can rating book
@@ -33,3 +34,4 @@
 		+ Can view all followers and following
 
 ------- Admin -------
+
