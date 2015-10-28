@@ -8,8 +8,8 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, FormView, UpdateView, DetailView, ListView, \
-    CreateView
+from django.views.generic import TemplateView, FormView, UpdateView, DetailView, ListView, CreateView
+from django.db.models import Q
 
 from admin.forms import BookCreateFormView
 from book.models import Book
@@ -140,7 +140,10 @@ class AdminCategoryEdit(UpdateView):
 AdminCategoryEditView = AdminCategoryEdit.as_view()
 
 """
-Book
+---------------------------------------------------------
+ Book
+---------------------------------------------------------
+
 """
 
 
@@ -154,6 +157,14 @@ class AdminBookIndex(ListView):
         for i in ctx['page_obj']:
             i.category = Category.objects.get(id=i.category.id)
         return ctx
+
+    def get(self, request, *args, **kwargs):
+        search = self.request.GET.get('search', False)
+        if search:
+            self.queryset = Book.objects.filter(Q(title__icontains=search) | Q(category__name__icontains=search) | Q(author__icontains=search) | Q(publish__icontains=search))
+        else:
+            self.queryset = self.get_queryset()
+        return super(AdminBookIndex, self).get(request, *args, **kwargs)
 
 
 AdminBookIndexView = AdminBookIndex.as_view()
@@ -215,6 +226,17 @@ class AdminBookDetail(DetailView):
 
 
 AdminBookDetailView = AdminBookDetail.as_view()
+
+
+def admin_book_delete(request):
+    request_book_id = request.POST.get('book_id', False)
+    if request_book_id:
+        obj = get_object_or_404(Book, pk=request_book_id)
+        obj.delete()
+        return HttpResponseRedirect(reverse_lazy('admin:admin_book_index'))
+    else:
+        return HttpResponseRedirect(reverse_lazy('admin:admin_book_index'))
+
 
 """
 ---------------------------------------------------------

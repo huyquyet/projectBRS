@@ -3,12 +3,16 @@
     Book Index
 {% endblock %}
 {% block content_header %}
-    <div class="col-lg-5 col-lg-offset-3">
-        <span class="text-blue">Book Index</span>
+    <div class="col-lg-5 col-lg-offset-3" style="padding-bottom: 10px;">
+        <span class="text-blue pull-left">Book Index</span>
+        <form action="" method="get" class="pull-right">
+            {% csrf_token %}
+            <input type="text" value="" name="search" class="form-control" placeholder="Enter something" style="width: 400px;">
+        </form>
     </div>
 {% endblock %}
 {% block content %}
-    <div class="row">
+    <div class="row" style="padding: 0 5px 0 5px">
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
@@ -43,10 +47,9 @@
                     <td class="col-lg-1">
                         <a href="{% url 'admin:admin_book_edit' obj.slug %}" class="btn btn-success btn-xs no-margin" role="button">Edit</a>
 
-                        <form action="#" method="post"
-                              style="float: right;">
+                        <form action="{% url 'admin:admin_book_delete' %}" method="post" style="float: right; margin: 0 20px 0 0">
                             {% csrf_token %}
-                            <input type="hidden" name="id_course" value="{{ obj.slug }}">
+                            <input type="hidden" name="book_id" value="{{ obj.id }}">
                             <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want remover user ?')"> Delete</button>
                         </form>
                     </td>

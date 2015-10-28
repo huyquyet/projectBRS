@@ -8,7 +8,7 @@
     </div>
 {% endblock %}
 {% block content %}
-    <div class="row">
+    <div class="row" style="padding: 0 5px 0 5px">
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
@@ -32,10 +32,9 @@
                                             href="{% url 'admin:admin_category_detail' obj.slug %}">{{ obj.slug }}</a>
                     </td>
                     <td class="col-lg-1">
-                        <a  href="#" class="btn btn-success btn-xs no-margin" role="button">Edit</a>
+                        <a href="#" class="btn btn-success btn-xs no-margin" role="button">Edit</a>
 
-                        <form action="#" method="post"
-                              style="float: right;">
+                        <form action="#" method="post" style="float: right; margin: 0 20px 0 0">
                             {% csrf_token %}
                             <input type="hidden" name="id_course" value="{{ obj.slug }}">
                             <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want remover user ?')"> Delete</button>

@@ -6,9 +6,8 @@ __author__ = 'FRAMGIA\nguyen.huy.quyet'
 
 urlpatterns = [
 
-    #########################
-    ##### Profile
-    ########################
+    ################################
+    # Profile
 
     url(r'^$', views.AdminIndexView, name='admin_index'),
     url(r'^login/$', views.AdminLoginView, name='admin_login'),
@@ -16,25 +15,29 @@ urlpatterns = [
     url(r'^detail/(?P<pk>[0-9]+)/$', views.AdminProfileView, name='admin_detail_profile'),
     url(r'^edit/(?P<pk>[0-9]+)/$', views.AdminEditProfileView, name='admin_edit_profile'),
 
-    #########################
-    ##### Category
-    ########################
+    ################################
+
+    ################################
+    # Category
 
     url(r'^category$', views.AdminCategoryIndexView, name='admin_category_index'),
     url(r'^category/create$', views.AdminCategoryCreateView, name='admin_category_create'),
     url(r'^category/detail/(?P<slug>[\w-]+)$', views.AdminCategoryDetailView, name='admin_category_detail'),
     url(r'^category/edit/(?P<slug>[\w-]+)$', views.AdminCategoryEditView, name='admin_category_edit'),
 
-    #########################
-    ##### Book
-    ########################
+    ################################
+
+    ################################
+    # Book
 
     url(r'^book$', views.AdminBookIndexView, name='admin_book_index'),
     url(r'^book/create$', views.AdminBookCreateView, name='admin_book_create'),
     url(r'^book/edit/(?P<slug>[\w-]+)$', views.AdminBookEditView, name='admin_book_edit'),
     url(r'^book/detail/(?P<slug>[\w-]+)$', views.AdminBookDetailView, name='admin_book_detail'),
+    url(r'^book/delete$', views.admin_book_delete, name='admin_book_delete'),
 
     ################################
+
     ################################
     # Request Book
 

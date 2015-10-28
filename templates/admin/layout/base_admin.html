@@ -263,10 +263,12 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                {% block content_header %}
-                    Page Header
-                    <small>Optional description</small>
-                {% endblock %}
+                <div style="margin-bottom: 10px;">
+                    {% block content_header %}
+                        Page Header
+                        <small>Optional description</small>
+                    {% endblock %}
+                </div>
             </h1>
         </section>
 
