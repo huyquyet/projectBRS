@@ -1,6 +1,7 @@
 # Create your views here.
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 
 from book.models import Book
 from comment.models import CommentReview, LikeComment
@@ -30,24 +31,25 @@ def comment_create(request):
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
 
 
-# def comment_update(request):
-#     review_id = request.POST.get('review_id', '')
-#     review_content = request.POST.get('review_content', False)
-#     book_id = request.POST.get('book_id', '')
-#     s_review_id = review_id.strip()
-#     s_book_id = book_id.strip()
-#
-#     if review_id and request.user:
-#         obj, create = CommentReview.objects.get(pk=review_id)
-#         obj.content = review_content
-#         obj.save()
-#         return return_redirect(s_book_id)
-#     elif request.user:
-#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
-#     elif book_id:
-#         return return_redirect(s_book_id)
-#     else:
-#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
+def comment_delete(request):
+    comment_id = request.POST.get('comment_id', False)
+    book_id = request.POST.get('book_id', '')
+    s_book_id = book_id.strip()
+
+    if comment_id and request.user:
+        obj = get_object_or_404(CommentReview, pk=comment_id)
+        if request.user == obj.user_profile.user:
+            obj.delete()
+            return return_redirect(s_book_id)
+        else:
+            return HttpResponseRedirect(reverse_lazy("book:book_index"))
+    elif request.user:
+        return HttpResponseRedirect(reverse_lazy("book:book_index"))
+    elif book_id:
+        return return_redirect(s_book_id)
+    else:
+        return HttpResponseRedirect(reverse_lazy("book:book_index"))
+
 
 def comment_review_like_unlike(request):
     comment_id = request.POST.get('comment_id', False)
