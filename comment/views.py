@@ -7,29 +7,44 @@ from comment.models import CommentReview
 from review.models import Review
 
 
+def return_redirect(book_id):
+    slug_book = Book.objects.get(pk=book_id).slug
+    return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
+
+
 def comment_create(request):
     review_id = request.POST.get('review_id', '')
     content_comment = request.POST.get('content_comment', False)
     book_id = request.POST.get('book_id', '')
 
     if review_id and request.user:
-        obj = CommentReview.objects.create(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id))
+        obj = CommentReview.objects.create(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id.strip()))
         obj.content = content_comment
         obj.save()
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
+        return return_redirect(book_id.strip())
     elif request.user:
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
     elif book_id:
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
+        return return_redirect(book_id.strip())
     else:
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
 
 
-        # def return_all_of_book(book):
-        #     all_review = Review.objects.filter(book=book)
-        #     for i in all_review:
-        #         i.number_like_review = i.like_review.all().count()
-        #
-        #     return all_review
+# def comment_update(request):
+#     review_id = request.POST.get('review_id', '')
+#     review_content = request.POST.get('review_content', False)
+#     book_id = request.POST.get('book_id', '')
+#     s_review_id = review_id.strip()
+#     s_book_id = book_id.strip()
+#
+#     if review_id and request.user:
+#         obj, create = CommentReview.objects.get(pk=review_id)
+#         obj.content = review_content
+#         obj.save()
+#         return return_redirect(s_book_id)
+#     elif request.user:
+#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
+#     elif book_id:
+#         return return_redirect(s_book_id)
+#     else:
+#         return HttpResponseRedirect(reverse_lazy("book:book_index"))

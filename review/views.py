@@ -1,9 +1,15 @@
 # Create your views here.
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 
 from book.models import Book
 from review.models import Review, LikeReview
+
+
+def return_redirect(book_id):
+    slug_book = Book.objects.get(pk=book_id).slug
+    return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
 
 
 def review_create(request):
@@ -11,16 +17,52 @@ def review_create(request):
     content_review = request.POST.get('content_review', False)
 
     if book_id and request.user:
-        obj, create = Review.objects.get_or_create(user_profile=request.user.user_profile, book=Book.objects.get(pk=book_id))
+        obj, create = Review.objects.create(user_profile=request.user.user_profile, book=Book.objects.get(pk=book_id))
         obj.content = content_review
         obj.save()
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
+        return return_redirect(book_id.strip())
     elif request.user:
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
     elif book_id:
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
+        return return_redirect(book_id.strip())
+    else:
+        return HttpResponseRedirect(reverse_lazy("book:book_index"))
+
+
+def review_update(request):
+    review_id = request.POST.get('review_id', '')
+    review_content = request.POST.get('review_content', False)
+    book_id = request.POST.get('book_id', '')
+    s_review_id = review_id.strip()
+    s_book_id = book_id.strip()
+
+    if review_id and request.user:
+        obj, create = Review.objects.get_or_create(pk=s_review_id)
+        obj.content = review_content
+        obj.save()
+        return return_redirect(s_book_id)
+    elif request.user:
+        return HttpResponseRedirect(reverse_lazy("book:book_index"))
+    elif book_id:
+        return return_redirect(s_book_id)
+    else:
+        return HttpResponseRedirect(reverse_lazy("book:book_index"))
+
+
+def review_delete(request):
+    review_id = request.POST.get('review_id', '')
+    book_id = request.POST.get('book_id', '')
+    s_book_id = book_id.strip()
+
+    if review_id and request.user:
+        s_review_id = review_id.strip()
+        obj = get_object_or_404(Review, pk=s_review_id)
+        obj.delete()
+        return return_redirect(s_book_id)
+    elif request.user:
+        return HttpResponseRedirect(reverse_lazy("book:book_index"))
+    elif book_id:
+        return return_redirect(s_book_id)
     else:
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
 
@@ -59,7 +101,6 @@ def review_like_unlike(request):
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
     else:
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
-
 
 # def review_like(request):
 #     review_id = request.POST.get('review_id', False)

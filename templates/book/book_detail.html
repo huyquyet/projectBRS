@@ -92,7 +92,9 @@
                 </div>
 
                 <div class="col-lg-8">
-                    <div><span class="text-success text-bold "><h3>{{ object.title }}</h3></span></div>
+                    <div>
+                        <h3><span class="text-success text-bold"> {{ object.title }}</span></h3>
+                    </div>
                     <div class="row">
                         <div class="col-lg-7">
                             <div>
@@ -124,13 +126,13 @@
                                 </form>
                             {% elif object.read_book == 1 %}
                                 <div class="dropdown">
-                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="width:160px"><strong>Reading book !</strong>&nbsp;&nbsp;&nbsp;<span class="caret"></span></button>
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="width:160px"><strong>Reading book !</strong>&nbsp;&nbsp;&nbsp;<span
+                                            class="caret"></span></button>
                                     <ul class="dropdown-menu">
                                         <li>
                                             <form action="{% url 'book:read_finish' %}" method="post" id="form-read-finish">
                                                 {% csrf_token %}
                                                 <input type="hidden" value="{{ object.id }}" name="book_id">
-                                                {#                                                <button type="submit" class="btn btn-link" style="width:160px;">Finish</button>#}
                                             </form>
                                             <a href="#" onclick="document.forms['form-read-finish'].submit();return false;">Finish !</a>
                                         </li>
@@ -138,7 +140,8 @@
                                 </div>
                             {% elif object.read_book == 2 %}
                                 <div class=" dropdown">
-                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="width:160px"><strong>Read book !</strong>&nbsp;&nbsp;&nbsp;<span class="caret"></span></button>
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="width:160px"><strong>Read book !</strong>&nbsp;&nbsp;&nbsp;<span
+                                            class="caret"></span></button>
                                     <ul class="dropdown-menu">
                                         <li><a href="#">Want to Read book !</a></li>
                                     </ul>
@@ -165,42 +168,82 @@
                     <h3>{{ object.review }} Review</h3>
                     {% for obj in review_all_book %}
                         <div class="row">
-                            <div class="col-lg-2" style="width: 10%; margin: 5px 0 0 0">
+                            <div class="col-lg-2" id="review-{{ obj.id }}" style="width: 10%; margin: 5px 0 0 0">
                                 <div class="thumbnail">
                                     <img src="{{ obj.user_profile.avata.url|default_if_none:'None' }}" alt="chua cos anh  id = {{ obj.user_profile.user.id }}">
                                 </div>
                             </div>
                             <div class="col-lg-10" style="width: 90%; padding: 5px;">
                                 <div style="width: 100%">
-                                    <div style="width: 95%; float: left">
+                                    <div style="width: 93%; float: left; padding: 0">
+                                        <div>
                                         <span style="font-size: 14px;">
-                                            <strong class="text-success"> {{ obj.user_profile.user.first_name }} {{ obj.user_profile.user.last_name }} : </strong>
-                                            {{ obj.content }}</span>
-                                        <br>
-
-                                        <form action="{% url 'review:review_like_unlike' %}" method="post">
-                                            {% csrf_token %}
-                                            <input type="hidden" value="{{ obj.id }}" name="review_id">
-                                            <input type="hidden" value="{{ object.id }}" name="book_id">
-                                            {% if user.id in obj.id_like %}
-                                                <input type="hidden" value="unlike" name="check">
-                                                <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Unlike</button>
-                                            {% else %}
-                                                <input type="hidden" value="like" name="check">
-                                                <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Like</button>
-                                            {% endif %}
-                                            - <a href="#id_{{ obj.id }}">comment</a> - {{ obj.date|date:'d-m-Y' }}<br>
-                                        </form>
-
-                                        {{ obj.number_like_review }} like this<br>
+                                            <strong class="text-success" style="float: left"> {{ obj.user_profile.user.first_name }} {{ obj.user_profile.user.last_name }} : </strong>
+                                            <span id="id-review-{{ obj.id }}-content">{{ obj.content }}</span>
+                                            <span id="id-review-{{ obj.id }}-form" style="display:none;">
+                                                <form action="{% url 'review:review_update' %}" method="post" id="update-review-{{ obj.id }}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" value="{{ obj.id }}" name="review_id">
+                                                    <input type="hidden" value="{{ object.id }}" name="book_id">
+                                                    <textarea name="review_content" class="col-lg-9">{{ obj.content }}</textarea>
+                                                </form>
+                                                <form action="{% url 'review:review_delete' %}" method="post" id="delete-review-{{ obj.id }}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" value="{{ obj.id }}" name="review_id">
+                                                    <input type="hidden" value="{{ object.id }}" name="book_id">
+                                                </form>
+                                            </span>
+                                        </span>
+                                        </div>
+                                        <div class="pull-left">
+                                            <form action="{% url 'review:review_like_unlike' %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" value="{{ obj.id }}" name="review_id">
+                                                <input type="hidden" value="{{ object.id }}" name="book_id">
+                                                {% if user.id in obj.id_like %}
+                                                    <input type="hidden" value="unlike" name="check">
+                                                    <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Unlike</button>
+                                                {% else %}
+                                                    <input type="hidden" value="like" name="check">
+                                                    <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Like</button>
+                                                {% endif %}
+                                                - <a href="#id_{{ obj.id }}">comment</a> - {{ obj.date|date:'d-m-Y' }}<br>
+                                            </form>
+                                            {{ obj.number_like_review }} like this<br>
+                                        </div>
                                     </div>
-                                    <div style="width: 5%; float: left">
+                                    <div style="width: 7%; float: left; padding: 0">
                                         {% if user.id == obj.user_profile.user.id %}
-                                            <button class="btn btn-xs btn-danger">edit</button>
+                                            <div class="dropdown">
+                                                <button type="button" id="id-btn-{{ obj.id }}-dropdown" class="btn btn-danger btn-xs dropdown-toggle btn-edit-review-dropdown" data-toggle="dropdown"
+                                                        style="display: block">
+                                                    Edit&nbsp;<span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" style="min-width: 42px;padding: 0">
+                                                    <li>
+                                                        <button id="id-btn-{{ obj.id }}-edit" class="btn btn-xs btn-info btn-edit-review"
+                                                                onclick="display_none_content('id-review-{{ obj.id }}-'); display_none_btn('id-btn-{{ obj.id }}-')"
+                                                                style="display: block; width: 42px;margin: 0 0 3px 0">Edit
+                                                        </button>
+
+                                                        <button id="id-btn-{{ obj.id }}-delete" class="btn btn-xs btn-danger btn-edit-review"
+                                                                onclick="confirm_delete_review('delete-review-{{ obj.id }}')" style="display: block; width: 42px;">Delete
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <button class="btn btn-xs btn-success" id="id-btn-{{ obj.id }}-submit" onclick="document.forms['update-review-{{ obj.id }}'].submit();return false;"
+                                                    style="display: none; margin: 0 0 5px 0">
+                                                Update
+                                            </button>
+                                            <button class="btn btn-xs btn-danger" id="id-btn-{{ obj.id }}-cancel" style="display: none"
+                                                    onclick="display_block_content('id-review-{{ obj.id }}-'); display_block_btn('id-btn-{{ obj.id }}-')">Cancel
+                                            </button>
+
                                         {% endif %}
                                     </div>
                                 </div>
-                                <div class="col-lg-11" style="padding: 0; margin: 3px 0 3px 0; width: 90%">
+                                <div class=" col-lg-11" style="padding: 0; margin: 3px 0 3px 0; width: 90%">
                                     {% with obj.comment.all as comment %}
                                         {% for i in comment %}
                                             <div class="row">
@@ -208,10 +251,10 @@
                                                     <div class="thumbnail">
                                                         <img src="{{ i.user_profile.avata.url|default_if_none:'None' }}" alt="id ={{ i.user_profile.user.id }}" width="100%" height="100%">
                                                     </div>
-
                                                 </div>
                                                 <div class="col-lg-11" style="width: 90%;padding: 5px;">
-                                                    <span style="font-size: 14px;"><strong class="text-success"> {{ i.user_profile.user.first_name }} {{ i.user_profile.user.last_name }} : </strong>{{ i.content }}</span>
+                                                    <span style="font-size: 14px;"><strong class="text-success"> {{ i.user_profile.user.first_name }} {{ i.user_profile.user.last_name }}
+                                                        : </strong>{{ i.content }}</span>
                                                     <br> <a href=""> Like</a> - <a href="">comment</a> - {{ i.date|date:'d-m-Y' }}<br>
                                                     {{ i.get_total_like }} like this<br>
                                                 </div>
@@ -231,7 +274,6 @@
                                                 <input type="hidden" value="{{ obj.id }}" name="review_id">
                                                 <input type="hidden" value="{{ object.id }}" name="book_id">
                                                 <input type="text" class="form-control" name="content_comment" id="id_{{ obj.id }}" placeholder="Write review">
-                                                {#                                                <button class=" btn btn-sm btn-default" type="submit" name="submit" style="width: 50px;margin: 5px 0 0 0">Post</button>#}
                                             </form>
                                         </div>
                                     </div>
@@ -254,4 +296,50 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        function display_none_content(id_span) {
+            $('#' + id_span + 'content').css('display', 'none');
+            $('#' + id_span + 'form').css('display', 'block');
+        }
+        function display_none_btn(id_btn) {
+            $('#' + id_btn + 'edit').css('display', 'none');
+            $('#' + id_btn + 'dropdown').css('display', 'none');
+            $('#' + id_btn + 'delete').css('display', 'none');
+            $('#' + id_btn + 'submit').css('display', 'block');
+            $('#' + id_btn + 'cancel').css('display', 'block');
+        }
+        function display_block_content(id_span) {
+            $('#' + id_span + 'content').css('display', 'block');
+            $('#' + id_span + 'form').css('display', 'none');
+        }
+        function display_block_btn(id_btn) {
+            $('#' + id_btn + 'edit').css('display', 'block');
+            $('#' + id_btn + 'dropdown').css('display', 'block');
+            $('#' + id_btn + 'delete').css('display', 'block');
+            $('#' + id_btn + 'submit').css('display', 'none');
+            $('#' + id_btn + 'cancel').css('display', 'none');
+        }
+        function confirm_delete_review(id_review) {
+            result = confirm('Are you sure you want delete review ?');
+            if (result) {
+                $('#' + id_review).submit();
+            }
+        }
+    </script>
+    <style>
+        .btn-edit-review-dropdown {
+            background-color: #909090;
+            border-color: white;
+            opacity: 0.2;
+        }
+
+        .btn-edit-review-dropdown:hover {
+            color: #fff;
+            background-color: #c9302c;
+            border-color: #ac2925;
+            opacity: 1;
+        }
+    </style>
 {% endblock %}
