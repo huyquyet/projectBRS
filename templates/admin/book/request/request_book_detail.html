@@ -1,0 +1,120 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% block title %}
+    Book Index
+{% endblock %}
+{% block content_header %}
+    <div class="row">
+        <div class="col-lg-9 col-lg-offset-3">
+            <span class="text-blue">Book request detail</span>
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row" style="padding: 0 10px 0 10px">
+        <div class="col-lg-6 col-lg-offset-2">
+            <div class="row">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col-lg-6">User request</th>
+                        <th class="col-lg-6">Name book</th>
+
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="col-lg-6"><span class=" text-info">username : {{ detail_request.user_profile.user.username }}</span>
+                        </td>
+                        <td class="col-lg-6"><span class=" text-info">{{ detail_request.name }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-lg-6"><span class=" text-info">Full name :{{ detail_request.full_name }}</span>
+                        </td>
+                        <td class="col-lg-6"><span class=" text-info"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <thead>
+                    <tr>
+                        <th class="col-lg-6">Author</th>
+                        <th class="col-lg-6">Publish</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="col-lg-6"><span class=" text-info">{{ detail_request.author }}</span>
+                        </td>
+                        <td class="col-lg-6"><span class=" text-info">{{ detail_request.publish }}</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <thead>
+                    <tr>
+                        <th class="col-lg-6">Page</th>
+                        <th class="col-lg-6">Date</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="col-lg-6"><span class=" text-info">{{ detail_request.page }}</span>
+                        </td>
+                        <td class="col-lg-6"><span class=" text-danger">{{ detail_request.date|date:'d-m-Y' }}</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <thead>
+                    <tr>
+                        <th class="col-lg-6">Status</th>
+                        <th class="col-lg-6"></th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="col-lg-6"><span class=" {% if detail_request.status == 0 %}text-info{% elif detail_request.status == 1 %}text-success{% elif detail_request.status == 2 %}text-danger{% endif %}">
+                            {{ detail_request.text_status }}</span>
+                        </td>
+                        <td class="col-lg-6"><span class=" text-info"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody>
+                    <tr>
+                        <td class="col-lg-6">
+                            <span class=" text-info">
+                            {% if detail_request.status == 0 %}
+                                <form action="{% url 'admin:admin_accept_request_book' %}" method="post" id="accept">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ detail_request.id }}" name="request_book_id">
+                                    <button type="submit" class="btn btn-default pull-left " style="margin: 0 0 0 7px"> Accept</button>
+                                </form>
+                            {% elif  detail_request.status != 0 %}
+                                <button type="submit" class="btn btn-default pull-left {% if detail_request.status == 1 %}active{% endif %}" style="margin: 0 0 0 7px" {% if detail_request.status == 2 %}disabled{% endif %}>
+                                    Accept
+                                </button>
+                            {% endif %}
+                                {% if detail_request.status == 0 %}
+                                    <form action="{% url 'admin:admin_deny_request_book' %}" method="post" id="deny">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{ detail_request.id }}" name="request_book_id">
+                                        <button type="submit" class="btn btn-default pull-left" style="margin: 0 0 0 7px">Deny</button>
+                                    </form>
+                                {% elif detail_request.status != 0 %}
+                                    <button type="submit" class="btn btn-default pull-left {% if detail_request.status == 2 %}active{% endif %}" style="margin: 0 0 0 7px" {% if detail_request.status == 1 %}disabled{% endif %}>
+                                        Accept
+                                    </button>
+                                {% endif %}
+
+                                <form action="{% url 'admin:admin_delete_request_book' %}" method="post" id="delete">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ detail_request.id }}" name="request_book_id">
+                                    <button type="submit" class="btn btn-default pull-left" style="margin: 0 0 0 7px">Delete</button>
+                                </form>
+
+                            <a role="button" href="{% url 'admin:admin_list_request_book' %}" class="btn btn-default pull-left" style="margin: 0 0 0 7px">Cancel</a>
+
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

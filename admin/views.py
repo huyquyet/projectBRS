@@ -237,15 +237,19 @@ class AdminListRequestBook(ListView):
     paginate_by = 15
     context_object_name = 'list_request_book'
 
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        return super(AdminListRequestBook, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         ctx = super(AdminListRequestBook, self).get_context_data(**kwargs)
         for i in ctx['list_request_book']:
             if i.status == 0:
-                i.status = 'Waiting'
+                i.text_status = 'Waiting'
             elif i.status == 1:
-                i.status = 'Successful'
+                i.text_status = 'Successful'
             elif i.status == 2:
-                i.status = 'Fail'
+                i.text_status = 'Fail'
             else:
                 i.status = 'Fail'
         ctx['total_send_book'] = count_book_request()
@@ -258,6 +262,30 @@ class AdminListRequestBook(ListView):
 AdminListRequestBookView = AdminListRequestBook.as_view()
 
 
+class AdminDetailRequestBook(DetailView):
+    model = ByBook
+    template_name = 'admin/book/request/request_book_detail.html'
+    context_object_name = 'detail_request'
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        return super(AdminDetailRequestBook, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AdminDetailRequestBook, self).get_context_data(**kwargs)
+        ctx['detail_request'].full_name = ctx['detail_request'].user_profile.user.first_name + ' ' + ctx['detail_request'].user_profile.user.last_name
+        if ctx['detail_request'].status == 0:
+            ctx['detail_request'].text_status = 'Waiting'
+        elif ctx['detail_request'].status == 1:
+            ctx['detail_request'].text_status = 'Successful'
+        elif ctx['detail_request'].status == 2:
+            ctx['detail_request'].text_status = 'Fail'
+        return ctx
+
+
+AdminDetailRequestBookView = AdminDetailRequestBook.as_view()
+
+
 def admin_delete_request_book(request):
     request_book_id = request.POST.get('request_book_id', False)
     if request_book_id:
@@ -267,3 +295,24 @@ def admin_delete_request_book(request):
     else:
         return HttpResponseRedirect(reverse_lazy('admin:admin_list_request_book'))
 
+
+def admin_deny_request_book(request):
+    request_book_id = request.POST.get('request_book_id', False)
+    if request_book_id:
+        obj = get_object_or_404(ByBook, pk=request_book_id)
+        obj.status = 2
+        obj.save()
+        return HttpResponseRedirect(reverse_lazy('admin:admin_detail_request_book', kwargs={'pk': request_book_id}))
+    else:
+        return HttpResponseRedirect(reverse_lazy('admin:admin_list_request_book'))
+
+
+def admin_accept_request_book(request):
+    request_book_id = request.POST.get('request_book_id', False)
+    if request_book_id:
+        obj = get_object_or_404(ByBook, pk=request_book_id)
+        obj.status = 1
+        obj.save()
+        return HttpResponseRedirect(reverse_lazy('admin:admin_detail_request_book', kwargs={'pk': request_book_id}))
+    else:
+        return HttpResponseRedirect(reverse_lazy('admin:admin_list_request_book'))

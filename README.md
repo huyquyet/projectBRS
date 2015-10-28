@@ -2,6 +2,7 @@
 * Account
 	+ Can Sing in,sing out, register
 	+ Can update ptofile, change password
+	
 * Book
 	+ Can view all book 
 	+ Can view detail book (number rating, number review)
@@ -12,10 +13,17 @@
 	+ Can edit review book of me
 	+ Can write comment review book ( like, unlike, edit, delete comment )
 	+ Can add book favorite
+	
+* Send request book
+	+ Can send request new book
+	+ Can view all send request new book of my
+	+ Can delete send request new book
+	
 * Follow
 	+ Can follow user
 	+ Can view read book, reading book, favorite book of user following
 	+ Can unfollow user
+	
 * Manager
 	- Book
 		+ Can view all read books, reading book, favorite book (detail)

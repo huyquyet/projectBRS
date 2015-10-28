@@ -29,7 +29,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for obj in list_request_book %}
+            {% for obj in list_send_book %}
                 <tr>
                     <td class="col-lg-1"><span class=" text-info">{{ forloop.counter }}</span>
                     </td>
@@ -41,7 +41,7 @@
                     </td>
                     <td class="col-lg-1"><span class=" text-info">{{ obj.page }}</span>
                     </td>
-                    <td class="col-lg-1"><span class=" text-info">{{ obj.status }}</span>
+                    <td class="col-lg-1"><span class=" {% if obj.status == 0 %}text-info{% elif obj.status == 1 %}text-success{% elif obj.status == 2 %}text-danger{% endif %}">{{ obj.text_status }}</span>
                     </td>
                     <td class="col-lg-1">
                         <form action="{% url 'send:send_delete_book' %}" method="post">

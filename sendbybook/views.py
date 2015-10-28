@@ -56,11 +56,11 @@ class SendBookManager(BaseView, SingleObjectMixin, ListView):
         ctx = super(SendBookManager, self).get_context_data(**kwargs)
         for i in ctx['list_send_book']:
             if i.status == 0:
-                i.status = 'Waiting'
+                i.text_status = 'Waiting'
             elif i.status == 1:
-                i.status = 'Successful'
+                i.text_status = 'Successful'
             elif i.status == 2:
-                i.status = 'Fail'
+                i.text_status = 'Fail'
             else:
                 i.status = 'Fail'
         ctx['total_send_book'] = count_book_of_user(self.request.user)

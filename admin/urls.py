@@ -39,5 +39,8 @@ urlpatterns = [
     # Request Book
 
     url(r'^request_book$', views.AdminListRequestBookView, name='admin_list_request_book'),
-    url(r'^request_book/delete$', views.admin_delete_request_book, name='admin_delete_request_book'),
+    url(r'^request_book/(?P<pk>[0-9]+)/$', views.AdminDetailRequestBookView, name='admin_detail_request_book'),
+    url(r'^request_book/delete/$', views.admin_delete_request_book, name='admin_delete_request_book'),
+    url(r'^request_book/deny/$', views.admin_deny_request_book, name='admin_deny_request_book'),
+    url(r'^request_book/accept/$', views.admin_accept_request_book, name='admin_accept_request_book'),
 ]
