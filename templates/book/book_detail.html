@@ -1,4 +1,5 @@
 {% extends 'user/layout/base_user.html' %}
+{% load comment %}
 {% block content %}
     <div class="row" style="padding-top: 5px;background-color: #FFFFFF;">
 
@@ -243,6 +244,9 @@
                                         {% endif %}
                                     </div>
                                 </div>
+
+                                <!------------------------ Display comment of review and write new comment --------------------------------------->
+
                                 <div class=" col-lg-11" style="padding: 0; margin: 3px 0 3px 0; width: 90%">
                                     {% with obj.comment.all as comment %}
                                         {% for i in comment %}
@@ -253,14 +257,32 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-11" style="width: 90%;padding: 5px;">
-                                                    <span style="font-size: 14px;"><strong class="text-success"> {{ i.user_profile.user.first_name }} {{ i.user_profile.user.last_name }}
-                                                        : </strong>{{ i.content }}</span>
-                                                    <br> <a href=""> Like</a> - <a href="">comment</a> - {{ i.date|date:'d-m-Y' }}<br>
-                                                    {{ i.get_total_like }} like this<br>
+                                                    <span style="font-size: 14px;">
+                                                        <strong class="text-success"> {{ i.user_profile.user.first_name }} {{ i.user_profile.user.last_name }}: </strong>
+                                                        {{ i.content }}
+                                                    </span>
+                                                    <br>
+
+                                                    <form action="{% url 'comment:comment_review_like_unlike' %}" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" value="{{ i.id }}" name="comment_id">
+                                                        <input type="hidden" value="{{ object.id }}" name="book_id">
+                                                        {% return_user_like_of_comment i.pk as all_like_cmt %}
+                                                        {% if user.id in all_like_cmt %}
+                                                            <input type="hidden" value="unlike" name="check">
+                                                            <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Unlike</button>
+                                                        {% else %}
+                                                            <input type="hidden" value="like" name="check">
+                                                            <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Like</button>
+                                                        {% endif %}
+                                                        - {{ i.date|date:'d-m-Y' }}<br> {{ i.get_total_like }} like this<br>
+                                                    </form>
+
                                                 </div>
                                             </div>
                                         {% endfor %}
                                     {% endwith %}
+
 
                                     <div class="row">
                                         <div class="col-lg-1" style="width: 10%;padding: 5px;">
@@ -278,9 +300,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!---------------------- End display comment of review and write new comment --------------------------------------->
+
                             </div>
                         </div>
-
                     {% endfor %}
                 {% endif %}
                 {% if object.rate_book > 0 %}

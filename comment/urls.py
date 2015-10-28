@@ -5,5 +5,5 @@ __author__ = 'FRAMGIA\nguyen.huy.quyet'
 
 urlpatterns = [
     url(r'^create_comment$', views.comment_create, name='comment_create'),
-    # url(r'^update_comment/$', views.comment_update, name='comment_update'),
+    url(r'^comment_like_unlike/$', views.comment_review_like_unlike, name='comment_review_like_unlike'),
 ]

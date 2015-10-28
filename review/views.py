@@ -89,12 +89,10 @@ def review_like_unlike(request):
         if check_1 == 'like':
             obj, create = LikeReview.objects.get_or_create(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id))
             obj.save()
-            slug_book = Book.objects.get(pk=book_id).slug
-            return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
+            return return_redirect(book_id)
         elif check_1 == 'unlike':
             LikeReview.objects.get(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id)).delete()
-            slug_book = Book.objects.get(pk=book_id).slug
-            return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
+            return return_redirect(book_id)
         else:
             return HttpResponseRedirect(reverse_lazy("book:book_index"))
     elif request.user:
