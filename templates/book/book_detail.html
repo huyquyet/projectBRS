@@ -339,7 +339,7 @@
                                                     {% csrf_token %}
                                                     <input type="hidden" value="{{ obj.id }}" name="review_id">
                                                     <input type="hidden" value="{{ object.id }}" name="book_id">
-                                                    <input type="text" class="form-control" name="content_comment" id="id_{{ obj.id }}" placeholder="Write review">
+                                                    <input type="text" class="form-control" name="content_comment" id="id_{{ obj.id }}" placeholder="Write comment">
                                                 </form>
                                             </div>
                                         </div>
@@ -354,7 +354,7 @@
                         <form action="{% url 'review:review_create' %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" value="{{ object.id }}" name="book_id">
-                            <textarea class="form-control" rows="3" name="content_review" placeholder="Write review"></textarea>
+                            <textarea class="form-control" id="write-new-review" rows="3" name="content_review" placeholder="Write review"></textarea>
                             <button class=" btn btn-sm btn-default" type="submit" name="submit" style="width: 50px;margin: 5px 0 0 0">Post</button>
                         </form>
                     {% else %}

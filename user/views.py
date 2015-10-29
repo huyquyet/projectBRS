@@ -14,6 +14,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from base.views import BaseView
 from book.views import return_list_book_read, return_list_book_favorite
+from review.views import return_list_review_of_user
 from user.models import UserProfile, Follow
 
 
@@ -257,6 +258,7 @@ class UserHomePage(BaseView, SingleObjectMixin, ListView):
             ctx['list_book_favorite'] = return_list_book_favorite(self.object, count, search)
             ctx['list_user_following'] = return_list_following_of_user(self.object)
             ctx['list_user_followers'] = return_list_followers_of_user(self.object)
+            ctx['list_user_review'] = return_list_review_of_user(self.object)
         else:
             ctx['check'] = False
             ctx['count_favorite'] = return_list_book_favorite(self.object).count()

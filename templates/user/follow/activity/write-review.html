@@ -1,0 +1,211 @@
+<div class="row content-activity">
+    <legend>
+        <a href="{% url 'book:user_manager_book_reading' user.username %}" style="margin: 0 0 0 10px;font-size: 20px;">Write review</a>
+    </legend>
+    <div class="row" style="background-color: #F7F7F7; padding-top: 5px;">
+        {% for obj in list_user_review %}
+            <div class=" thumbnail" style="margin-left: 2%; width: 96%">
+                <div class="row">
+                    <!--======================================= Display cover book====================================================================-->
+                    <div class="col-lg-2 ">
+                        <a href="{% url 'book:book_detail' obj.book.slug %}"><img src="{{ obj.book.cover.url }}" class="" alt="{{ obj.book.title }}" width="100%"/></a>
+                    </div>
+                    <!--======================================= End display cover book====================================================================-->
+
+                    <!--======================================= Display information book====================================================================-->
+                    <div class="col-lg-8">
+                        <div>
+                            <a href="{% url 'book:book_detail' obj.book.slug %}"><h3 style="margin: 4px 0 4px 0; font-size: 18px;"><span class="text-success text-bold"> {{ obj.book.title }}</span></h3></a>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div>
+                                    <h4 style="margin: 4px 0 4px 0; font-size: 16px;"> Category : <a href="#"> {{ obj.book.category }}</a></h4>
+                                </div>
+                                <div>
+                                    <h5>Author : <span class="text-danger">{{ obj.book.author }}</span></h5>
+                                    <h5>Publish date : {{ obj.book.date|date:'d-m-Y' }} by <span class=" text-danger">{{ obj.book.publish }}</span></h5>
+                                </div>
+                                <div>
+                                    <span class="text-success">{{ obj.point_rating }}</span>
+                                    <span class="text-danger">point</span> -
+                                    <span class="text-success">{{ obj.rating }}</span>
+                                    <span class="text-danger">rating</span> -
+                                    <span class="text-success">{{ obj.review }}</span>
+                                    <span class="text-danger">review </span> ------
+                                    <span class="text-danger">Page : </span>
+                                    <span class="text-success">{{ obj.book.page }}</span>&nbsp;&nbsp;
+                                    <span class="text-danger">Price : </span>
+                                    <span class="text-success">{{ obj.book.price }} $</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--======================================= End display information book====================================================================-->
+
+                </div>
+                <div class="thumbnail" style="margin: 5px 0 0 0">
+                    <div class="row">
+                        <div class="col-lg-2" style="width: 10%; margin-left: 2%">
+                            <a href="#"><img src="{{ obj.user_profile.avata.url }}" class="" alt="{{ obj.book.title }}" width="100%"/></a>
+                        </div>
+                        <div class="col-lg-10">
+                            <strong class="text-info" style="font-size: 14px">{{ obj.user_profile.user.first_name }} {{ obj.user_profile.user.last_name }} : </strong>
+                            {{ obj.content }}<br>
+                            <a class="text-info"> {{ obj.number_like_review }} like -</a><a href="{% url 'book:book_detail' obj.book.slug %}#id_{{ obj.id }}"> {{ obj.number_comment_review }} comment</a>
+                        </div>
+                    </div>
+
+                    {#                {% for obj in review_all_book %}#}
+                    {#                    <div class="row">#}
+                    {#                        <div class="col-lg-2" id="review-{{ obj.id }}" style="width: 10%; margin: 5px 0 0 0">#}
+                    {#                            <div class="thumbnail">#}
+                    {#                                <img src="{{ obj.user_profile.avata.url|default_if_none:'None' }}" alt="chua cos anh  id = {{ obj.user_profile.user.id }}">#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                        <div class="col-lg-10" style="width: 90%; padding: 5px;">#}
+                    {#                            <div style="width: 100%">#}
+                    {#                                <div style="width: 93%; float: left; padding: 0">#}
+                    {#                                    <div>#}
+                    {#                                        <span style="font-size: 14px;">#}
+                    {#                                            <strong class="text-success" style="float: left"> {{ obj.user_profile.user.first_name }} {{ obj.user_profile.user.last_name }} : </strong>#}
+                    {#                                            <span id="id-review-{{ obj.id }}-content">{{ obj.content }}</span>#}
+                    {#                                            <span id="id-review-{{ obj.id }}-form" style="display:none;">#}
+                    {#                                                <form action="{% url 'review:review_update' %}" method="post" id="update-review-{{ obj.id }}">#}
+                    {#                                                    {% csrf_token %}#}
+                    {#                                                    <input type="hidden" value="{{ obj.id }}" name="review_id">#}
+                    {#                                                    <input type="hidden" value="{{ object.id }}" name="book_id">#}
+                    {#                                                    <textarea name="review_content" class="col-lg-9">{{ obj.content }}</textarea>#}
+                    {#                                                </form>#}
+                    {#                                                <form action="{% url 'review:review_delete' %}" method="post" id="delete-review-{{ obj.id }}">#}
+                    {#                                                    {% csrf_token %}#}
+                    {#                                                    <input type="hidden" value="{{ obj.id }}" name="review_id">#}
+                    {#                                                    <input type="hidden" value="{{ object.id }}" name="book_id">#}
+                    {#                                                </form>#}
+                    {#                                            </span>#}
+                    {#                                        </span>#}
+                    {#                                    </div>#}
+                    {#                                    <div class="pull-left">#}
+                    {#                                        <form action="{% url 'review:review_like_unlike' %}" method="post">#}
+                    {#                                            {% csrf_token %}#}
+                    {#                                            <input type="hidden" value="{{ obj.id }}" name="review_id">#}
+                    {#                                            <input type="hidden" value="{{ object.id }}" name="book_id">#}
+                    {#                                            {% if user.id in obj.id_like %}#}
+                    {#                                                <input type="hidden" value="unlike" name="check">#}
+                    {#                                                <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Unlike</button>#}
+                    {#                                            {% else %}#}
+                    {#                                                <input type="hidden" value="like" name="check">#}
+                    {#                                                <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Like</button>#}
+                    {#                                            {% endif %}#}
+                    {#                                            - <a href="#id_{{ obj.id }}">comment</a> - {{ obj.date|date:'d-m-Y' }}<br>#}
+                    {#                                        </form>#}
+                    {#                                        {{ obj.number_like_review }} like this<br>#}
+                    {#                                    </div>#}
+                    {#                                </div>#}
+                    {#                                <div style="width: 7%; float: left; padding: 0">#}
+                    {#                                    {% if user.id == obj.user_profile.user.id %}#}
+                    {#                                        <div class="dropdown">#}
+                    {#                                            <button type="button" id="id-btn-{{ obj.id }}-dropdown" class="btn btn-danger btn-xs dropdown-toggle btn-edit-review-dropdown" data-toggle="dropdown"#}
+                    {#                                                    style="display: block">#}
+                    {#                                                Edit&nbsp;<span class="caret"></span>#}
+                    {#                                            </button>#}
+                    {#                                            <ul class="dropdown-menu" style="min-width: 42px;padding: 0">#}
+                    {#                                                <li>#}
+                    {#                                                    <button id="id-btn-{{ obj.id }}-edit" class="btn btn-xs btn-info btn-edit-review"#}
+                    {#                                                            onclick="display_none_content('id-review-{{ obj.id }}-'); display_none_btn('id-btn-{{ obj.id }}-')"#}
+                    {#                                                            style="display: block; width: 42px;margin: 0 0 3px 0">Edit#}
+                    {#                                                    </button>#}
+                    {##}
+                    {#                                                    <button id="id-btn-{{ obj.id }}-delete" class="btn btn-xs btn-danger btn-edit-review"#}
+                    {#                                                            onclick="confirm_delete_review('delete-review-{{ obj.id }}')" style="display: block; width: 42px;">Delete#}
+                    {#                                                    </button>#}
+                    {#                                                </li>#}
+                    {#                                            </ul>#}
+                    {#                                        </div>#}
+                    {#                                        <button class="btn btn-xs btn-success" id="id-btn-{{ obj.id }}-submit" onclick="document.forms['update-review-{{ obj.id }}'].submit();return false;"#}
+                    {#                                                style="display: none; margin: 0 0 5px 0">#}
+                    {#                                            Update#}
+                    {#                                        </button>#}
+                    {#                                        <button class="btn btn-xs btn-danger" id="id-btn-{{ obj.id }}-cancel" style="display: none"#}
+                    {#                                                onclick="display_block_content('id-review-{{ obj.id }}-'); display_block_btn('id-btn-{{ obj.id }}-')">Cancel#}
+                    {#                                        </button>#}
+                    {#                                    {% endif %}#}
+                    {#                                </div>#}
+                    {#                            </div>#}
+                    {##}
+                    {#                            <!------------------------ Display comment of review and write new comment --------------------------------------->#}
+                    {##}
+                    {#                            <div class=" col-lg-11" style="padding: 0; margin: 3px 0 3px 0; width: 90%">#}
+                    {#                                {% with obj.comment.all as comment %}#}
+                    {#                                    {% for i in comment %}#}
+                    {#                                        <div class="row">#}
+                    {#                                            <div class="col-lg-1" style="width: 10%;padding: 5px;">#}
+                    {#                                                <div class="thumbnail">#}
+                    {#                                                    <img src="{{ i.user_profile.avata.url|default_if_none:'None' }}" alt="id ={{ i.user_profile.user.id }}" width="100%" height="100%">#}
+                    {#                                                </div>#}
+                    {#                                            </div>#}
+                    {#                                            <div class="col-lg-11" style="width: 90%;padding: 5px;">#}
+                    {#                                                <div style="width: 10%;float: right">#}
+                    {#                                                    {% if user.id == i.user_profile.user.id %}#}
+                    {#                                                        <form action="{% url 'comment:comment_delete' %}" method="post" id="delete-comment-{{ i.id }}">#}
+                    {#                                                            {% csrf_token %}#}
+                    {#                                                            <input type="hidden" value="{{ i.id }}" name="comment_id">#}
+                    {#                                                            <input type="hidden" value="{{ object.id }}" name="book_id">#}
+                    {#                                                            <button id="id-btn-{{ obj.id }}-delete" class="btn btn-xs btn-danger btn-delete-comment"#}
+                    {#                                                                    onclick="confirm_delete_comment('delete-comment-{{ i.id }}')">Delete#}
+                    {#                                                            </button>#}
+                    {#                                                        </form>#}
+                    {#                                                    {% endif %}#}
+                    {#                                                </div>#}
+                    {#                                                <div style="width: 90%;">#}
+                    {#                                                    <span style="font-size: 14px;">#}
+                    {#                                                        <strong class="text-success"> {{ i.user_profile.user.first_name }} {{ i.user_profile.user.last_name }}: </strong>#}
+                    {#                                                        {{ i.content }}#}
+                    {#                                                    </span>#}
+                    {#                                                </div>#}
+                    {#                                                <form action="{% url 'comment:comment_review_like_unlike' %}" method="post">#}
+                    {#                                                    {% csrf_token %}#}
+                    {#                                                    <input type="hidden" value="{{ i.id }}" name="comment_id">#}
+                    {#                                                    <input type="hidden" value="{{ object.id }}" name="book_id">#}
+                    {#                                                    {% return_user_like_of_comment i.pk as all_like_cmt %}#}
+                    {#                                                    {% if user.id in all_like_cmt %}#}
+                    {#                                                        <input type="hidden" value="unlike" name="check">#}
+                    {#                                                        <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Unlike</button>#}
+                    {#                                                    {% else %}#}
+                    {#                                                        <input type="hidden" value="like" name="check">#}
+                    {#                                                        <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Like</button>#}
+                    {#                                                    {% endif %}#}
+                    {#                                                    - {{ i.date|date:'d-m-Y' }}<br> {{ i.get_total_like }} like this<br>#}
+                    {#                                                </form>#}
+                    {#                                            </div>#}
+                    {#                                        </div>#}
+                    {#                                    {% endfor %}#}
+                    {#                                {% endwith %}#}
+                    {#                                <div class="row">#}
+                    {#                                    <div class="col-lg-1" style="width: 10%;padding: 5px;">#}
+                    {#                                        <div class="thumbnail">#}
+                    {#                                            <img src="{{ user.user_profile.avata.url|default_if_none:'None' }}" alt="id ={{ user.id }}" width="100%" height="100%">#}
+                    {#                                        </div>#}
+                    {#                                    </div>#}
+                    {#                                    <div class="col-lg-11" style="width: 90%;padding: 5px;">#}
+                    {#                                        <form action="{% url 'comment:comment_create' %}" method="post">#}
+                    {#                                            {% csrf_token %}#}
+                    {#                                            <input type="hidden" value="{{ obj.id }}" name="review_id">#}
+                    {#                                            <input type="hidden" value="{{ object.id }}" name="book_id">#}
+                    {#                                            <input type="text" class="form-control" name="content_comment" id="id_{{ obj.id }}" placeholder="Write review">#}
+                    {#                                        </form>#}
+                    {#                                    </div>#}
+                    {#                                </div>#}
+                    {#                            </div>#}
+                    {#                            <!---------------------- End display comment of review and write new comment --------------------------------------->#}
+                    {##}
+                    {#                        </div>#}
+                    {#                    </div>#}
+                    {#                {% endfor %}#}
+                </div>
+            </div>
+        {% empty %}
+            User not yet write review book
+        {% endfor %}
+    </div>
+</div>

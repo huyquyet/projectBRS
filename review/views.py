@@ -100,6 +100,7 @@ def review_like_unlike(request):
     else:
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
 
+
 # def review_like(request):
 #     review_id = request.POST.get('review_id', False)
 #     book_id = request.POST.get('book_id', False)
@@ -125,3 +126,14 @@ def review_like_unlike(request):
 #         return HttpResponseRedirect(reverse_lazy("book:book_index"))
 #     else:
 #         return HttpResponseRedirect(reverse_lazy("book:book_index"))
+
+
+def return_list_review_of_user(user):
+    list_review = Review.objects.filter(user_profile=user.user_profile).order_by('-date')
+    for i in list_review:
+        i.point_rating = i.book.get_rating_book()
+        i.rating = i.book.rating_book.count()
+        i.review = i.book.review_book.count()
+        i.number_like_review = i.like_review.all().count()
+        i.number_comment_review = i.comment.all().count()
+    return list_review
