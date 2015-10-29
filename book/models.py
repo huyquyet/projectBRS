@@ -8,11 +8,6 @@ from projectBRS import settings
 
 
 
-
-
-
-
-
 # Create your models here.
 from user.models import UserProfile
 

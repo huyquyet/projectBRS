@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -17,3 +18,4 @@ class UserProfile(models.Model):
 class Follow(models.Model):
     follower = models.ForeignKey(UserProfile, related_name='follower')  # Nguoi theo doi
     followee = models.ForeignKey(UserProfile, related_name='followee')  # Nguoi dc theo doi
+    date = models.DateTimeField(default=timezone.now)

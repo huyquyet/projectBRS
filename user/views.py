@@ -141,20 +141,32 @@ User Follow
 """
 
 
-def list_following_of_user(user):
+def return_list_following_of_user(user):
     try:
-        followee = Follow.objects.filter(follower=user.user_profile).values_list('followee', flat=True)
-        user_follwee = User.objects.filter(user_profile__id__in=followee)
-        return user_follwee
+        following = Follow.objects.filter(follower=user.user_profile).values_list('followee', flat=True)
+        list_user_following = User.objects.filter(user_profile__id__in=following)
+        for i in list_user_following:
+            i.count_favorite = return_list_book_favorite(i).count()
+            i.count_reading_book = return_list_book_read(i, 1).count()
+            i.check_follow = False
+        return list_user_following
     except:
         return []
 
 
-def list_followers_of_user(user):
+def return_list_followers_of_user(user):
     try:
         followers = Follow.objects.filter(followee=user.user_profile).values_list('follower', flat=True)
-        user_followers = User.objects.filter(user_profile__id__in=followers)
-        return user_followers
+        list_user_followers = User.objects.filter(user_profile__id__in=followers)
+        list_following = return_list_following_of_user(user)
+        for i in list_user_followers:
+            i.count_favorite = return_list_book_favorite(i).count()
+            i.count_reading_book = return_list_book_read(i, 1).count()
+            if i in list_following:
+                i.check_follow = False
+            else:
+                i.check_follow = True
+        return list_user_followers
     except:
         return []
 
@@ -174,7 +186,7 @@ class UserManageFollow(BaseView, SingleObjectMixin, ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super(UserManageFollow, self).get_context_data(**kwargs)
-        ctx['list_follow'] = list_following_of_user(self.object)
+        ctx['list_follow'] = return_list_following_of_user(self.object)
         ctx['check'] = 'following'
         for i in ctx['list_follow']:
             i.count_favorite = return_list_book_favorite(i).count()
@@ -203,16 +215,16 @@ class UserManageFollowers(BaseView, SingleObjectMixin, ListView):
         ctx = super(UserManageFollowers, self).get_context_data(**kwargs)
 
         """---------return list user following---------"""
-        list_following = list_following_of_user(self.object)
-        ctx['list_follow'] = list_followers_of_user(self.object)
+        # list_following = return_list_following_of_user(self.object)
+        ctx['list_follow'] = return_list_followers_of_user(self.object)
         ctx['check'] = 'followers'
-        for i in ctx['list_follow']:
-            i.count_favorite = return_list_book_favorite(i).count()
-            i.count_reading_book = return_list_book_read(i, 1).count()
-            if i in list_following:
-                i.check_follow = False
-            else:
-                i.check_follow = True
+        # for i in ctx['list_follow']:
+        #     i.count_favorite = return_list_book_favorite(i).count()
+        #     i.count_reading_book = return_list_book_read(i, 1).count()
+        #     if i in list_following:
+        #         i.check_follow = False
+        #     else:
+        #         i.check_follow = True
         return ctx
 
 
@@ -234,7 +246,7 @@ class UserHomePage(BaseView, SingleObjectMixin, ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super(UserHomePage, self).get_context_data(**kwargs)
-        if self.object in list_following_of_user(self.request.user):
+        if self.object in return_list_following_of_user(self.request.user) or self.object == self.request.user:
             search = self.request.GET.get('search', None)
             count = 6
             ctx['check'] = True
@@ -243,6 +255,8 @@ class UserHomePage(BaseView, SingleObjectMixin, ListView):
             ctx['list_book_read'] = return_list_book_read(self.object, 2, count, search)
             ctx['list_book_reading'] = return_list_book_read(self.object, 1, count, search)
             ctx['list_book_favorite'] = return_list_book_favorite(self.object, count, search)
+            ctx['list_user_following'] = return_list_following_of_user(self.object)
+            ctx['list_user_followers'] = return_list_followers_of_user(self.object)
         else:
             ctx['check'] = False
             ctx['count_favorite'] = return_list_book_favorite(self.object).count()
@@ -282,3 +296,6 @@ def user_un_follow(request):
             return HttpResponseRedirect(reverse_lazy('user:user_manager_follow', kwargs={'username': user.username}))
         else:
             return HttpResponseRedirect(reverse_lazy('user:user_home_page', kwargs={'username': User.objects.get(pk=user_follow_id).username}))
+
+
+            # class ac(ContexMixin)

@@ -201,7 +201,7 @@ body {
 }
 
 .user-header > .book-follow > .follow {
-    float:left;
+    float: left;
     margin: 7px 0 0 0;
 }
 
@@ -209,8 +209,6 @@ body {
     font-size: 18px;
     margin-bottom: 10px;
 }
-
-
 
 .user-footer {
     background-color: #f9f9f9;
@@ -261,3 +259,12 @@ body {
 }
 
 /*--------------------------------- End User Follow ------------------------------------*/
+
+/*--------------------------------- User Activity --------------------------------------*/
+.content-activity {
+    background-color: #F7F7F7;
+    padding: 15px 0 0 10px;
+    width: 95%;
+}
+
+/*--------------------------------- End User Activity --------------------------------------*/
