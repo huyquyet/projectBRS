@@ -13,22 +13,25 @@
                         <span class="text-danger">{{ count_favorite }}</span> <span class="text-info">favorite book</span> -
                         <span class="text-danger">{{ count_reading_book }}</span> <span class="text-info">reading book</span>
                     </div>
-
-                    <div class="dropdown">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            <strong class="text-bold text-muted ">Following&nbsp;&nbsp;<span class="caret"></span></strong>
-                        </button>
-                        <ul class="dropdown-menu" style="min-width: 100px">
-                            <li>
-                                <form action="{% url 'user:user_un_follow' %}" method="post" id="form-un-follow">
-                                    {% csrf_token %}
-                                    <input type="hidden" value="user_home_page" name="location">
-                                    <input type="hidden" value="{{ UserName.id }}" name="user_id">
-                                </form>
-                                <a href="#" onclick="document.forms['form-un-follow'].submit();return false;">Unfollow !</a>
-                            </li>
-                        </ul>
-                    </div>
+                    {% if user_profile %}
+                        <a href="{% url 'user:user_edit_profile' user.username %}" class="btn btn-default "><span class="text-bold text-muted">Update Profile</span></a>
+                    {% else %}
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <strong class="text-bold text-muted ">Following&nbsp;&nbsp;<span class="caret"></span></strong>
+                            </button>
+                            <ul class="dropdown-menu" style="min-width: 100px">
+                                <li>
+                                    <form action="{% url 'user:user_un_follow' %}" method="post" id="form-un-follow">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="user_home_page" name="location">
+                                        <input type="hidden" value="{{ UserName.id }}" name="user_id">
+                                    </form>
+                                    <a href="#" onclick="document.forms['form-un-follow'].submit();return false;">Unfollow !</a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -38,7 +41,7 @@
                 <li><a href="#following" data-toggle="tab">Following</a></li>
                 <li><a href="#followers" data-toggle="tab">Followers</a></li>
                 <li><a href="#write-review" data-toggle="tab">Write review</a></li>
-                <li><a href="#write-comment" data-toggle="tab">Write comment</a></li>
+                {#                <li><a href="#write-comment" data-toggle="tab">Write comment</a></li>#}
             </ul>
             <div id="myTabContent" class="tab-content">
                 <div class="tab-pane fade active in" id="book">
@@ -46,27 +49,17 @@
                 </div>
                 <div class="tab-pane fade" id="following">
                     {% include 'user/follow/activity/following.html' %}
-                    <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four
-                        loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda
-                        labore aesthetic magna delectus mollit.</p>
+
                 </div>
                 <div class="tab-pane fade" id="followers">
                     {% include 'user/follow/activity/followers.html' %}
-                    <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four
-                        loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda
-                        labore aesthetic magna delectus mollit.</p>
                 </div>
                 <div class="tab-pane fade" id="write-review">
                     {% include 'user/follow/activity/write-review.html' %}
-                    <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork
-                        tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
                 </div>
-                <div class="tab-pane fade" id="write-comment">
-                    {% include 'user/follow/activity/write-comment.html' %}
-                    <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland
-                        seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby
-                        sweater.</p>
-                </div>
+                {#                <div class="tab-pane fade" id="write-comment">#}
+                {#                    {% include 'user/follow/activity/write-comment.html' %}#}
+                {#                </div>#}
             </div>
         </div>
     {% else %}

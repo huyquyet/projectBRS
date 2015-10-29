@@ -259,6 +259,8 @@ class UserHomePage(BaseView, SingleObjectMixin, ListView):
             ctx['list_user_following'] = return_list_following_of_user(self.object)
             ctx['list_user_followers'] = return_list_followers_of_user(self.object)
             ctx['list_user_review'] = return_list_review_of_user(self.object)
+            if self.object == self.request.user:
+                ctx['user_profile'] = True
         else:
             ctx['check'] = False
             ctx['count_favorite'] = return_list_book_favorite(self.object).count()
