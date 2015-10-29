@@ -1,7 +1,7 @@
 ------- User -------
 * Account
 	+ Can Sing in,sing out, register
-	+ Can update ptofile, change password
+	+ Can update profile, change password
 	
 * Book
 	+ Can view all book 
@@ -22,7 +22,7 @@
 	
 * Follow
 	+ Can follow user
-	+ Can view read book, reading book, favorite book of user following
+	+ Can view read book, reading book, favorite book, following, followers of user following
 	+ Can unfollow user
 	
 * Manager
