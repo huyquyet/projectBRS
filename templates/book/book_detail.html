@@ -19,56 +19,19 @@
                             <input type="hidden" value="{{ object.pk }}" name="book_id">
                         </form>
 
-                        <!--============================== 1 star=====================================================================-->
-                        <a id="rating_1" href="#" class="btn-lg" style="padding: 0;" onclick="set_rating(1)">
-                            {% if object.rate_book >= 1 %}
-                                <span class="glyphicon glyphicon-star" style="color: red">
-                            {% else %}
-                                <span class="glyphicon glyphicon-star-empty">
-                            {% endif %}
-                            </span></a>
-                        <!--============================== End 1 star=====================================================================-->
+                        <!--============================== Start display star =====================================================================-->
+                        {% for i in  object.rate_book %}
+                            <a id="rating_1" href="#" class="btn-lg" style="padding: 0;" onclick="set_rating({{ forloop.counter }})">
+                                {% if i %}
+                                    <span class="glyphicon glyphicon-star" style="color: red">
+                                {% else %}
+                                    <span class="glyphicon glyphicon-star-empty">
+                                {% endif %}
+                                </span>
+                            </a>
+                        {% endfor %}
+                        <!--============================== End start display star =====================================================================-->
 
-                        <!--============================== 2 star=========================================================================-->
-                        <a href="#" class="btn-lg" style="padding: 0;" onclick="set_rating(1)">
-                            {% if object.rate_book >= 2 %}
-                                <span class="glyphicon glyphicon-star" style="color: red">
-                            {% else %}
-                                <span class="glyphicon glyphicon-star-empty">
-                            {% endif %}
-                            </span></a>
-                        <!--============================== End 2 star=====================================================================-->
-
-                        <!--============================== 3 star=========================================================================-->
-                        <a href="#" class="btn-lg" style="padding: 0;" onclick="set_rating(3);">
-                            {% if object.rate_book >= 3 %}
-                                <span class="glyphicon glyphicon-star" style="color: red">
-                            {% else %}
-                                <span class="glyphicon glyphicon-star-empty">
-                            {% endif %}
-                            </span></a>
-                        <!--============================== End 3 star=====================================================================-->
-
-                        <!--============================== 4 star=========================================================================-->
-
-                        <a href="#" class="btn-lg" style="padding: 0;" onclick="set_rating(4)">
-                            {% if object.rate_book >= 4 %}
-                                <span class="glyphicon glyphicon-star" style="color: red">
-                            {% else %}
-                                <span class="glyphicon glyphicon-star-empty">
-                            {% endif %}
-                            </span></a>
-                        <!--============================== End 4 star=====================================================================-->
-
-                        <!--============================== 5 star=========================================================================-->
-                        <a href="#" class="btn-lg" style="padding: 0;" onclick="set_rating(5)">
-                            {% if object.rate_book >= 5 %}
-                                <span class="glyphicon glyphicon-star" style="color: red">
-                            {% else %}
-                                <span class="glyphicon glyphicon-star-empty">
-                            {% endif %}
-                            </span></a>
-                        <!--============================== End 5 star=====================================================================-->
                     </div>
                     <!--============================================= End display rating book===========================================================-->
 

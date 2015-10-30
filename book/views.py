@@ -99,7 +99,9 @@ def return_rating_book(user, book):
     try:
         # if User.objects.filter(user_profile=user).exists():
         if Rating.objects.filter(user_profile=user.user_profile, book=book).exists():
-            return Rating.objects.get(user_profile=user.user_profile, book=book).rate
+            count_rating = Rating.objects.get(user_profile=user.user_profile, book=book).rate
+            list_rating = [True if i <= count_rating else False for i in range(1, 6)]
+            return list_rating
         else:
             return 0
     except:
