@@ -2,7 +2,7 @@
 {% load comment %}
 {% block content %}
     <div class="row" style="padding-top: 5px;background-color: #FFFFFF;">
-        <div class=" thumbnail" style="border: 0 solid" >
+        <div class=" thumbnail" style="border: 0 solid">
             <div class="row" style="padding: 0;">
                 {#                <div class="col-lg-12">#}
                 <!--============================================= Display cover book===========================================================-->
@@ -13,79 +13,61 @@
                     <div class="col-lg-12">
                         <strong><span class="text-success" style="float: left; margin: 4px 0 0 0; font-size: 15px;">Rating : </span></strong>
 
-                        <!--============================== 1 star=====================================================================-->
-                        <form action="{% url 'book:book_rating' %}" method="post" id="rating-form-1" style="margin: 5px 0 0 10px;float: left;">
+                        <form action="{% url 'book:book_rating' %}" method="post" id="rating-form" style="margin: 5px 0 0 10px;float: left;">
                             {% csrf_token %}
-                            <a href="#" class="btn-lg" style="padding: 0;" onclick="document.forms['rating-form-1'].submit();return false;">
-                                {% if object.rate_book >= 1 %}
-                                    <span class="glyphicon glyphicon-star" style="color: red">
-                                {% else %}
-                                    <span class="glyphicon glyphicon-star-empty">
-                                {% endif %}
-                                </span></a>
-                            <input type="hidden" value="1" name="point_rating">
+                            <input id="input_rating" type="hidden" value="" name="point_rating">
                             <input type="hidden" value="{{ object.pk }}" name="book_id">
                         </form>
+
+                        <!--============================== 1 star=====================================================================-->
+                        <a id="rating_1" href="#" class="btn-lg" style="padding: 0;" onclick="set_rating(1)">
+                            {% if object.rate_book >= 1 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty">
+                            {% endif %}
+                            </span></a>
                         <!--============================== End 1 star=====================================================================-->
 
                         <!--============================== 2 star=========================================================================-->
-                        <form action="{% url 'book:book_rating' %}" method="post" id="rating-form-2" style="margin: 5px 0 0 10px;float: left;">
-                            {% csrf_token %}
-                            <a href="#" class="btn-lg" style="padding: 0;" onclick="document.forms['rating-form-2'].submit();return false;">
-                                {% if object.rate_book >= 2 %}
-                                    <span class="glyphicon glyphicon-star" style="color: red">
-                                {% else %}
-                                    <span class="glyphicon glyphicon-star-empty">
-                                {% endif %}
-                                </span></a>
-                            <input type="hidden" value="2" name="point_rating">
-                            <input type="hidden" value="{{ object.pk }}" name="book_id">
-                        </form>
+                        <a href="#" class="btn-lg" style="padding: 0;" onclick="set_rating(1)">
+                            {% if object.rate_book >= 2 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty">
+                            {% endif %}
+                            </span></a>
                         <!--============================== End 2 star=====================================================================-->
 
                         <!--============================== 3 star=========================================================================-->
-                        <form action="{% url 'book:book_rating' %}" method="post" id="rating-form-3" style="margin: 5px 0 0 10px;float: left;">
-                            {% csrf_token %}
-                            <a href="#" class="btn-lg" style="padding: 0;" onclick="document.forms['rating-form-3'].submit();return false;">
-                                {% if object.rate_book >= 3 %}
-                                    <span class="glyphicon glyphicon-star" style="color: red">
-                                {% else %}
-                                    <span class="glyphicon glyphicon-star-empty">
-                                {% endif %}
-                                </span></a>
-                            <input type="hidden" value="3" name="point_rating">
-                            <input type="hidden" value="{{ object.pk }}" name="book_id">
-                        </form>
+                        <a href="#" class="btn-lg" style="padding: 0;" onclick="set_rating(3);">
+                            {% if object.rate_book >= 3 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty">
+                            {% endif %}
+                            </span></a>
                         <!--============================== End 3 star=====================================================================-->
 
                         <!--============================== 4 star=========================================================================-->
-                        <form action="{% url 'book:book_rating' %}" method="post" id="rating-form-4" style="margin: 5px 0 0 10px;float: left;">
-                            {% csrf_token %}
-                            <a href="#" class="btn-lg" style="padding: 0;" onclick="document.forms['rating-form-4'].submit();return false;">
-                                {% if object.rate_book >= 4 %}
-                                    <span class="glyphicon glyphicon-star" style="color: red">
-                                {% else %}
-                                    <span class="glyphicon glyphicon-star-empty">
-                                {% endif %}
-                                </span></a>
-                            <input type="hidden" value="4" name="point_rating">
-                            <input type="hidden" value="{{ object.pk }}" name="book_id">
-                        </form>
+
+                        <a href="#" class="btn-lg" style="padding: 0;" onclick="set_rating(4)">
+                            {% if object.rate_book >= 4 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty">
+                            {% endif %}
+                            </span></a>
                         <!--============================== End 4 star=====================================================================-->
 
                         <!--============================== 5 star=========================================================================-->
-                        <form action="{% url 'book:book_rating' %}" method="post" id="rating-form-5" style="margin: 5px 0 0 10px;float: left;">
-                            {% csrf_token %}
-                            <a href="#" class="btn-lg" style="padding: 0;" onclick="document.forms['rating-form-5'].submit();return false;">
-                                {% if object.rate_book >= 5 %}
-                                    <span class="glyphicon glyphicon-star" style="color: red">
-                                {% else %}
-                                    <span class="glyphicon glyphicon-star-empty">
-                                {% endif %}
-                                </span></a>
-                            <input type="hidden" value="5" name="point_rating">
-                            <input type="hidden" value="{{ object.pk }}" name="book_id">
-                        </form>
+                        <a href="#" class="btn-lg" style="padding: 0;" onclick="set_rating(5)">
+                            {% if object.rate_book >= 5 %}
+                                <span class="glyphicon glyphicon-star" style="color: red">
+                            {% else %}
+                                <span class="glyphicon glyphicon-star-empty">
+                            {% endif %}
+                            </span></a>
                         <!--============================== End 5 star=====================================================================-->
                     </div>
                     <!--============================================= End display rating book===========================================================-->
@@ -177,7 +159,7 @@
                 </div>
                 <!--============================================= End display information book===========================================================-->
             </div>
-            <div class="row" style="padding: 0;margin: 0" >
+            <div class="row" style="padding: 0;margin: 0">
                 <div class="thumbnail" style="margin: 5px 0 0 0; ">
 
                     {% if object.review == 0 %}
@@ -401,6 +383,11 @@
                 $('#' + id_comment).submit();
             }
         }
+        function set_rating(value) {
+            $("#input_rating").val(value);
+            $('#rating-form').submit();
+        }
+
     </script>
     <style>
         .btn-edit-review-dropdown {
