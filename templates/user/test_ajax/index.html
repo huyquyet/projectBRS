@@ -1,0 +1,30 @@
+{% extends 'user/layout/base_user.html' %}
+{% block content %}
+    <div>
+        <input id="q" type="text"/>
+        <input id="searchSubmit" type="submit" value="Search"/>
+        <br/>
+        <span class="hint">Type in a query string to search for users</span>
+
+        <div class="margin">{#            <span id="spinner"><img src="{{ MEDIA_URL }}spinner.gif"/></span>#}
+            <div id="results"></div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#searchSubmit').click(function () {
+                q = $('#q').val();
+                $('#results').html('&nbsp;').load('{% url 'user:test_ajax_result' %}?q=' + q);
+            });
+        });
+
+        $(document).ajaxStart(function () {
+            $('#spinner').show();
+        }).ajaxStop(function () {
+            $('#spinner').hide();
+        });
+    </script>
+
+{% endblock %}

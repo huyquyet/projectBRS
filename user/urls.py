@@ -24,4 +24,9 @@ urlpatterns = [
     url(r'^(?P<username>[\w-]+)/following$', views.UserManageFollowView, name='user_manager_follow'),
     # url(r'^(?P<username>[\w-]+)/following', views.UserManageFollowingView, name='user_manager_following'),
     url(r'^(?P<username>[\w-]+)/followers', views.UserManageFollowersView, name='user_manager_followers'),
+
+
+
+    url(r'^test_ajax/', views.test_ajax, name='test_ajax'),
+    url(r'^test_ajax_result/', views.test_ajax_result, name='test_ajax_result'),
 ]

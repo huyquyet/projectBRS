@@ -6,13 +6,16 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, Pass
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response
+from django.template import RequestContext
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, UpdateView, ListView
 from django.views.generic.detail import SingleObjectMixin
 
 from base.views import BaseView
+from book.models import Book
 from book.views import return_list_book_read, return_list_book_favorite
 from review.views import return_list_review_of_user
 from user.models import UserProfile, Follow
@@ -303,3 +306,21 @@ def user_un_follow(request):
 
 
             # class ac(ContexMixin)
+
+
+def test_ajax(request):
+    template = 'user/test_ajax/index.html'
+    data = {}
+    return render_to_response(template, data, context_instance=RequestContext(request))
+
+
+def test_ajax_result(request):
+    if request.is_ajax():
+        q = request.GET.get('q')
+        if q is not None:
+            results = Book.objects.filter(Q(title__icontains=q) | Q(category__icontains=q))
+            template = 'user/test_ajax/results.html'
+            data = {
+                'results': results,
+            }
+            return render_to_response(template, data, context_instance=RequestContext(request))
