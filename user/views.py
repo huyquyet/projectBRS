@@ -120,6 +120,9 @@ class UserChangePass(UpdateView):
         return super(UserChangePass, self).dispatch(request, *args, **kwargs)
 
     # def form_valid(self, form):
+    def get_object(self, queryset=None):
+        self.object = User.objects.get(username=self.kwargs['username'])
+        return self.object
 
     def get_success_url(self):
         return reverse('user:user_login')
@@ -305,9 +308,6 @@ def user_un_follow(request):
             return HttpResponseRedirect(reverse_lazy('user:user_home_page', kwargs={'username': User.objects.get(pk=user_follow_id).username}))
 
 
-            # class ac(ContexMixin)
-
-
 def test_ajax(request):
     template = 'user/test_ajax/index.html'
     data = {}
@@ -318,8 +318,8 @@ def test_ajax_result(request):
     if request.is_ajax():
         q = request.GET.get('q')
         if q is not None:
-            results = Book.objects.filter(Q(title__icontains=q) | Q(category__icontains=q))
-            template = 'user/test_ajax/results.html'
+            results = Book.objects.filter(Q(title__icontains=q) | Q(category__name__icontains=q))
+            template = 'user/test_ajax/result.html'
             data = {
                 'results': results,
             }

@@ -56,6 +56,7 @@ class BookDetail(BaseView, DetailView):
         ctx['object'].review = ctx['object'].review_book.count()
         ctx['object'].slug_category = ctx['object'].category.slug
         ctx['object'].rate_book = return_rating_book(self.request.user, self.object)
+        ctx['object'].number_rate_book = return_number_rating_book(self.request.user, self.object)
         ctx['object'].read_book = return_read_book(self.request.user, self.object)
         ctx['favorite'] = return_favorite_book(self.request.user, self.object)
         ctx['object'].review = return_number_review(self.object)
@@ -99,13 +100,27 @@ def return_rating_book(user, book):
     try:
         # if User.objects.filter(user_profile=user).exists():
         if Rating.objects.filter(user_profile=user.user_profile, book=book).exists():
-            count_rating = Rating.objects.get(user_profile=user.user_profile, book=book).rate
+            count_rating = return_number_rating_book(user, book)
             list_rating = [True if i <= count_rating else False for i in range(1, 6)]
             return list_rating
         else:
+            list_rating = [False for i in range(1, 6)]
+            return list_rating
+    except:
+        list_rating = [False for i in range(1, 6)]
+        return list_rating
+
+
+def return_number_rating_book(user, book):
+    try:
+        # if User.objects.filter(user_profile=user).exists():
+        if Rating.objects.filter(user_profile=user.user_profile, book=book).exists():
+            count_rating = Rating.objects.get(user_profile=user.user_profile, book=book).rate
+            return count_rating
+        else:
             return 0
     except:
-        return 0
+        return
 
 
 """

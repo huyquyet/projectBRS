@@ -6,19 +6,33 @@
         <br/>
         <span class="hint">Type in a query string to search for users</span>
 
-        <div class="margin">{#            <span id="spinner"><img src="{{ MEDIA_URL }}spinner.gif"/></span>#}
+        <div class="margin">
             <div id="results"></div>
         </div>
     </div>
 {% endblock %}
 {% block js %}
     <script type="text/javascript">
+        <!-- Load 1 trang vao 1 the DIV -->
         $(document).ready(function () {
             $('#searchSubmit').click(function () {
-                q = $('#q').val();
-                $('#results').html('&nbsp;').load('{% url 'user:test_ajax_result' %}?q=' + q);
+                s = $('#q').val();
+                $('#results').html('&nbsp;').load('{% url 'user:test_ajax_result' %}?q=' + s);
             });
         });
+{#        $.ajax({#}
+{#            url: 'user:test_ajax_result',#}
+{#            type: 'GET',#}
+{#            data: 'twitterUsername=jquery4u',#}
+{#            success: function (data) {#}
+{#                //called when successful#}
+{#                $('#ajaxphp-results').html(data);#}
+{#            },#}
+{#            error: function (e) {#}
+{#                //called when there is an error#}
+{#                //console.log(e.message);#}
+{#            }#}
+{#        });#}
 
         $(document).ajaxStart(function () {
             $('#spinner').show();

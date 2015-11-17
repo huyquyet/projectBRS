@@ -5,6 +5,7 @@
 {% block content_header %}
     <div class="col-lg-5 col-lg-offset-3" style="padding-bottom: 10px;">
         <span class="text-blue pull-left">Book Index</span>
+
         <form action="" method="get" class="pull-right">
             {% csrf_token %}
             <input type="text" value="" name="search" class="form-control" placeholder="Enter something" style="width: 400px;">
@@ -16,44 +17,41 @@
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
-                <th class="col-lg-1">ID</th>
-                <th class="col-lg-3">Title</th>
-                <th class="col-lg-1">Category</th>
-                <th class="col-lg-2">Author</th>
-                <th class="col-lg-2">Publish</th>
-                <th class="col-lg-1">page</th>
-                <th class="col-lg-1">Price</th>
-                <th class="col-lg-1"><a href="{% url 'admin:admin_book_create' %}" role="button"
-                                        class="btn btn-danger btn-sm">Create New</a></th>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Author</th>
+                <th>Publish</th>
+                <th>page</th>
+                <th>Price</th>
+                <th><a href="{% url 'admin:admin_book_create' %}" role="button"
+                       class="btn btn-danger btn-sm">Create New</a></th>
             </tr>
             </thead>
             <tbody>
             {% for obj in page_obj %}
-                <tr>
-                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.id }}</a>
+                <tr id="row_book_{{ obj.id }}">
+                    <td><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.id }}</a>
                     </td>
-                    <td class="col-lg-3"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.title| truncatewords:10 }}</a>
+                    <td><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.title| truncatewords:10 }}</a>
                     </td>
-                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.category }}</a>
+                    <td><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.category }}</a>
                     </td>
-                    <td class="col-lg-2"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.author }}</a>
+                    <td><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.author }}</a>
                     </td>
-                    <td class="col-lg-2"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.publish }}</a>
+                    <td><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.publish }}</a>
                     </td>
-                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.page }}</a>
+                    <td><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.page }}</a>
                     </td>
-                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.price }}</a>
+                    <td><a class=" text-info" href="{% url 'admin:admin_book_detail' obj.slug %}">{{ obj.price }}</a>
                     </td>
-                    <td class="col-lg-1">
+                    <td>
                         <a href="{% url 'admin:admin_book_edit' obj.slug %}" class="btn btn-success btn-xs no-margin" role="button">Edit</a>
 
-                        <form action="{% url 'admin:admin_book_delete' %}" method="post" style="float: right; margin: 0 20px 0 0">
-                            {% csrf_token %}
-                            <input type="hidden" name="book_id" value="{{ obj.id }}">
-                            <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want remover user ?')"> Delete</button>
-                        </form>
+                        <div style="float: right; margin: 0 20px 0 0" id="delete_book_{{ obj.id }}">
+                            <button type="button" class="btn btn-danger btn-xs" onclick="delete_book({{ obj.id }})"> Delete</button>
+                        </div>
                     </td>
-
                 </tr>
             {% endfor %}
             </tbody>

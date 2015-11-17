@@ -1,14 +1,16 @@
 # Create your views here.
+
 from django.contrib.admin.forms import AdminAuthenticationForm
 from django.contrib.auth import login
 from django.contrib import auth
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, UpdateView, DetailView, ListView, CreateView
+
 from django.db.models import Q
 
 from admin.forms import BookCreateFormView
@@ -230,13 +232,18 @@ AdminBookDetailView = AdminBookDetail.as_view()
 
 
 def admin_book_delete(request):
-    request_book_id = request.POST.get('book_id', False)
-    if request_book_id:
-        obj = get_object_or_404(Book, pk=request_book_id)
-        obj.delete()
-        return HttpResponseRedirect(reverse_lazy('admin:admin_book_index'))
-    else:
-        return HttpResponseRedirect(reverse_lazy('admin:admin_book_index'))
+    if request.method == 'POST':
+        book_id = request.POST.get('book_id')
+        response_data = {}
+        if book_id:
+            obj = get_object_or_404(Book, pk=book_id)
+            name_book = obj.name
+            obj.delete()
+            response_data['result'] = 'delete success book' + name_book
+            return JsonResponse(response_data)
+        else:
+            response_data['result'] = 'delete error book'
+            return JsonResponse(response_data)
 
 
 """
