@@ -136,7 +136,7 @@
                     {% else %}
                         <h3>{{ object.review }} Review</h3>
                         {% for obj in review_all_book %}
-                            <div class="row">
+                            <div class="row" id="review_{{ obj.id }}">
                                 <!--============================================= Display cover user write review ===========================================================-->
                                 <div class="col-lg-2" id="review-{{ obj.id }}" style="width: 10%; margin: 5px 0 0 0">
                                     <div class="thumbnail">
@@ -174,20 +174,20 @@
                                             <!--=========================================== Display like - unlike - review =======================================================-->
                                             <div id="like_unlike">
                                                 <div class="pull-left">
-                                                    <form action="{% url 'review:review_like_unlike' %}" method="post">
-                                                        {% csrf_token %}
-                                                        <input type="hidden" value="{{ obj.id }}" name="review_id">
-                                                        <input type="hidden" value="{{ object.id }}" name="book_id">
-                                                        {% if user.id in obj.id_like %}
-                                                            <input type="hidden" value="unlike" name="check">
-                                                            <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Unlike</button>
-                                                        {% else %}
-                                                            <input type="hidden" value="like" name="check">
-                                                            <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Like</button>
-                                                        {% endif %}
-                                                        - <a href="#id_{{ obj.id }}">comment</a> - {{ obj.date|date:'d-m-Y' }}<br>
-                                                    </form>
-                                                    {{ obj.number_like_review }} like this<br>
+                                                    {#                                                    <form action="{% url 'review:review_like_unlike' %}" method="post">#}
+                                                    {#                                                        {% csrf_token %}#}
+                                                    {#                                                        <input type="hidden" value="{{ obj.id }}" name="review_id">#}
+                                                    {#                                                        <input type="hidden" value="{{ object.id }}" name="book_id">#}
+                                                    {% if user.id in obj.id_like %}
+                                                        {#                                                            <input type="hidden" value="unlike" name="check">#}
+                                                        <button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;" onclick="unlike_review({{ obj.id }},{{ user.id }})"> Unlike</button>
+                                                    {% else %}
+                                                        {#                                                            <input type="hidden" value="like" name="check">#}
+                                                        <button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;" onclick="like_review({{ obj.id }},{{ user.id }})"> Like</button>
+                                                    {% endif %}
+                                                    - <a href="#id_{{ obj.id }}">comment</a> - {{ obj.date|date:'d-m-Y' }}<br>
+                                                    {#                                                    </form>#}
+                                                    <span id="number_like_review_{{ obj.id }}">{{ obj.number_like_review }}</span> like this<br>
                                                 </div>
                                             </div>
                                             <!--=========================================== End display like - unlike - review ========================================================-->
@@ -236,7 +236,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-1" style="width: 10%;padding: 5px;">
                                                         <div class="thumbnail">
-                                                            <img src="{{ i.user_profile.avata.url|default_if_none:'None' }}" alt="id ={{ i.user_profile.user.id }}" width="100%" height="100%">
+                                                            <img src="{{ i.user_profile.avata.url|default_if_none:'None' }}" id="" alt="id ={{ i.user_profile.user.id }}" width="100%" height="100%">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-11" style="width: 90%;padding: 5px;">
@@ -383,6 +383,5 @@
             border-color: #ac2925;
             opacity: 1;
         }
-
     </style>
 {% endblock %}

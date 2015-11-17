@@ -29,26 +29,17 @@ $.ajaxSetup({
 });
 
 
-function delete_book(id) {
-    if (confirm('are you sure you want to remove this book?') == true) {
-        var book_id = id;
-        $.ajax({
-                url: "/admin/book/delete",
-                type: "POST",
-                data: {
-                    book_id: book_id
-                },
-                success: function (json) {
-                    alert(json.result);
-                    $('#row_book_' + id).hide();
-                },
-                error: function (result) {
-                    alert(json.result);
-                }
-            }
-        );
-    }
-    else {
-        return false;
-    }
+function unlike_review(id_review, id_user) {
+    var id_review = id_review;
+    $.ajax({
+        url: '',
+        type: 'POST',
+        data: '',
+        success: '',
+        error: ''
+    })
+}
+
+function like_review(id_review, id_user) {
+
 }
