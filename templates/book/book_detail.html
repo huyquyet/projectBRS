@@ -13,7 +13,8 @@
                     <div class="col-lg-12">
                         <strong><span class="text-success" style="float: left; margin: 4px 0 0 0; font-size: 15px;">Rating : </span></strong>
 
-                        <form action="{% url 'book:book_rating' %}" method="post" id="rating-form" style="margin: 5px 0 0 10px;float: left;">
+                        <form action="{% url 'book:book_rating' %}" method="post" id="rating-form"
+                              style="margin: 5px 0 0 10px;float: left;">
                             {% csrf_token %}
                             <input id="input_rating" type="hidden" value="" name="point_rating">
                             <input type="hidden" value="{{ object.pk }}" name="book_id">
@@ -21,7 +22,8 @@
 
                         <!--============================== Start display star =====================================================================-->
                         {% for i in  object.rate_book %}
-                            <a id="rating_1" href="#" class="btn-lg" style="padding: 0;" onclick="set_rating({{ forloop.counter }})">
+                            <a id="rating_1" href="#" class="btn-lg" style="padding: 0;"
+                               onclick="set_rating({{ forloop.counter }})">
                                 {% if i %}
                                     <span class="glyphicon glyphicon-star" style="color: red">
                                 {% else %}
@@ -41,16 +43,24 @@
                     <div>
                         {% if user.is_authenticated %}
                             {% if favorite %}
-                                <button class="btn btn-success " style="width: 190px; height: 30px;margin: 0 0 0 12px; font-size: 14px;">Favorited</button>
+                                <button class="btn btn-success "
+                                        style="width: 190px; height: 30px;margin: 0 0 0 12px; font-size: 14px;">
+                                    Favorited
+                                </button>
                             {% else %}
                                 <form action="{% url 'book:favorite_book' %}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" value="{{ object.id }}" name="book_id">
-                                    <button type="submit" class="btn btn-warning " style="width: 190px; height: 30px;margin: 0 0 0 12px; font-size: 14px;">Favorite</button>
+                                    <button type="submit" class="btn btn-warning "
+                                            style="width: 190px; height: 30px;margin: 0 0 0 12px; font-size: 14px;">
+                                        Favorite
+                                    </button>
                                 </form>
                             {% endif %}
                         {% else %}
-                            <button class="btn btn-warning disabled" style="width: 190px; height: 30px;margin: 0 0 0 12px; font-size: 14px;">Favorite</button>
+                            <button class="btn btn-warning disabled"
+                                    style="width: 190px; height: 30px;margin: 0 0 0 12px; font-size: 14px;">Favorite
+                            </button>
                         {% endif %}
                     </div>
                     <!--============================================= End display favorite book===========================================================-->
@@ -69,7 +79,8 @@
                             </div>
                             <div>
                                 <h5>Author : <span class="text-danger">{{ object.author }}</span></h5>
-                                <h5>Publish date : {{ object.date|date:'d-m-Y' }} by <span class=" text-danger">{{ object.publish }}</span></h5>
+                                <h5>Publish date : {{ object.date|date:'d-m-Y' }} by <span
+                                        class=" text-danger">{{ object.publish }}</span></h5>
                             </div>
                             <div>
                                 <span class="text-success">{{ object.point_rating }}</span>
@@ -89,25 +100,31 @@
                                 <form action="{% url 'book:read_book' %}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" value="{{ object.id }}" name="book_id">
-                                    <button type="submit" class="btn btn-success " style="width:160px"><strong>Want to Read book !</strong></button>
+                                    <button type="submit" class="btn btn-success " style="width:160px"><strong>Want to
+                                        Read book !</strong></button>
                                 </form>
                             {% elif object.read_book == 1 %}
                                 <div class="dropdown">
-                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="width:160px"><strong>Reading book !</strong>&nbsp;&nbsp;&nbsp;<span
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                                            style="width:160px"><strong>Reading book !</strong>&nbsp;&nbsp;&nbsp;<span
                                             class="caret"></span></button>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <form action="{% url 'book:read_finish' %}" method="post" id="form-read-finish">
+                                            <form action="{% url 'book:read_finish' %}" method="post"
+                                                  id="form-read-finish">
                                                 {% csrf_token %}
                                                 <input type="hidden" value="{{ object.id }}" name="book_id">
                                             </form>
-                                            <a href="#" onclick="document.forms['form-read-finish'].submit();return false;">Finish !</a>
+                                            <a href="#"
+                                               onclick="document.forms['form-read-finish'].submit();return false;">Finish
+                                                !</a>
                                         </li>
                                     </ul>
                                 </div>
                             {% elif object.read_book == 2 %}
                                 <div class=" dropdown">
-                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="width:160px"><strong>Read book !</strong>&nbsp;&nbsp;&nbsp;<span
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                                            style="width:160px"><strong>Read book !</strong>&nbsp;&nbsp;&nbsp;<span
                                             class="caret"></span></button>
                                     <ul class="dropdown-menu">
                                         <li><a href="#">Want to Read book !</a></li>
@@ -140,7 +157,8 @@
                                 <!--============================================= Display cover user write review ===========================================================-->
                                 <div class="col-lg-2" id="review-{{ obj.id }}" style="width: 10%; margin: 5px 0 0 0">
                                     <div class="thumbnail">
-                                        <img src="{{ obj.user_profile.avata.url|default_if_none:'None' }}" alt="chua cos anh  id = {{ obj.user_profile.user.id }}">
+                                        <img src="{{ obj.user_profile.avata.url|default_if_none:'None' }}"
+                                             alt="chua cos anh  id = {{ obj.user_profile.user.id }}">
                                     </div>
                                 </div>
                                 <!--============================================= End display cover write review ===========================================================-->
@@ -152,16 +170,21 @@
                                             <!--=========================================== Display information of user - content of review ===================================-->
                                             <div>
                                                 <span style="font-size: 14px;">
-                                                    <strong class="text-success" style="float: left"> {{ obj.user_profile.user.first_name }} {{ obj.user_profile.user.last_name }} : </strong>
+                                                    <strong class="text-success"
+                                                            style="float: left"> {{ obj.user_profile.user.first_name }} {{ obj.user_profile.user.last_name }}
+                                                        : </strong>
                                                     <span id="id-review-{{ obj.id }}-content">{{ obj.content }}</span>
                                                     <span id="id-review-{{ obj.id }}-form" style="display:none;">
-                                                        <form action="{% url 'review:review_update' %}" method="post" id="update-review-{{ obj.id }}">
+                                                        <form action="{% url 'review:review_update' %}" method="post"
+                                                              id="update-review-{{ obj.id }}">
                                                             {% csrf_token %}
                                                             <input type="hidden" value="{{ obj.id }}" name="review_id">
                                                             <input type="hidden" value="{{ object.id }}" name="book_id">
-                                                            <textarea name="review_content" class="col-lg-9">{{ obj.content }}</textarea>
+                                                            <textarea name="review_content"
+                                                                      class="col-lg-9">{{ obj.content }}</textarea>
                                                         </form>
-                                                        <form action="{% url 'review:review_delete' %}" method="post" id="delete-review-{{ obj.id }}">
+                                                        <form action="{% url 'review:review_delete' %}" method="post"
+                                                              id="delete-review-{{ obj.id }}">
                                                             {% csrf_token %}
                                                             <input type="hidden" value="{{ obj.id }}" name="review_id">
                                                             <input type="hidden" value="{{ object.id }}" name="book_id">
@@ -174,22 +197,24 @@
                                             <!--=========================================== Display like - unlike - review =======================================================-->
                                             <div id="like_unlike">
                                                 <div class="pull-left">
-                                                    {#                                                    <form action="{% url 'review:review_like_unlike' %}" method="post">#}
-                                                    {#                                                        {% csrf_token %}#}
-                                                    {#                                                        <input type="hidden" value="{{ obj.id }}" name="review_id">#}
-                                                    {#                                                        <input type="hidden" value="{{ object.id }}" name="book_id">#}
                                                     <span id="like_unlike_link">
                                                     {% if user.id in obj.id_like %}
-                                                        {#                                                            <input type="hidden" value="unlike" name="check">#}
-                                                        <button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;" onclick="unlike_review({{ obj.id }},{{ user.id }})"> Unlike</button>
+                                                        <button type="button" class="btn btn-link"
+                                                                style="padding: 2px 0 5px 0;"
+                                                                onclick="unlike_review({{ obj.id }},{{ user.id }})">
+                                                            Unlike
+                                                        </button>
                                                     {% else %}
-                                                        {#                                                            <input type="hidden" value="like" name="check">#}
-                                                        <button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;" onclick="like_review({{ obj.id }},{{ user.id }})"> Like</button>
+                                                        <button type="button" class="btn btn-link"
+                                                                style="padding: 2px 0 5px 0;"
+                                                                onclick="like_review({{ obj.id }},{{ user.id }})"> Like
+                                                        </button>
                                                     {% endif %}
                                                     </span>
-                                                    - <a href="#id_{{ obj.id }}">comment</a> - {{ obj.date|date:'d-m-Y' }}<br>
-                                                    {#                                                    </form>#}
-                                                    <span id="number_like_review_{{ obj.id }}">{{ obj.number_like_review }}</span> like this<br>
+                                                    - <a href="#id_{{ obj.id }}">comment</a>
+                                                    - {{ obj.date|date:'d-m-Y' }}<br>
+                                                    <span id="number_like_review_{{ obj.id }}">{{ obj.number_like_review }}</span>
+                                                    like this<br>
                                                 </div>
                                             </div>
                                             <!--=========================================== End display like - unlike - review ========================================================-->
@@ -199,29 +224,38 @@
                                         <div style="width: 7%; float: left; padding: 0">
                                             {% if user.id == obj.user_profile.user.id %}
                                                 <div class="dropdown">
-                                                    <button type="button" id="id-btn-{{ obj.id }}-dropdown" class="btn btn-danger btn-xs dropdown-toggle btn-edit-review-dropdown" data-toggle="dropdown"
+                                                    <button type="button" id="id-btn-{{ obj.id }}-dropdown"
+                                                            class="btn btn-danger btn-xs dropdown-toggle btn-edit-review-dropdown"
+                                                            data-toggle="dropdown"
                                                             style="display: block">
                                                         Edit&nbsp;<span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu" style="min-width: 42px;padding: 0">
                                                         <li>
-                                                            <button id="id-btn-{{ obj.id }}-edit" class="btn btn-xs btn-info btn-edit-review"
+                                                            <button id="id-btn-{{ obj.id }}-edit"
+                                                                    class="btn btn-xs btn-info btn-edit-review"
                                                                     onclick="display_none_content('id-review-{{ obj.id }}-'); display_none_btn('id-btn-{{ obj.id }}-')"
-                                                                    style="display: block; width: 42px;margin: 0 0 3px 0">Edit
+                                                                    style="display: block; width: 42px;margin: 0 0 3px 0">
+                                                                Edit
                                                             </button>
 
-                                                            <button id="id-btn-{{ obj.id }}-delete" class="btn btn-xs btn-danger btn-edit-review"
-                                                                    onclick="confirm_delete_review('delete-review-{{ obj.id }}')" style="display: block; width: 42px;">Delete
+                                                            <button id="id-btn-{{ obj.id }}-delete"
+                                                                    class="btn btn-xs btn-danger btn-edit-review"
+                                                                    onclick="confirm_delete_review('delete-review-{{ obj.id }}')"
+                                                                    style="display: block; width: 42px;">Delete
                                                             </button>
                                                         </li>
                                                     </ul>
                                                 </div>
-                                                <button class="btn btn-xs btn-success" id="id-btn-{{ obj.id }}-submit" onclick="document.forms['update-review-{{ obj.id }}'].submit();return false;"
+                                                <button class="btn btn-xs btn-success" id="id-btn-{{ obj.id }}-submit"
+                                                        onclick="document.forms['update-review-{{ obj.id }}'].submit();return false;"
                                                         style="display: none; margin: 0 0 5px 0">
                                                     Update
                                                 </button>
-                                                <button class="btn btn-xs btn-danger" id="id-btn-{{ obj.id }}-cancel" style="display: none"
-                                                        onclick="display_block_content('id-review-{{ obj.id }}-'); display_block_btn('id-btn-{{ obj.id }}-')">Cancel
+                                                <button class="btn btn-xs btn-danger" id="id-btn-{{ obj.id }}-cancel"
+                                                        style="display: none"
+                                                        onclick="display_block_content('id-review-{{ obj.id }}-'); display_block_btn('id-btn-{{ obj.id }}-')">
+                                                    Cancel
                                                 </button>
                                             {% endif %}
                                         </div>
@@ -238,18 +272,25 @@
                                                 <div class="row">
                                                     <div class="col-lg-1" style="width: 10%;padding: 5px;">
                                                         <div class="thumbnail">
-                                                            <img src="{{ i.user_profile.avata.url|default_if_none:'None' }}" id="" alt="id ={{ i.user_profile.user.id }}" width="100%" height="100%">
+                                                            <img src="{{ i.user_profile.avata.url|default_if_none:'None' }}"
+                                                                 id="" alt="id ={{ i.user_profile.user.id }}"
+                                                                 width="100%" height="100%">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-11" style="width: 90%;padding: 5px;">
                                                         <div style="width: 10%;float: right">
                                                             {% if user.id == i.user_profile.user.id %}
-                                                                <form action="{% url 'comment:comment_delete' %}" method="post" id="delete-comment-{{ i.id }}">
+                                                                <form action="{% url 'comment:comment_delete' %}"
+                                                                      method="post" id="delete-comment-{{ i.id }}">
                                                                     {% csrf_token %}
-                                                                    <input type="hidden" value="{{ i.id }}" name="comment_id">
-                                                                    <input type="hidden" value="{{ object.id }}" name="book_id">
-                                                                    <button id="id-btn-{{ obj.id }}-delete" class="btn btn-xs btn-danger btn-delete-comment"
-                                                                            onclick="confirm_delete_comment('delete-comment-{{ i.id }}')">Delete
+                                                                    <input type="hidden" value="{{ i.id }}"
+                                                                           name="comment_id">
+                                                                    <input type="hidden" value="{{ object.id }}"
+                                                                           name="book_id">
+                                                                    <button id="id-btn-{{ obj.id }}-delete"
+                                                                            class="btn btn-xs btn-danger btn-delete-comment"
+                                                                            onclick="confirm_delete_comment('delete-comment-{{ i.id }}')">
+                                                                        Delete
                                                                     </button>
                                                                 </form>
                                                             {% endif %}
@@ -260,19 +301,25 @@
                                                         {{ i.content }}
                                                     </span>
                                                         </div>
-                                                        <form action="{% url 'comment:comment_review_like_unlike' %}" method="post">
+                                                        <form action="{% url 'comment:comment_review_like_unlike' %}"
+                                                              method="post">
                                                             {% csrf_token %}
                                                             <input type="hidden" value="{{ i.id }}" name="comment_id">
                                                             <input type="hidden" value="{{ object.id }}" name="book_id">
                                                             {% return_user_like_of_comment i.pk as all_like_cmt %}
                                                             {% if user.id in all_like_cmt %}
                                                                 <input type="hidden" value="unlike" name="check">
-                                                                <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Unlike</button>
+                                                                <button type="submit" class="btn btn-link"
+                                                                        style="padding: 2px 0 5px 0;"> Unlike
+                                                                </button>
                                                             {% else %}
                                                                 <input type="hidden" value="like" name="check">
-                                                                <button type="submit" class="btn btn-link" style="padding: 2px 0 5px 0;"> Like</button>
+                                                                <button type="submit" class="btn btn-link"
+                                                                        style="padding: 2px 0 5px 0;"> Like
+                                                                </button>
                                                             {% endif %}
-                                                            - {{ i.date|date:'d-m-Y' }}<br> {{ i.get_total_like }} like this<br>
+                                                            - {{ i.date|date:'d-m-Y' }}<br> {{ i.get_total_like }} like
+                                                            this<br>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -282,7 +329,8 @@
                                             <div class="row">
                                                 <div class="col-lg-1" style="width: 10%;padding: 5px;">
                                                     <div class="thumbnail">
-                                                        <img src="{{ user.user_profile.avata.url|default_if_none:'None' }}" alt="id ={{ user.id }}" width="100%" height="100%">
+                                                        <img src="{{ user.user_profile.avata.url|default_if_none:'None' }}"
+                                                             alt="id ={{ user.id }}" width="100%" height="100%">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-11" style="width: 90%;padding: 5px;">
@@ -290,7 +338,8 @@
                                                         {% csrf_token %}
                                                         <input type="hidden" value="{{ obj.id }}" name="review_id">
                                                         <input type="hidden" value="{{ object.id }}" name="book_id">
-                                                        <input type="text" class="form-control" name="content_comment" id="id_{{ obj.id }}" placeholder="Write comment">
+                                                        <input type="text" class="form-control" name="content_comment"
+                                                               id="id_{{ obj.id }}" placeholder="Write comment">
                                                     </form>
                                                 </div>
                                             </div>
@@ -306,8 +355,11 @@
                         <form action="{% url 'review:review_create' %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" value="{{ object.id }}" name="book_id">
-                            <textarea class="form-control" id="write-new-review" rows="3" name="content_review" placeholder="Write review"></textarea>
-                            <button class=" btn btn-sm btn-default" type="submit" name="submit" style="width: 50px;margin: 5px 0 0 0">Post</button>
+                            <textarea class="form-control" id="write-new-review" rows="3" name="content_review"
+                                      placeholder="Write review"></textarea>
+                            <button class=" btn btn-sm btn-default" type="submit" name="submit"
+                                    style="width: 50px;margin: 5px 0 0 0">Post
+                            </button>
                         </form>
                     {% else %}
                         Rating book mới có thể review
