@@ -28,15 +28,13 @@ $.ajaxSetup({
     }
 });
 
-
 function delete_book(id) {
     if (confirm('are you sure you want to remove this book?') == true) {
-        var book_id = id;
         $.ajax({
                 url: "/admin/book/delete",
                 type: "POST",
                 data: {
-                    book_id: book_id
+                    book_id: id
                 },
                 success: function (json) {
                     alert(json.result);

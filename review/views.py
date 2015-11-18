@@ -19,7 +19,7 @@ def review_create(request):
     content_review = request.POST.get('content_review', False)
 
     if book_id and request.user:
-        obj, create = Review.objects.create(user_profile=request.user.user_profile, book=Book.objects.get(pk=book_id))
+        obj, create = Review.objects.get_or_create(user_profile=request.user.user_profile, book=Book.objects.get(pk=book_id))
         obj.content = content_review
         obj.save()
         return return_redirect(book_id.strip())

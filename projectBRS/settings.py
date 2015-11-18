@@ -152,3 +152,5 @@ LOGIN_URL = '/user/login'
 
 BOOK_DIR = 'books'
 AVATA_DIR = 'avata'
+
+# APPEND_SLASH = False

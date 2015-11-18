@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-lg-1" style="width: 10%;padding: 5px;">
+        <div class="thumbnail">
+            <img src="{{ i.user_avata|default_if_none:'None' }}"
+                 id="" alt="id ={{ i.user_id }}"
+                 width="100%" height="100%">
+        </div>
+    </div>
+    <div class="col-lg-11" style="width: 90%;padding: 5px;">
+        <div style="width: 10%;float: right">
+            {% if user.id == i.user_id %}
+                <form action="{% url 'comment:comment_delete' %}"
+                      method="post" id="delete-comment-{{ i.comment_id }}">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ i.comment_id }}"
+                           name="comment_id">
+{#                    <input type="hidden" value="{{ object.id }}"#}
+{#                           name="book_id">#}
+                    <button id="id-btn-{{ i.comment_id }}-delete"
+                            class="btn btn-xs btn-danger btn-delete-comment"
+                            onclick="confirm_delete_comment('delete-comment-{{ i.comment_id }}')">
+                        Delete
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+        <div style="width: 90%;">
+            <span style="font-size: 14px;">
+                <strong class="text-success">{{ i.user_first_name }} {{ i.user_first_name }}: </strong>
+                {{ i.content }}
+            </span>
+        </div>
+        <form action="{% url 'comment:comment_review_like_unlike' %}"
+              method="post">
+            {% csrf_token %}
+            <input type="hidden" value="{{ i.comment_id }}" name="comment_id">
+            {% return_user_like_of_comment i.comment_id as all_like_cmt %}
+            {% if user.id in all_like_cmt %}
+                <input type="hidden" value="unlike" name="check">
+                <button type="submit" class="btn btn-link"
+                        style="padding: 2px 0 5px 0;"> Unlike
+                </button>
+            {% else %}
+                <input type="hidden" value="like" name="check">
+                <button type="submit" class="btn btn-link"
+                        style="padding: 2px 0 5px 0;"> Like
+                </button>
+            {% endif %}
+            - {{ i.date|date:'d-m-Y' }}<br> {{ i.get_total_like }} like
+            this<br>
+        </form>
+    </div>
+</div>
