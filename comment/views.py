@@ -46,47 +46,46 @@ def comment_create(request):
 
 def comment_delete(request):
     comment_id = request.POST.get('comment_id', False)
-    book_id = request.POST.get('book_id', '')
-    s_book_id = book_id.strip()
-
+    # book_id = request.POST.get('book_id', '')
+    # s_book_id = book_id.strip()
+    response_data = {}
     if comment_id and request.user:
         obj = get_object_or_404(CommentReview, pk=comment_id)
         if request.user == obj.user_profile.user:
             obj.delete()
-            return return_redirect(s_book_id)
+            response_data['result'] = 'Delete Successfull'
+            return JsonResponse(response_data)
         else:
-            return HttpResponseRedirect(reverse_lazy("book:book_index"))
-    elif request.user:
-        return HttpResponseRedirect(reverse_lazy("book:book_index"))
-    elif book_id:
-        return return_redirect(s_book_id)
+            response_data['result'] = 'Denied Permission'
+            return JsonResponse(response_data)
     else:
-        return HttpResponseRedirect(reverse_lazy("book:book_index"))
+        response_data['result'] = 'Error '
+        return JsonResponse(response_data)
 
 
-def comment_review_like_unlike(request):
-    comment_id = request.POST.get('comment_id', False)
-    book_id = request.POST.get('book_id', False)
-    check = request.POST.get('check', False)
-
-    if comment_id and request.user and check:
-        check_1 = check.strip()
-        if check_1 == 'like':
-            obj, create = LikeComment.objects.get_or_create(user_profile=request.user.user_profile,
-                                                            comment=CommentReview.objects.get(pk=comment_id))
-            obj.save()
-            return return_redirect(book_id.strip())
-        elif check_1 == 'unlike':
-            LikeComment.objects.get(user_profile=request.user.user_profile,
-                                    comment=CommentReview.objects.get(pk=comment_id)).delete()
-            return return_redirect(book_id.strip())
-        else:
-            return HttpResponseRedirect(reverse_lazy("book:book_index"))
-    elif request.user:
-        return HttpResponseRedirect(reverse_lazy("book:book_index"))
-    else:
-        return HttpResponseRedirect(reverse_lazy("book:book_index"))
-
+# def comment_review_like_unlike(request):
+#     comment_id = request.POST.get('comment_id', False)
+#     book_id = request.POST.get('book_id', False)
+#     check = request.POST.get('check', False)
+#
+#     if comment_id and request.user and check:
+#         check_1 = check.strip()
+#         if check_1 == 'like':
+#             obj, create = LikeComment.objects.get_or_create(user_profile=request.user.user_profile,
+#                                                             comment=CommentReview.objects.get(pk=comment_id))
+#             obj.save()
+#             return return_redirect(book_id.strip())
+#         elif check_1 == 'unlike':
+#             LikeComment.objects.get(user_profile=request.user.user_profile,
+#                                     comment=CommentReview.objects.get(pk=comment_id)).delete()
+#             return return_redirect(book_id.strip())
+#         else:
+#             return HttpResponseRedirect(reverse_lazy("book:book_index"))
+#     elif request.user:
+#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
+#     else:
+#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
+#
 
 def comment_review_unlike(request):
     id_comment = request.POST.get('id_comment', False)

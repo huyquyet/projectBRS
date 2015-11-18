@@ -92,7 +92,7 @@ function create_comment_review(id) {
             success: function (json) {
                 var d1 = new Date();
                 $('#content_comment_' + id).val('');
-                $('#display_comment_review_' + id).append('<div class="row">' +
+                $('#display_comment_review_' + id).append('<div class="row" id="comment_review_number_' + json.comment_id + '">' +
                     '<div class="col-lg-1" style="width: 10%;padding: 5px;">' +
                     '<div class="thumbnail">' +
                     '<img src="' + json.user_avata + '" id="" alt="id =' + json.user_id + '"width="100%" height="100%">' +
@@ -100,15 +100,10 @@ function create_comment_review(id) {
                     '</div>' +
                     '<div class="col-lg-11" style="width: 90%;padding: 5px;">' +
                     '<div style="width: 10%;float: right">' +
-                    '<form action="/comment/comment_delete/"method="post" id="delete-comment-' + json.comment_id + '">' +
-                    '<input type="hidden" name="csrfmiddlewaretoken" value="ap9rMTqa8ZJggNudUvso0wU3huBQcUzI">' +
-                    '<input type="hidden" value="' + json.comment_id + '"name="comment_id">' +
-                    '<input type="hidden" value="' + json.book_id + '"name="book_id">' +
-                    '<button id="id-btn-' + json.comment_id + '-delete" class="btn btn-xs btn-danger btn-delete-comment"' +
-                    'onclick="confirm_delete_comment("delete-comment-' + json.comment_id + '")">' +
+                    '<button id="id-btn-' + json.comment_id + '-delete" type="button"' +
+                    'class="btn btn-xs btn-danger btn-delete-comment"onclick="delete_comment(' + json.comment_id + ')">' +
                     'Delete' +
                     '</button>' +
-                    '</form>' +
                     '</div>' +
                     '<div style="width: 90%;">' +
                     '<span style="font-size: 14px;">' +
@@ -169,5 +164,22 @@ function like_comment(id_comment) {
             alert('error submit data');
         }
     })
+}
+
+function delete_comment(id_comment) {
+    if (confirm('Are you sure you want delete comment ?') == true) {
+        $.ajax({
+            url: '/comment/comment_delete/',
+            type: 'POST',
+            data: {
+                comment_id: id_comment
+            },
+            success: function (json) {
+                alert(json.result);
+                $('#comment_review_number_' + id_comment).hide();
+            },
+            error: ''
+        })
+    }
 }
 
