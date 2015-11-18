@@ -86,3 +86,31 @@ def comment_review_like_unlike(request):
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
     else:
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
+
+
+def comment_review_unlike(request):
+    id_comment = request.POST.get('id_comment', False)
+    response_data = {}
+    if id_comment:
+        obj = LikeComment.objects.get(user_profile=request.user.user_profile,
+                                      comment=CommentReview.objects.get(pk=id_comment))
+        obj.delete()
+        response_data['result'] = True
+        response_data['like'] = CommentReview.objects.get(id=id_comment).get_total_like()
+        return JsonResponse(response_data)
+    else:
+        response_data['result'] = False
+
+
+def comment_review_like(request):
+    id_comment = request.POST.get('id_comment', False)
+    response_data = {}
+    if id_comment:
+        obj, create = LikeComment.objects.get_or_create(user_profile=request.user.user_profile,
+                                                        comment=CommentReview.objects.get(pk=id_comment))
+        obj.save()
+        response_data['result'] = True
+        response_data['like'] = CommentReview.objects.get(id=id_comment).get_total_like()
+        return JsonResponse(response_data)
+    else:
+        response_data['result'] = False

@@ -297,34 +297,28 @@
                                                                 {% endif %}
                                                             </div>
                                                             <div style="width: 90%;">
-                                                        <span style="font-size: 14px;">
-                                                            <strong class="text-success">{{ i.user_profile.user.first_name }} {{ i.user_profile.user.last_name }}: </strong>
-                                                            {{ i.content }}
-                                                        </span>
+                                                                <span style="font-size: 14px;">
+                                                                    <strong class="text-success">{{ i.user_profile.user.first_name }} {{ i.user_profile.user.last_name }}: </strong>
+                                                                    {{ i.content }}
+                                                                </span>
                                                             </div>
-                                                            <form action="{% url 'comment:comment_review_like_unlike' %}"
-                                                                  method="post">
-                                                                {% csrf_token %}
-                                                                <input type="hidden" value="{{ i.id }}"
-                                                                       name="comment_id">
-                                                                <input type="hidden" value="{{ object.id }}"
-                                                                       name="book_id">
-                                                                {% return_user_like_of_comment i.pk as all_like_cmt %}
+                                                            {% return_user_like_of_comment i.pk as all_like_cmt %}
+                                                                <span id="like_unlike_comment_link_{{ i.pk }}">
                                                                 {% if user.id in all_like_cmt %}
-                                                                    <input type="hidden" value="unlike" name="check">
-                                                                    <button type="submit" class="btn btn-link"
-                                                                            style="padding: 2px 0 5px 0;"> Unlike
+                                                                    <button type="button" class="btn btn-link"
+                                                                            style="padding: 2px 0 5px 0; "
+                                                                            onclick="unlike_comment({{ i.pk }})"> Unlike
                                                                     </button>
                                                                 {% else %}
-                                                                    <input type="hidden" value="like" name="check">
-                                                                    <button type="submit" class="btn btn-link"
-                                                                            style="padding: 2px 0 5px 0;"> Like
+                                                                    <button type="button" class="btn btn-link"
+                                                                            style="padding: 2px 0 5px 0;"
+                                                                            onclick="like_comment({{ i.pk }})"> Like
                                                                     </button>
                                                                 {% endif %}
-                                                                - {{ i.date|date:'d-m-Y' }}<br> {{ i.get_total_like }}
-                                                                like
-                                                                this<br>
-                                                            </form>
+                                                                </span>
+                                                            - {{ i.date|date:'d-m-Y' }}<br>
+                                                            <span id="number_like_comment_{{ i.pk }}"> {{ i.get_total_like }}</span>
+                                                            like this<br>
                                                         </div>
                                                     </div>
                                                 {% endfor %}
