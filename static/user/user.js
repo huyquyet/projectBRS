@@ -30,16 +30,39 @@ $.ajaxSetup({
 
 
 function unlike_review(id_review, id_user) {
-    var id_review = id_review;
     $.ajax({
-        url: '',
-        type: 'POST',
-        data: '',
-        success: '',
-        error: ''
-    })
+            url: '/review/unlike',
+            type: 'POST',
+            data: {
+                review_id: id_review,
+                user_id: id_user
+            },
+            success: function (json) {
+                $('#like_unlike_link').html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;" onclick="like_review(' + id_review + ',' + id_user + ')" > Like');
+                $('#number_like_review_' + id_review).html(json.like);
+
+            },
+            error: function () {
+                alert('error submit data');
+            }
+        }
+    )
 }
 
 function like_review(id_review, id_user) {
-
+    $.ajax({
+        url: '/review/like',
+        type: 'POST',
+        data: {
+            review_id: id_review,
+            user_id: id_user
+        },
+        success: function (json) {
+            $('#like_unlike_link').html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;" onclick="unlike_review(' + id_review + ',' + id_user + ')" > Unlike');
+            $('#number_like_review_' + id_review).html(json.like);
+        },
+        error: function () {
+            alert('error submit data');
+        }
+    })
 }

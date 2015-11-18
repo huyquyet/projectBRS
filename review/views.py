@@ -1,6 +1,8 @@
 # Create your views here.
+from django.contrib.auth.models import User
+
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 
 from book.models import Book
@@ -101,31 +103,40 @@ def review_like_unlike(request):
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
 
 
-# def review_like(request):
-#     review_id = request.POST.get('review_id', False)
-#     book_id = request.POST.get('book_id', False)
-#     if review_id and request.user:
-#         obj, create = LikeReview.objects.get_or_create(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id))
-#         obj.save()
-#         slug_book = Book.objects.get(pk=book_id).slug
-#         return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
-#     elif request.user:
-#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
-#     else:
-#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
-#
-#
-# def review_unlike(request):
-#     review_id = request.POST.get('review_id', False)
-#     book_id = request.POST.get('book_id', False)
-#     if review_id and request.user:
-#         LikeReview.objects.get(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id)).delete()
-#         slug_book = Book.objects.get(pk=book_id).slug
-#         return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
-#     elif request.user:
-#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
-#     else:
-#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
+def review_like(request):
+    review_id = request.POST.get('review_id', False)
+    user_id = request.POST.get('user_id', False)
+    response_data = {}
+    if review_id and request.user:
+        obj, create = LikeReview.objects.get_or_create(user_profile=User.objects.get(id=user_id).user_profile, review=Review.objects.get(pk=review_id))
+        obj.save()
+        response_data['result'] = True
+        response_data['like'] = Review.objects.get(id=review_id).like_review.all().count()
+        return JsonResponse(response_data)
+    elif request.user:
+        response_data['result'] = False
+        return JsonResponse(response_data)
+    else:
+        response_data['result'] = False
+        return JsonResponse(response_data)
+
+
+def review_unlike(request):
+    review_id = request.POST.get('review_id', False)
+    user_id = request.POST.get('user_id', False)
+    response_data = {}
+    if review_id and request.user:
+        obj = LikeReview.objects.get(user_profile=User.objects.get(id=user_id).user_profile, review=Review.objects.get(pk=review_id))
+        obj.delete()
+        response_data['result'] = True
+        response_data['like'] = Review.objects.get(id=review_id).like_review.all().count()
+        return JsonResponse(response_data)
+    elif request.user:
+        response_data['result'] = False
+        return JsonResponse(response_data)
+    else:
+        response_data['result'] = False
+        return JsonResponse(response_data)
 
 
 def return_list_review_of_user(user):

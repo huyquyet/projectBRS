@@ -178,6 +178,7 @@
                                                     {#                                                        {% csrf_token %}#}
                                                     {#                                                        <input type="hidden" value="{{ obj.id }}" name="review_id">#}
                                                     {#                                                        <input type="hidden" value="{{ object.id }}" name="book_id">#}
+                                                    <span id="like_unlike_link">
                                                     {% if user.id in obj.id_like %}
                                                         {#                                                            <input type="hidden" value="unlike" name="check">#}
                                                         <button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;" onclick="unlike_review({{ obj.id }},{{ user.id }})"> Unlike</button>
@@ -185,6 +186,7 @@
                                                         {#                                                            <input type="hidden" value="like" name="check">#}
                                                         <button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;" onclick="like_review({{ obj.id }},{{ user.id }})"> Like</button>
                                                     {% endif %}
+                                                    </span>
                                                     - <a href="#id_{{ obj.id }}">comment</a> - {{ obj.date|date:'d-m-Y' }}<br>
                                                     {#                                                    </form>#}
                                                     <span id="number_like_review_{{ obj.id }}">{{ obj.number_like_review }}</span> like this<br>
