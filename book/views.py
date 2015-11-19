@@ -80,23 +80,28 @@ Rating
 
 @login_required
 def add_rating(request):
-    point = request.POST.get('point_rating', False)
+    rating = request.POST.get('rating', False)
     book_id = request.POST.get('book_id', False)
-
-    if book_id and point:
+    response_data = {}
+    if book_id and rating:
         obj, create = Rating.objects.get_or_create(user_profile=request.user.user_profile,
                                                    book=Book.objects.get(pk=book_id))
-        obj.rate = point
+        obj.rate = rating
         obj.save()
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
-    elif point:
-        return HttpResponseRedirect(reverse("book:book_index"))
-    elif book_id:
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
+        response_data['result'] = True
+        response_data['number_point'] = Book.objects.get(id=book_id).get_rating_book()
+        response_data['number_rating'] = Book.objects.get(id=book_id).rating_book.count()
+        return JsonResponse(response_data)
+    # slug_book = Book.objects.get(pk=book_id).slug
+    #     return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
+    # elif point:
+    #     return HttpResponseRedirect(reverse("book:book_index"))
+    # elif book_id:
+    #     slug_book = Book.objects.get(pk=book_id).slug
+    #     return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
     else:
-        return HttpResponseRedirect(reverse("book:book_index"))
+        response_data['result'] = False
+        return JsonResponse(response_data)
 
 
 def return_rating_book(user, book):

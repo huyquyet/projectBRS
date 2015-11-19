@@ -201,7 +201,7 @@ function read_book_start(id_book) {
                 '<strong>Reading book !</strong>&nbsp;&nbsp;&nbsp;<span class="caret"></span>' +
                 '</button>' +
                 '<ul class="dropdown-menu"><li>' +
-                '<a href="#" onclick="read_book_finish(' + id_book + ')">Finish !</a>' +
+                '<a href="#" onclick="read_book_finish(' + id_book + '); return false;">Finish !</a>' +
                 '</li></ul></div>')
         },
         error: ''
@@ -228,4 +228,41 @@ function read_book_finish(id_book) {
         }
     })
 
+}
+
+function set_rating(id_book, rating) {
+    $.ajax({
+        url: '/book/user/rating/',
+        type: 'POST',
+        data: {
+            book_id: id_book,
+            rating: rating
+        },
+        success: function (json) {
+            if (json.result == true) {
+                var a = $('#display_star');
+                a.html('');
+                for (var i = 0; i < 5; i++) {
+                    var j = i + 1;
+                    if (j <= rating) {
+                        a.append('<a href="" class="btn-lg" style="padding: 0;"' +
+                            'onclick="set_rating(' + id_book + ',' + j + '); return false;">' +
+                            '<span class="glyphicon glyphicon-star" style="color: red"></a>');
+                    }
+                    else {
+                        a.append('<a href="" class="btn-lg" style="padding: 0;"' +
+                            'onclick="set_rating(' + id_book + ',' + j + '); return false;">' +
+                            '<span class="glyphicon glyphicon-star-empty"></a>');
+                    }
+                }
+                $('#number_point').html(json.number_point);
+                $('#number_rating').html(json.number_rating);
+            } else {
+                alert('Error')
+            }
+        },
+        error: function (json) {
+            alert('Error')
+        }
+    })
 }

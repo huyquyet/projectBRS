@@ -13,26 +13,28 @@
                     <div class="col-lg-12">
                         <strong><span class="text-success" style="float: left; margin: 4px 0 0 0; font-size: 15px;">Rating : </span></strong>
 
-                        <form action="{% url 'book:book_rating' %}" method="post" id="rating-form"
-                              style="margin: 5px 0 0 10px;float: left;">
-                            {% csrf_token %}
-                            <input id="input_rating" type="hidden" value="" name="point_rating">
-                            <input type="hidden" value="{{ object.pk }}" name="book_id">
-                        </form>
-
+                        {#                        <form action="{% url 'book:book_rating' %}" method="post" id="rating-form"#}
+                        {#                              style="margin: 5px 0 0 10px;float: left;">#}
+                        {#                            {% csrf_token %}#}
+                        {#                            <input id="input_rating" type="hidden" value="" name="point_rating">#}
+                        {#                            <input type="hidden" value="{{ object.pk }}" name="book_id">#}
+                        {#                        </form>#}
+                        {#                        id="rating_1"#}
                         <!--============================== Start display star =====================================================================-->
-                        {% for i in  object.rate_book %}
-                            <a id="rating_1" href="#" class="btn-lg" style="padding: 0;"
-                               onclick="set_rating({{ forloop.counter }})">
-                                {% if i %}
-                                    <span class="glyphicon glyphicon-star" style="color: red">
-                                {% else %}
-                                    <span class="glyphicon glyphicon-star-empty">
-                                {% endif %}
-                                </span>
-                            </a>
-                        {% endfor %}
-                        {{ object.rate_book.count }}
+                        <div id="display_star">
+                            {% for i in  object.rate_book %}
+                                <a href="#" class="btn-lg" style="padding: 0;"
+                                   onclick="set_rating({{ object.id }},{{ forloop.counter }}); return false;">
+                                    {% if i %}
+                                        <span class="glyphicon glyphicon-star" style="color: red">
+                                    {% else %}
+                                        <span class="glyphicon glyphicon-star-empty">
+                                    {% endif %}
+                                    </span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                        {#                        {{ object.rate_book.count }}#}
                         <!--============================== End start display star =====================================================================-->
 
                     </div>
@@ -83,9 +85,9 @@
                                         class=" text-danger">{{ object.publish }}</span></h5>
                             </div>
                             <div>
-                                <span class="text-success">{{ object.point_rating }}</span>
+                                <span class="text-success" id="number_point">{{ object.point_rating }}</span>
                                 <span class="text-danger">point</span> -
-                                <span class="text-success">{{ object.rating }}</span>
+                                <span class="text-success" id="number_rating">{{ object.rating }}</span>
                                 <span class="text-danger">rating</span> -
                                 <span class="text-success">{{ object.review }}</span>
                                 <span class="text-danger">review </span> ------
@@ -98,7 +100,7 @@
                         <div class="col-lg-5" id="button_read_book">
                             {% if object.read_book == 0 %}
                                 <button type="button" class="btn btn-success " style="width:160px"
-                                        onclick="read_book_start({{ object.id }})"><strong>Want to Read book !</strong>
+                                        onclick="read_book_start({{ object.id }}); return false;"><strong>Want to Read book !</strong>
                                 </button>
                             {% elif object.read_book == 1 %}
                                 <div class="dropdown">
@@ -107,7 +109,7 @@
                                             class="caret"></span></button>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a href="#" onclick="read_book_finish({{ object.id }})">Finish !</a>
+                                            <a href="#" onclick="read_book_finish({{ object.id }}); return false;">Finish !</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -386,10 +388,10 @@
                 $('#' + id_review).submit();
             }
         }
-        function set_rating(value) {
-            $("#input_rating").val(value);
-            $('#rating-form').submit();
-        }
+        {#        function set_rating(value) {#}
+        {#            $("#input_rating").val(value);#}
+        {#            $('#rating-form').submit();#}
+        {#        }#}
     </script>
     <style>
         .btn-edit-review-dropdown {
