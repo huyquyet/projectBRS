@@ -266,3 +266,24 @@ function set_rating(id_book, rating) {
         }
     })
 }
+
+function favorite_book(id_book) {
+    $.ajax({
+        url: '/book/user/add_favorite',
+        type: 'POST',
+        data: {
+            book_id: id_book
+        },
+        success: function (json) {
+            if (json.result == true) {
+                $('#favorite').html('<button class="btn btn-success "' +
+                    'style="width: 190px; height: 30px;margin: 0 0 0 12px; font-size: 14px;">' +
+                    'Favorited</button>');
+            } else
+                alert('Error');
+        },
+        error: function (json) {
+            alert('Error');
+        }
+    })
+}

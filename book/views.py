@@ -1,9 +1,8 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.views.generic import ListView, DetailView
 from django.views.generic.detail import SingleObjectMixin
 
@@ -92,13 +91,6 @@ def add_rating(request):
         response_data['number_point'] = Book.objects.get(id=book_id).get_rating_book()
         response_data['number_rating'] = Book.objects.get(id=book_id).rating_book.count()
         return JsonResponse(response_data)
-    # slug_book = Book.objects.get(pk=book_id).slug
-    #     return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
-    # elif point:
-    #     return HttpResponseRedirect(reverse("book:book_index"))
-    # elif book_id:
-    #     slug_book = Book.objects.get(pk=book_id).slug
-    #     return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
     else:
         response_data['result'] = False
         return JsonResponse(response_data)
@@ -106,7 +98,6 @@ def add_rating(request):
 
 def return_rating_book(user, book):
     try:
-        # if User.objects.filter(user_profile=user).exists():
         if Rating.objects.filter(user_profile=user.user_profile, book=book).exists():
             count_rating = return_number_rating_book(user, book)
             list_rating = [True if i <= count_rating else False for i in range(1, 6)]
@@ -201,25 +192,21 @@ Favorite book
 @login_required()
 def favorite_book(request):
     book_id = request.POST.get('book_id', False)
+    response_data = {}
 
     if book_id and request.user:
         obj, create = Favorite.objects.get_or_create(user_profile=request.user.user_profile,
                                                      book=Book.objects.get(pk=book_id))
         obj.save()
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
-    elif request.user:
-        return HttpResponseRedirect(reverse("book:book_index"))
-    elif book_id:
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
+        response_data['result'] = True
+        return JsonResponse(response_data)
     else:
-        return HttpResponseRedirect(reverse("book:book_index"))
+        response_data['result'] = False
+        return JsonResponse(response_data)
 
 
 def return_favorite_book(user, book):
     try:
-        # if User.objects.filter(user_profile=user).exists():
         if Favorite.objects.filter(user_profile=user.user_profile, book=book).exists():
             return True
         else:
