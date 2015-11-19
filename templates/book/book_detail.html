@@ -95,14 +95,11 @@
                                 <span class="text-success">{{ object.price }} $</span>
                             </div>
                         </div>
-                        <div class="col-lg-5">
+                        <div class="col-lg-5" id="button_read_book">
                             {% if object.read_book == 0 %}
-                                <form action="{% url 'book:read_book' %}" method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" value="{{ object.id }}" name="book_id">
-                                    <button type="submit" class="btn btn-success " style="width:160px"><strong>Want to
-                                        Read book !</strong></button>
-                                </form>
+                                <button type="button" class="btn btn-success " style="width:160px"
+                                        onclick="read_book_start({{ object.id }})"><strong>Want to Read book !</strong>
+                                </button>
                             {% elif object.read_book == 1 %}
                                 <div class="dropdown">
                                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
@@ -110,19 +107,12 @@
                                             class="caret"></span></button>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <form action="{% url 'book:read_finish' %}" method="post"
-                                                  id="form-read-finish">
-                                                {% csrf_token %}
-                                                <input type="hidden" value="{{ object.id }}" name="book_id">
-                                            </form>
-                                            <a href="#"
-                                               onclick="document.forms['form-read-finish'].submit();return false;">Finish
-                                                !</a>
+                                            <a href="#" onclick="read_book_finish({{ object.id }})">Finish !</a>
                                         </li>
                                     </ul>
                                 </div>
                             {% elif object.read_book == 2 %}
-                                <div class=" dropdown">
+                                <div class="dropdown">
                                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
                                             style="width:160px"><strong>Read book !</strong>&nbsp;&nbsp;&nbsp;<span
                                             class="caret"></span></button>
@@ -152,6 +142,7 @@
 
                     {% else %}
                         <h3>{{ object.review }} Review</h3>
+
                         {% for obj in review_all_book %}
                             <div class="row" id="review_{{ obj.id }}">
                                 <!--============================================= Display cover user write review ===========================================================-->

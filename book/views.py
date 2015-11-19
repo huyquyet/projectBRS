@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic import ListView, DetailView
 from django.views.generic.detail import SingleObjectMixin
 
@@ -36,7 +36,9 @@ class BookIndex(BaseView, ListView):
         search = self.request.GET.get('search', False)
         if search:
             search_1 = search.strip()
-            self.queryset = Book.objects.filter(Q(title__icontains=search_1) | Q(category__name__icontains=search_1) | Q(author__icontains=search) | Q(publish__icontains=search_1)).order_by('-id')
+            self.queryset = Book.objects.filter(
+                Q(title__icontains=search_1) | Q(category__name__icontains=search_1) | Q(author__icontains=search) | Q(
+                    publish__icontains=search_1)).order_by('-id')
         else:
             self.queryset = Book.objects.order_by('-id')
         return super(BookIndex, self).get(request, *args, **kwargs)
@@ -82,7 +84,8 @@ def add_rating(request):
     book_id = request.POST.get('book_id', False)
 
     if book_id and point:
-        obj, create = Rating.objects.get_or_create(user_profile=request.user.user_profile, book=Book.objects.get(pk=book_id))
+        obj, create = Rating.objects.get_or_create(user_profile=request.user.user_profile,
+                                                   book=Book.objects.get(pk=book_id))
         obj.rate = point
         obj.save()
         slug_book = Book.objects.get(pk=book_id).slug
@@ -135,20 +138,17 @@ Read book
 @login_required()
 def want_read_book(request):
     book_id = request.POST.get('book_id', False)
-
+    response_data = {}
     if book_id and request.user:
-        obj, create = ReadReading.objects.get_or_create(user_profile=request.user.user_profile, book=Book.objects.get(pk=book_id))
+        obj, create = ReadReading.objects.get_or_create(user_profile=request.user.user_profile,
+                                                        book=Book.objects.get(pk=book_id))
         obj.status = 1
         obj.save()
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
-    elif request.user:
-        return HttpResponseRedirect(reverse("book:book_index"))
-    elif book_id:
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
+        response_data['result'] = 'Successful'
+        return JsonResponse(response_data)
     else:
-        return HttpResponseRedirect(reverse("book:book_index"))
+        response_data['result'] = 'Error'
+        return JsonResponse(response_data)
 
 
 """
@@ -161,7 +161,6 @@ Return
 
 def return_read_book(user, book):
     try:
-        # if User.objects.filter(user_profile=user).exists():
         if ReadReading.objects.filter(user_profile=user.user_profile, book=book).exists():
             return ReadReading.objects.get(user_profile=user.user_profile, book=book).status
         else:
@@ -172,19 +171,17 @@ def return_read_book(user, book):
 
 def read_finish(request):
     book_id = request.POST.get('book_id', False)
+    response_data = {}
     if book_id and request.user:
-        obj, create = ReadReading.objects.get_or_create(user_profile=request.user.user_profile, book=Book.objects.get(pk=book_id))
+        obj, create = ReadReading.objects.get_or_create(user_profile=request.user.user_profile,
+                                                        book=Book.objects.get(pk=book_id))
         obj.status = 2
         obj.save()
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
-    elif request.user:
-        return HttpResponseRedirect(reverse("book:book_index"))
-    elif book_id:
-        slug_book = Book.objects.get(pk=book_id).slug
-        return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
+        response_data['result'] = 'Successful'
+        return JsonResponse(response_data)
     else:
-        return HttpResponseRedirect(reverse("book:book_index"))
+        response_data['result'] = 'Error'
+        return JsonResponse(response_data)
 
 
 """
@@ -201,7 +198,8 @@ def favorite_book(request):
     book_id = request.POST.get('book_id', False)
 
     if book_id and request.user:
-        obj, create = Favorite.objects.get_or_create(user_profile=request.user.user_profile, book=Book.objects.get(pk=book_id))
+        obj, create = Favorite.objects.get_or_create(user_profile=request.user.user_profile,
+                                                     book=Book.objects.get(pk=book_id))
         obj.save()
         slug_book = Book.objects.get(pk=book_id).slug
         return HttpResponseRedirect(reverse("book:book_detail", kwargs={'slug': slug_book}))
@@ -253,7 +251,8 @@ status = 2 read
 
 
 def return_list_book_read(user, status=None, count=None, search=None):
-    list_read = ReadReading.objects.filter(user_profile=user.user_profile, status=status).order_by('-date').values_list('book', flat=True)
+    list_read = ReadReading.objects.filter(user_profile=user.user_profile, status=status).order_by('-date').values_list(
+        'book', flat=True)
     if search is None:
         list_book = Book.objects.filter(id__in=list_read)[0:count]
     else:
@@ -265,7 +264,8 @@ def return_list_book_read(user, status=None, count=None, search=None):
 
 
 def return_list_book_favorite(user, count=None, search=None):
-    list_favorite = Favorite.objects.filter(user_profile=user.user_profile).order_by('-date').values_list('book', flat=True)
+    list_favorite = Favorite.objects.filter(user_profile=user.user_profile).order_by('-date').values_list('book',
+                                                                                                          flat=True)
     if search is None:
         list_book = Book.objects.filter(id__in=list_favorite)[0:count]
     else:

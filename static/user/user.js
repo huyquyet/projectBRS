@@ -183,3 +183,49 @@ function delete_comment(id_comment) {
     }
 }
 
+//function create_review(id_book){
+//
+//}
+
+function read_book_start(id_book) {
+    console.log('vao day');
+    $.ajax({
+        url: '/book/user/readbook',
+        type: 'POST',
+        data: {
+            book_id: id_book
+        },
+        success: function (json) {
+            $('#button_read_book').html('<div class="dropdown"><button type="button"' +
+                'class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="width:160px">' +
+                '<strong>Reading book !</strong>&nbsp;&nbsp;&nbsp;<span class="caret"></span>' +
+                '</button>' +
+                '<ul class="dropdown-menu"><li>' +
+                '<a href="#" onclick="read_book_finish(' + id_book + ')">Finish !</a>' +
+                '</li></ul></div>')
+        },
+        error: ''
+    })
+
+}
+
+function read_book_finish(id_book) {
+    $.ajax({
+        url: '/book/user/readfinish',
+        type: 'POST',
+        data: {
+            book_id: id_book
+        },
+        success: function (json) {
+            $('#button_read_book').html('<div class=" dropdown"><button type="button"' +
+                'class="btn btn-info dropdown-toggle" data-toggle="dropdown" style="width:160px">' +
+                '<strong>Read book !</strong>&nbsp;&nbsp;&nbsp;<span class="caret"></span></button>' +
+                '<ul class="dropdown-menu"><li><a href="#">Want to Read book !</a>' +
+                '</li></ul></div>')
+        },
+        error: function (json) {
+            alert(json.result)
+        }
+    })
+
+}
