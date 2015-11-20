@@ -92,30 +92,7 @@ function create_comment_review(id) {
             success: function (json) {
                 var d1 = new Date();
                 $('#content_comment_' + id).val('');
-                $('#display_comment_review_' + id).append('<div class="row" id="comment_review_number_' + json.comment_id + '">' +
-                    '<div class="col-lg-1" style="width: 10%;padding: 5px;">' +
-                    '<div class="thumbnail">' +
-                    '<img src="' + json.user_avata + '" id="" alt="id =' + json.user_id + '"width="100%" height="100%">' +
-                    ' </div>' +
-                    '</div>' +
-                    '<div class="col-lg-11" style="width: 90%;padding: 5px;">' +
-                    '<div style="width: 10%;float: right">' +
-                    '<button id="id-btn-' + json.comment_id + '-delete" type="button"' +
-                    'class="btn btn-xs btn-danger btn-delete-comment"onclick="delete_comment(' + json.comment_id + ')">' +
-                    'Delete' +
-                    '</button>' +
-                    '</div>' +
-                    '<div style="width: 90%;">' +
-                    '<span style="font-size: 14px;">' +
-                    '<strong class="text-success"> ' + json.user_first_name + ' ' + json.user_last_name + ': </strong>' + json.content +
-                    '</span>' +
-                    '</div>' +
-                    '<span id="like_unlike_comment_link_' + json.comment_id + '">' +
-                    '<button type="button" class="btn btn-link"style="padding: 2px 0 5px 0;" onclick="like_comment(' + json.comment_id + ')"> Like</button>' +
-                    '</span>' +
-                    ' - ' + d1.getDate() + '-' + d1.getMonth() + '-' + d1.getFullYear() + '<br> <span id="number_like_comment_' + json.comment_id + '">0</span> like this <br>' +
-                    '</div>' +
-                    '</div>')
+                $('#display_comment_review_' + id).append(json.html);
             },
             error: function (json) {
             }
@@ -182,10 +159,6 @@ function delete_comment(id_comment) {
         })
     }
 }
-
-//function create_review(id_book){
-//
-//}
 
 function read_book_start(id_book) {
     console.log('vao day');
@@ -281,6 +254,62 @@ function favorite_book(id_book) {
                     'Favorited</button>');
             } else
                 alert('Error');
+        },
+        error: function (json) {
+            alert('Error');
+        }
+    })
+}
+
+function load_more_comment(id_review, start, end, number_comment) {
+    var end_start = end;
+    var end_end = end + (end - start);
+    $.ajax({
+        url: '/comment/load_more_comment/',
+        type: 'POST',
+        data: {
+            review_id: id_review,
+            start: start,
+            end: end,
+            number_comment: number_comment
+        },
+        success: function (json) {
+            for (var i = 0; i < Object.keys(json).length; i++) {
+                var jsons = json[i];
+                $('#display_comment_review_' + id_review).prepend('<div class="row" id="comment_review_number_' + jsons.comment_id + '">' +
+                    '<div class="col-lg-1" style="width: 10%;padding: 5px;">' +
+                    '<div class="thumbnail">' +
+                    '<img src="' + jsons.user_avata + '" id="" alt="id =' + jsons.user_id + '"width="100%" height="100%">' +
+                    ' </div>' +
+                    '</div>' +
+                    '<div class="col-lg-11" style="width: 90%;padding: 5px;">' +
+                    '<div style="width: 10%;float: right">' +
+                    '<button id="id-btn-' + jsons.comment_id + '-delete" type="button"' +
+                    'class="btn btn-xs btn-danger btn-delete-comment"onclick="delete_comment(' + jsons.comment_id + ')">' +
+                    'Delete' +
+                    '</button>' +
+                    '</div>' +
+                    '<div style="width: 90%;">' +
+                    '<span style="font-size: 14px;">' +
+                    '<strong class="text-success"> ' + jsons.user_first_name + ' ' + jsons.user_last_name + ': </strong>' + jsons.content +
+                    '</span>' +
+                    '</div>' +
+                    '<span id="like_unlike_comment_link_' + jsons.comment_id + '">' +
+                    '<button type="button" class="btn btn-link"style="padding: 2px 0 5px 0;" onclick="like_comment(' + jsons.comment_id + ')"> Like</button>' +
+                    '</span>' +
+                    ' - ' + jsons.date + '<br> <span id="number_like_comment_' + jsons.comment_id + '">0</span> like this <br>' +
+                    '</div>' +
+                    '</div>');
+            }
+            if (end < number_comment) {
+                $('#view_more_comment_' + id_review).html('<span class="pull-right">.... ' + end + ' of ' + number_comment + '</span>' +
+                    '<button  class="btn btn-link"onclick="load_more_comment(' + id_review + ', ' + end_start +
+                    ', ' + end_end + ',' + number_comment + ')"> View more comment.....</button>'
+                );
+            }
+            else {
+                $('#view_more_comment_' + id_review).html('');
+            }
         },
         error: function (json) {
             alert('Error');

@@ -12,6 +12,7 @@ class ByBook(models.Model):
     page = models.IntegerField()
     date = models.DateTimeField()
     status = models.IntegerField(default=0)
+    del_status = models.BooleanField(default=True)
 
     """
     status

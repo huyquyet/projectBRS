@@ -5,7 +5,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, DetailView
-
 from django.views.generic.detail import SingleObjectMixin
 
 from base.views import BaseView
@@ -49,7 +48,7 @@ class SendBookManager(BaseView, SingleObjectMixin, ListView):
         return super(SendBookManager, self).get(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
-        self.object = ByBook.objects.filter(user_profile=self.request.user.user_profile)
+        self.object = ByBook.objects.filter(user_profile=self.request.user.user_profile, del_status=True)
         return self.object
 
     def get_context_data(self, **kwargs):
@@ -85,8 +84,9 @@ def delete_book(request):
     send_book_id = request.POST.get('send_book_id', False)
     if send_book_id:
         obj = get_object_or_404(ByBook, pk=send_book_id)
-        if request.user == UserProfile.objects.get(user=obj.user):
-            obj.delete()
+        if request.user == UserProfile.objects.get(user=obj.user_profile.user).user:
+            obj.del_status = False
+            obj.save()
             return HttpResponseRedirect(reverse_lazy('send:send_book_manager'))
         else:
             return HttpResponseRedirect(reverse_lazy('send:send_book_manager'))
@@ -94,9 +94,9 @@ def delete_book(request):
         return HttpResponseRedirect(reverse_lazy('send:send_book_manager'))
 
 
-def count_book_of_user(user, count=None):
-    if count is None:
+def count_book_of_user(user, status=None):
+    if status is None:
         result = ByBook.objects.filter(user_profile=user.user_profile).count()
     else:
-        result = ByBook.objects.filter(user_profile=user.user_profile, status=count).count()
+        result = ByBook.objects.filter(user_profile=user.user_profile, status=status).count()
     return result
