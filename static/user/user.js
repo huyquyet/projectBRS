@@ -1,3 +1,6 @@
+/*
+ JavaScript get CSRF_TOKEN
+ */
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -27,6 +30,7 @@ $.ajaxSetup({
         }
     }
 });
+
 //  loai bo khoang trang dau va cuoi String
 function Trim(sString) {
     while (sString.substring(0, 1) == ' ') {
@@ -47,7 +51,8 @@ function unlike_review(id_review, id_user) {
                 user_id: id_user
             },
             success: function (json) {
-                $('#like_unlike_link').html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;" onclick="like_review(' + id_review + ',' + id_user + ')" > Like');
+                $('#like_unlike_link').html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;"' +
+                    ' onclick="like_review(' + id_review + ',' + id_user + ')" > Like');
                 $('#number_like_review_' + id_review).html(json.like);
 
             },
@@ -67,7 +72,8 @@ function like_review(id_review, id_user) {
             user_id: id_user
         },
         success: function (json) {
-            $('#like_unlike_link').html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;" onclick="unlike_review(' + id_review + ',' + id_user + ')" > Unlike');
+            $('#like_unlike_link').html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;" ' +
+                'onclick="unlike_review(' + id_review + ',' + id_user + ')" > Unlike');
             $('#number_like_review_' + id_review).html(json.like);
         },
         error: function () {
@@ -110,10 +116,12 @@ function unlike_comment(id_comment) {
         },
         success: function (json) {
             if (json.result) {
-                $('#like_unlike_comment_link_' + id_comment).html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0; " onclick="like_comment(' + id_comment + ')" > Like');
+                $('#like_unlike_comment_link_' + id_comment).html('<button type="button" class="btn btn-link" ' +
+                    'style="padding: 2px 0 5px 0; " onclick="like_comment(' + id_comment + ')" > Like');
                 $('#number_like_comment_' + id_comment).html(json.like);
             } else {
-                $('#like_unlike_comment_link_' + id_comment).html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0; " onclick="unlike_comment(' + id_comment + ')" > Like');
+                $('#like_unlike_comment_link_' + id_comment).html('<button type="button" class="btn btn-link"' +
+                    ' style="padding: 2px 0 5px 0; " onclick="unlike_comment(' + id_comment + ')" > Like');
             }
         },
         error: function () {
@@ -131,10 +139,12 @@ function like_comment(id_comment) {
         },
         success: function (json) {
             if (json.result) {
-                $('#like_unlike_comment_link_' + id_comment).html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0; " onclick="unlike_comment(' + id_comment + ')" > Unlike');
+                $('#like_unlike_comment_link_' + id_comment).html('<button type="button" class="btn btn-link" ' +
+                    'style="padding: 2px 0 5px 0; " onclick="unlike_comment(' + id_comment + ')" > Unlike');
                 $('#number_like_comment_' + id_comment).html(json.like);
             } else {
-                $('#like_unlike_comment_link_' + id_comment).html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0; " onclick="like_comment(' + id_comment + ')" > Unlike');
+                $('#like_unlike_comment_link_' + id_comment).html('<button type="button" class="btn btn-link"' +
+                    ' style="padding: 2px 0 5px 0; " onclick="like_comment(' + id_comment + ')" > Unlike');
             }
         },
         error: function () {
@@ -274,35 +284,13 @@ function load_more_comment(id_review, start, end, number_comment) {
             number_comment: number_comment
         },
         success: function (json) {
-            for (var i = 0; i < Object.keys(json).length; i++) {
-                var jsons = json[i];
-                $('#display_comment_review_' + id_review).prepend('<div class="row" id="comment_review_number_' + jsons.comment_id + '">' +
-                    '<div class="col-lg-1" style="width: 10%;padding: 5px;">' +
-                    '<div class="thumbnail">' +
-                    '<img src="' + jsons.user_avata + '" id="" alt="id =' + jsons.user_id + '"width="100%" height="100%">' +
-                    ' </div>' +
-                    '</div>' +
-                    '<div class="col-lg-11" style="width: 90%;padding: 5px;">' +
-                    '<div style="width: 10%;float: right">' +
-                    '<button id="id-btn-' + jsons.comment_id + '-delete" type="button"' +
-                    'class="btn btn-xs btn-danger btn-delete-comment"onclick="delete_comment(' + jsons.comment_id + ')">' +
-                    'Delete' +
-                    '</button>' +
-                    '</div>' +
-                    '<div style="width: 90%;">' +
-                    '<span style="font-size: 14px;">' +
-                    '<strong class="text-success"> ' + jsons.user_first_name + ' ' + jsons.user_last_name + ': </strong>' + jsons.content +
-                    '</span>' +
-                    '</div>' +
-                    '<span id="like_unlike_comment_link_' + jsons.comment_id + '">' +
-                    '<button type="button" class="btn btn-link"style="padding: 2px 0 5px 0;" onclick="like_comment(' + jsons.comment_id + ')"> Like</button>' +
-                    '</span>' +
-                    ' - ' + jsons.date + '<br> <span id="number_like_comment_' + jsons.comment_id + '">0</span> like this <br>' +
-                    '</div>' +
-                    '</div>');
+            var data = json.data;
+            for (var i = 0; i < data.length; i++) {
+                $('#display_comment_review_' + id_review).prepend(data[i]);
             }
             if (end < number_comment) {
-                $('#view_more_comment_' + id_review).html('<span class="pull-right">.... ' + end + ' of ' + number_comment + '</span>' +
+                $('#view_more_comment_' + id_review).html('' +
+                    '<span class="pull-right">.... ' + end + ' of ' + number_comment + '</span>' +
                     '<button  class="btn btn-link"onclick="load_more_comment(' + id_review + ', ' + end_start +
                     ', ' + end_end + ',' + number_comment + ')"> View more comment.....</button>'
                 );

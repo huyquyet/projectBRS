@@ -49,30 +49,6 @@ def comment_delete(request):
         return JsonResponse(response_data)
 
 
-# def comment_review_like_unlike(request):
-#     comment_id = request.POST.get('comment_id', False)
-#     book_id = request.POST.get('book_id', False)
-#     check = request.POST.get('check', False)
-#
-#     if comment_id and request.user and check:
-#         check_1 = check.strip()
-#         if check_1 == 'like':
-#             obj, create = LikeComment.objects.get_or_create(user_profile=request.user.user_profile,
-#                                                             comment=CommentReview.objects.get(pk=comment_id))
-#             obj.save()
-#             return return_redirect(book_id.strip())
-#         elif check_1 == 'unlike':
-#             LikeComment.objects.get(user_profile=request.user.user_profile,
-#                                     comment=CommentReview.objects.get(pk=comment_id)).delete()
-#             return return_redirect(book_id.strip())
-#         else:
-#             return HttpResponseRedirect(reverse_lazy("book:book_index"))
-#     elif request.user:
-#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
-#     else:
-#         return HttpResponseRedirect(reverse_lazy("book:book_index"))
-#
-
 def comment_review_unlike(request):
     id_comment = request.POST.get('id_comment', False)
     response_data = {}
@@ -106,47 +82,22 @@ def load_more_comment(request):
     start = request.POST.get('start', False)
     end = request.POST.get('end', False)
     number_comment = request.POST.get('number_comment', False)
-    response_data = {}
+    response_data = []
     if int(end) < int(number_comment):
         comments = CommentReview.objects.filter(review__id=review_id).order_by('-id')[int(start):int(end)]
     else:
         comments = CommentReview.objects.filter(review=Review.objects.get(id=review_id)).order_by('-id')[
                    int(start):int(number_comment)]
     for i in range(len(comments)):
-        response_data[str(i)] = load_one_comment(comments[i].id)
-    return JsonResponse(response_data)
-
-    # review_id = request.POST.get('review_id', False)
-    # start = request.POST.get('start', False)
-    # end = request.POST.get('end', False)
-    # number_comment = request.POST.get('number_comment', False)
-    # response_data = []
-    # # number_comment = CommentReview.objects.filter(review=Review.objects.get(id=review_id)).count()
-    # if int(end) < int(number_comment):
-    #     review = Review.objects.get(id=review_id)
-    #     comments = CommentReview.objects.filter(review__id=review_id).order_by('-id')[int(start):int(end)]
-    # else:
-    #     comments = CommentReview.objects.filter(review=Review.objects.get(id=review_id)).order_by('-id')[
-    #                int(start):int(number_comment)]
-    # for i in range(len(comments)):
-    #     response_data.append(load_one_comment(comments[i].id))
-    # data = {
-    #     'data': response_data
-    # }
-    # return JsonResponse(data)
+        comment = load_one_comment(comments[i].id)
+        response_data.append(
+            render_to_string('book/comment_review.html', {'review': comment.review, 'comment': comment}))
+    data = {
+        'data': response_data
+    }
+    return JsonResponse(data)
 
 
 def load_one_comment(id_comment):
-    response_data = {}
     obj = CommentReview.objects.get(id=id_comment)
-    response_data['user_avata'] = obj.user_profile.avata.url
-    response_data['user_id'] = obj.user_profile.user.id
-    response_data['user_first_name'] = obj.user_profile.user.first_name
-    response_data['user_last_name'] = obj.user_profile.user.last_name
-    response_data['comment_id'] = obj.id
-    response_data['book_id'] = obj.review.book.id
-    response_data['date'] = obj.date
-    response_data['content'] = obj.content
-    response_data['date'] = obj.date
-    # response_data['get_total_like'] = obj.get_total_like
-    return response_data
+    return obj
