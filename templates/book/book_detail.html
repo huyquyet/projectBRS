@@ -141,7 +141,7 @@
                                 <!--============================================= Display cover user write review ===========================================================-->
                                 <div class="col-lg-2" id="review-{{ obj.id }}" style="width: 10%; margin: 5px 0 0 0">
                                     <div class="thumbnail">
-                                        <img src="{{ obj.user_profile.avata.url|default_if_none:'None' }}"
+                                        <img src="{{ obj.user_profile.avatar.url|default_if_none:'None' }}"
                                              alt="chua cos anh  id = {{ obj.user_profile.user.id }}">
                                     </div>
                                 </div>
@@ -269,7 +269,7 @@
                                                 <div class="row" id="comment_review_number_{{ i.id }}">
                                                     <div class="col-lg-1" style="width: 10%;padding: 5px;">
                                                         <div class="thumbnail">
-                                                            <img src="{{ i.user_profile.avata.url|default_if_none:'None' }}"
+                                                            <img src="{{ i.user_profile.avatar.url|default_if_none:'None' }}"
                                                                  id="" alt="id ={{ i.user_profile.user.id }}"
                                                                  width="100%" height="100%">
                                                         </div>
@@ -317,7 +317,7 @@
                                             <div class="row">
                                                 <div class="col-lg-1" style="width: 10%;padding: 5px;">
                                                     <div class="thumbnail">
-                                                        <img src="{{ user.user_profile.avata.url|default_if_none:'None' }}"
+                                                        <img src="{{ user.user_profile.avatar.url|default_if_none:'None' }}"
                                                              alt="id ={{ user.id }}" width="100%" height="100%">
                                                     </div>
                                                 </div>

@@ -2,7 +2,7 @@
     {% load comment %}
     <div class="col-lg-1" style="width: 10%;padding: 5px;">
         <div class="thumbnail">
-            <img src="{{ comment.user_profile.avata.url|default_if_none:'None' }}"
+            <img src="{{ comment.user_profile.avatar.url|default_if_none:'None' }}"
                  id="" alt="id ={{ comment.user_profile.user.id }}"
                  width="100%" height="100%">
         </div>

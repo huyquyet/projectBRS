@@ -22,24 +22,31 @@ body {
     background-repeat: repeat-x;
     height: 50px;
     border-bottom: 1px solid #E3DFC9;
-    /*color: #382110;*/
+    color: #382110;
+    top: 0;
+    right: 0;
+    left: 0;
 }
 
 .mainContent {
-    width: 1200px;
+    /*width: 1200px;*/
     /*margin-left: auto;*/
     /*margin-right: auto;*/
-    margin: 5px 300px;
+    /*margin: 5px 300px;*/
+    /*margin: 0 auto;*/
     text-align: left;
+    /*background-color: #005983;*/
+
 }
 
 .brs-content {
-    max-width: 1200px;
+    /*max-width: 1200px;*/
     /*margin-left: auto;*/
     /*margin-right: auto;*/
-    margin: 5px 300px;
-    text-align: left;
+    /*margin: 5px 300px;*/
+    text-align: l   eft;
     /*background: beige;*/
+    margin-top: 55px;
 }
 
 /*body {*/
@@ -227,6 +234,18 @@ body {
 
 .user-footer .btn-default {
     color: #666666;
+}
+
+/*.hover-a {*/
+/*background-color: transparent;*/
+/*}*/
+
+.hover-a:hover {
+    background-color: transparent !important;
+}
+
+.hover-a:focus {
+    background-color: transparent !important;
 }
 
 /*----------------------------------base_user_right--------------------------------------*/

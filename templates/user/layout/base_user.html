@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+{% load swampdragon_tags %}
+{% swampdragon_settings %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,6 +30,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %} Trang index {% endblock %}</title>
+
+
+    <script type="text/javascript" src="{% static 'user/angular.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'swampdragon/js/dist/swampdragon.js' %}"></script>
+
+
+    <script type="text/javascript" src="{% static 'swampdragon/js/vendor/sockjs-0.3.4.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'swampdragon/js/legacy/swampdragon-vanilla.js' %}"></script>
+    <script type="text/javascript" src="{% static 'swampdragon/js/dist/datamapper.js' %}"></script>
+
+    <script type="text/javascript" src="https://127.0.0.1:9999/settings.js"></script>
+
+    <!-- notifications -->
+    <script type="text/javascript" src="{% static 'bookdetail.js' %}"></script>
 </head>
 <body>
 <div class="container-fluid ">
@@ -36,7 +54,7 @@
             {% include 'user/layout/header_user.html' %}
         </header>
 
-        <div class="col-lg-12 brs-content">
+        <div class="col-lg-8 col-lg-offset-2 brs-content">
             <section>
                 <div class="col-lg-9">
                     {% block content %}
