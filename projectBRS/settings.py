@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'app.category',
     'app.review',
     'app.comment',
+    'app.activity',
     'swampdragon',
 
     # login facebook

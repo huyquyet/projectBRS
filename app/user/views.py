@@ -13,11 +13,14 @@ from django.template import RequestContext
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, UpdateView, ListView
 from django.views.generic.detail import SingleObjectMixin
+from django.utils import timezone
 
+from app.activity.models import Activity, Activities, TypeActivity
 from app.base.views import BaseView
 from app.book.models import Book
 from app.book.views import return_list_book_read, return_list_book_favorite
 from app.review.views import return_list_review_of_user
+from app.user.functions import check_user_activity, install_user_activity
 from app.user.models import UserProfile, Follow
 
 
@@ -278,6 +281,21 @@ def user_follower(request):
                                                    followee=UserProfile.objects.get(
                                                        user=User.objects.get(pk=followers_user_id)))
         obj.save()
+
+        """ Install activity in database """
+        time = timezone.now()
+        type_activity = TypeActivity.objects.get(name='follow_user').pk
+        check_user = check_user_activity(user.pk)
+        if check_user:
+            activity = Activity(time=time.time(), date=time.date(), type=type_activity, data=1)
+            activities = Activities.objects(_id=user.pk)
+            activities.activity.append(activity)
+        else:
+            if install_user_activity(user.pk):
+                activity = Activity(time=time.time(), date=time.date(), type=type_activity, data=1)
+                activities = Activities.objects(_id=user.pk)
+                activities.activity.append(activity)
+
         return HttpResponseRedirect(
             reverse_lazy('user:user_home_page', kwargs={'username': User.objects.get(pk=followers_user_id).username}))
     else:
