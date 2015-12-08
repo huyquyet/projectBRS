@@ -287,14 +287,24 @@ def user_follower(request):
         type_activity = TypeActivity.objects.get(name='follow_user').pk
         check_user = check_user_activity(user.pk)
         if check_user:
-            activity = Activity(time=time.time(), date=time.date(), type=type_activity, data=1)
+            activity = Activity(time=timezone.now)
+            activity.type_activity = type_activity
+            activity.data = 'follow you'
+            activity.save()
             activities = Activities.objects(_id=user.pk)
+            # activities.save()
             activities.activity.append(activity)
+            activities.save()
         else:
             if install_user_activity(user.pk):
-                activity = Activity(time=time.time(), date=time.date(), type=type_activity, data=1)
+                activity = Activity()
+                activity.type_activity = type_activity
+                activity.data = 'follow you'
+                activity.save()
                 activities = Activities.objects(_id=user.pk)
+                # activities.save()
                 activities.activity.append(activity)
+                activities.save()
 
         return HttpResponseRedirect(
             reverse_lazy('user:user_home_page', kwargs={'username': User.objects.get(pk=followers_user_id).username}))
