@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 
+from app.activity.function import create_activity
 from app.book.models import Book
 from app.review.models import Review, LikeReview
 
@@ -18,9 +19,15 @@ def review_create(request):
     content_review = request.POST.get('content_review', False)
 
     if book_id and request.user:
-        obj, create = Review.objects.get_or_create(user_profile=request.user.user_profile, book=Book.objects.get(pk=book_id))
+        obj = Review.objects.create(user_profile=request.user.user_profile,
+                                    book=Book.objects.get(pk=book_id))
         obj.content = content_review
         obj.save()
+
+        """ Install activity in database """
+        create_activity(request.user.pk, 'write_review', book_id,
+                        'Write review  :' + Book.objects.get(pk=book_id).title)
+
         return return_redirect(book_id.strip())
     elif request.user:
         return HttpResponseRedirect(reverse_lazy("book:book_index"))
@@ -88,11 +95,13 @@ def review_like_unlike(request):
     if review_id and request.user and check:
         check_1 = check.strip()
         if check_1 == 'like':
-            obj, create = LikeReview.objects.get_or_create(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id))
+            obj, create = LikeReview.objects.get_or_create(user_profile=request.user.user_profile,
+                                                           review=Review.objects.get(pk=review_id))
             obj.save()
             return return_redirect(book_id)
         elif check_1 == 'unlike':
-            LikeReview.objects.get(user_profile=request.user.user_profile, review=Review.objects.get(pk=review_id)).delete()
+            LikeReview.objects.get(user_profile=request.user.user_profile,
+                                   review=Review.objects.get(pk=review_id)).delete()
             return return_redirect(book_id)
         else:
             return HttpResponseRedirect(reverse_lazy("book:book_index"))
@@ -107,8 +116,14 @@ def review_like(request):
     user_id = request.POST.get('user_id', False)
     response_data = {}
     if review_id and request.user:
-        obj, create = LikeReview.objects.get_or_create(user_profile=User.objects.get(id=user_id).user_profile, review=Review.objects.get(pk=review_id))
+        obj, create = LikeReview.objects.get_or_create(user_profile=User.objects.get(id=user_id).user_profile,
+                                                       review=Review.objects.get(pk=review_id))
         obj.save()
+
+        """ Install activity in database """
+        create_activity(request.user.pk, 'like_review', review_id,
+                        'Like review ' + Review.objects.get(pk=review_id).content)
+
         response_data['result'] = True
         response_data['like'] = Review.objects.get(id=review_id).like_review.all().count()
         return JsonResponse(response_data)
@@ -125,7 +140,8 @@ def review_unlike(request):
     user_id = request.POST.get('user_id', False)
     response_data = {}
     if review_id and request.user:
-        obj = LikeReview.objects.get(user_profile=User.objects.get(id=user_id).user_profile, review=Review.objects.get(pk=review_id))
+        obj = LikeReview.objects.get(user_profile=User.objects.get(id=user_id).user_profile,
+                                     review=Review.objects.get(pk=review_id))
         obj.delete()
         response_data['result'] = True
         response_data['like'] = Review.objects.get(id=review_id).like_review.all().count()

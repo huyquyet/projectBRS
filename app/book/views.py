@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.views.generic import ListView, DetailView
 from django.views.generic.detail import SingleObjectMixin
 
+from app.activity.function import create_activity
 from app.base.views import BaseView
 from app.book.models import Book, Rating, ReadReading, Favorite
 from app.review.views import return_all_of_book
@@ -81,12 +82,18 @@ Rating
 def add_rating(request):
     rating = request.POST.get('rating', False)
     book_id = request.POST.get('book_id', False)
+    user_id = request.POST.get('user_id', False)
     response_data = {}
     if book_id and rating:
         obj, create = Rating.objects.get_or_create(user_profile=request.user.user_profile,
                                                    book=Book.objects.get(pk=book_id))
         obj.rate = rating
         obj.save()
+
+        """ Install activity in database """
+        create_activity(request.user.pk, 'rating_book', book_id,
+                        'Rating ' + rating + 'star in ' + Book.objects.get(pk=book_id).title)
+
         response_data['result'] = True
         response_data['number_point'] = Book.objects.get(id=book_id).get_rating_book()
         response_data['number_rating'] = Book.objects.get(id=book_id).rating_book.count()
@@ -140,6 +147,10 @@ def want_read_book(request):
                                                         book=Book.objects.get(pk=book_id))
         obj.status = 1
         obj.save()
+
+        """ Install activity in database """
+        create_activity(request.user.pk, 'read_book', book_id, 'Reading book' + Book.objects.get(pk=book_id).title)
+
         response_data['result'] = 'Successful'
         return JsonResponse(response_data)
     else:
@@ -173,6 +184,11 @@ def read_finish(request):
                                                         book=Book.objects.get(pk=book_id))
         obj.status = 2
         obj.save()
+
+        """ Install activity in database """
+        create_activity(request.user.pk, 'finish_book', book_id,
+                        'Finish read book' + Book.objects.get(pk=book_id).title)
+
         response_data['result'] = 'Successful'
         return JsonResponse(response_data)
     else:

@@ -7,6 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, DetailView
 from django.views.generic.detail import SingleObjectMixin
 
+from app.activity.function import create_activity
 from app.base.views import BaseView
 from app.sendbybook.forms import SendNewBookFormView
 from app.sendbybook.models import ByBook
@@ -24,7 +25,11 @@ class SendNewBook(BaseView, CreateView):
     def form_valid(self, form):
         form.instance.user_profile = UserProfile.objects.get(user=self.request.user)
         form.instance.status = False
-        form.save()
+        by_book = form.save()
+
+        """ Install activity in database """
+        create_activity(self.request.user.pk, 'send_book', '',
+                        'Send a new book ' + ByBook.objects.get(pk=by_book.pk).name)
         return super(SendNewBook, self).form_valid(form)
 
     def get_success_url(self):

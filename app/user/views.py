@@ -6,21 +6,16 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, Pass
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render_to_response
-from django.template import RequestContext
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, UpdateView, ListView
 from django.views.generic.detail import SingleObjectMixin
-from django.utils import timezone
 
-from app.activity.models import Activity, Activities, TypeActivity
+from app.activity.function import create_activity
 from app.base.views import BaseView
-from app.book.models import Book
 from app.book.views import return_list_book_read, return_list_book_favorite
 from app.review.views import return_list_review_of_user
-from app.user.functions import check_user_activity, install_user_activity
 from app.user.models import UserProfile, Follow
 
 
@@ -283,18 +278,10 @@ def user_follower(request):
         obj.save()
 
         """ Install activity in database """
-        time = timezone.now()
-        type_activity = TypeActivity.objects.get(name='follow_user').pk
-        check_user = check_user_activity(user.pk)
-        if check_user:
-            activity = Activity(time=time.time(), date=time.date(), type=type_activity, data=1)
-            activities = Activities.objects(_id=user.pk)
-            activities.activity.append(activity)
-        else:
-            if install_user_activity(user.pk):
-                activity = Activity(time=time.time(), date=time.date(), type=type_activity, data=1)
-                activities = Activities.objects(_id=user.pk)
-                activities.activity.append(activity)
+        first_name = User.objects.get(pk=followers_user_id).first_name
+        last_name = User.objects.get(pk=followers_user_id).last_name
+
+        create_activity(request.user.pk, 'read_book', followers_user_id, 'Unfollow you' + first_name + last_name)
 
         return HttpResponseRedirect(
             reverse_lazy('user:user_home_page', kwargs={'username': User.objects.get(pk=followers_user_id).username}))
@@ -312,6 +299,13 @@ def user_un_follow(request):
         obj = get_object_or_404(Follow, follower=UserProfile.objects.get(user=request.user),
                                 followee=UserProfile.objects.get(user=User.objects.get(pk=user_follow_id)))
         obj.delete()
+
+        """ Install activity in database """
+        first_name = User.objects.get(pk=user_follow_id).first_name
+        last_name = User.objects.get(pk=user_follow_id).last_name
+
+        create_activity(request.user.pk, 'read_book', user_follow_id, 'Unfollow you' + first_name + last_name)
+
         if location == 'user_follow':
             return HttpResponseRedirect(reverse_lazy('user:user_manager_follow', kwargs={'username': user.username}))
         else:
@@ -323,21 +317,3 @@ def user_un_follow(request):
         else:
             return HttpResponseRedirect(
                 reverse_lazy('user:user_home_page', kwargs={'username': request.user}))
-
-
-def test_ajax(request):
-    template = 'user/test_ajax/index.html'
-    data = {}
-    return render_to_response(template, data, context_instance=RequestContext(request))
-
-
-def test_ajax_result(request):
-    if request.is_ajax():
-        q = request.GET.get('q')
-        if q is not None:
-            results = Book.objects.filter(Q(title__icontains=q) | Q(category__name__icontains=q))
-            template = 'user/test_ajax/result.html'
-            data = {
-                'results': results,
-            }
-            return render_to_response(template, data, context_instance=RequestContext(request))

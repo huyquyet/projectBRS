@@ -51,8 +51,8 @@ function unlike_review(id_review, id_user) {
                 user_id: id_user
             },
             success: function (json) {
-                $('#like_unlike_link').html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;"' +
-                    ' onclick="like_review(' + id_review + ',' + id_user + ')" > Like');
+                $('#like_unlike_link_' + id_review).html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;"' +
+                    ' onclick="like_review(' + id_review + ',' + id_user + ')" > Like</button>');
                 $('#number_like_review_' + id_review).html(json.like);
 
             },
@@ -72,14 +72,18 @@ function like_review(id_review, id_user) {
             user_id: id_user
         },
         success: function (json) {
-            $('#like_unlike_link').html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;" ' +
-                'onclick="unlike_review(' + id_review + ',' + id_user + ')" > Unlike');
+            $('#like_unlike_link_' + id_review).html('<button type="button" class="btn btn-link" style="padding: 2px 0 5px 0;" ' +
+                'onclick="unlike_review(' + id_review + ',' + id_user + ')" > Unlike</button>');
             $('#number_like_review_' + id_review).html(json.like);
         },
         error: function () {
             alert('error submit data');
         }
     })
+}
+
+function focus_comment(id_comment) {
+    $('#' + id_comment).focus();
 }
 
 function create_comment_review(id) {
@@ -213,13 +217,14 @@ function read_book_finish(id_book) {
 
 }
 
-function set_rating(id_book, rating) {
+function set_rating(id_book, rating, user_id) {
     $.ajax({
         url: '/book/user/rating/',
         type: 'POST',
         data: {
             book_id: id_book,
-            rating: rating
+            rating: rating,
+            user_id: user_id
         },
         success: function (json) {
             if (json.result == true) {

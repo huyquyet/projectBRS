@@ -17,7 +17,7 @@
                         <div id="display_star">
                             {% for i in  object.rate_book %}
                                 <a href="#" class="btn-lg" style="padding: 0;"
-                                   onclick="set_rating({{ object.id }},{{ forloop.counter }}); return false;">
+                                   onclick="set_rating({{ object.id }},{{ forloop.counter }},{{ user.pk }}); return false;">
                                     {% if i %}
                                         <span class="glyphicon glyphicon-star" style="color: red">
                                     {% else %}
@@ -181,7 +181,7 @@
                                             <!--=========================================== Display like - unlike - review =======================================================-->
                                             <div id="like_unlike">
                                                 <div class="pull-left">
-                                                    <span id="like_unlike_link">
+                                                    <span id="like_unlike_link_{{ obj.id }}">
                                                     {% if user.id in obj.id_like %}
                                                         <button type="button" class="btn btn-link"
                                                                 style="padding: 2px 0 5px 0;"
@@ -195,7 +195,12 @@
                                                         </button>
                                                     {% endif %}
                                                     </span>
-                                                    - <a href="#id_{{ obj.id }}">comment</a>
+                                                    -
+                                                    <button type="button" class="btn btn-link"
+                                                            style="padding: 2px 0 5px 0;"
+                                                            onclick="focus_comment('content_comment_{{ obj.id }}')">
+                                                        comment
+                                                    </button>
                                                     - {{ obj.date|date:'d-m-Y' }}<br>
                                                     <span id="number_like_review_{{ obj.id }}">{{ obj.number_like_review }}</span>
                                                     like this<br>
