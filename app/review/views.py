@@ -87,30 +87,6 @@ def return_check_like_review(user, review):
     return LikeReview.objects.filter(user_profile=user.user_profile, review=review).exists()
 
 
-def review_like_unlike(request):
-    review_id = request.POST.get('review_id', False)
-    book_id = request.POST.get('book_id', False)
-    check = request.POST.get('check', False)
-
-    if review_id and request.user and check:
-        check_1 = check.strip()
-        if check_1 == 'like':
-            obj, create = LikeReview.objects.get_or_create(user_profile=request.user.user_profile,
-                                                           review=Review.objects.get(pk=review_id))
-            obj.save()
-            return return_redirect(book_id)
-        elif check_1 == 'unlike':
-            LikeReview.objects.get(user_profile=request.user.user_profile,
-                                   review=Review.objects.get(pk=review_id)).delete()
-            return return_redirect(book_id)
-        else:
-            return HttpResponseRedirect(reverse_lazy("book:book_index"))
-    elif request.user:
-        return HttpResponseRedirect(reverse_lazy("book:book_index"))
-    else:
-        return HttpResponseRedirect(reverse_lazy("book:book_index"))
-
-
 def review_like(request):
     review_id = request.POST.get('review_id', False)
     user_id = request.POST.get('user_id', False)
@@ -119,11 +95,12 @@ def review_like(request):
         obj, create = LikeReview.objects.get_or_create(user_profile=User.objects.get(id=user_id).user_profile,
                                                        review=Review.objects.get(pk=review_id))
         obj.save()
-
-        """ Install activity in database """
-        create_activity(request.user.pk, 'like_review', review_id,
-                        'Like review ' + Review.objects.get(pk=review_id).content)
-
+        try:
+            """ Install activity in database """
+            create_activity(request.user.pk, 'like_review', review_id,
+                            'Like review ' + Review.objects.get(pk=review_id).content)
+        except:
+            pass
         response_data['result'] = True
         response_data['like'] = Review.objects.get(id=review_id).like_review.all().count()
         return JsonResponse(response_data)

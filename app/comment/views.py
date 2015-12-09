@@ -25,11 +25,14 @@ def comment_create(request):
                                            review=Review.objects.get(pk=review_id.strip()))
         obj.content = content_comment
         obj.save()
-
-        """ Install activity in database """
-        create_activity(request.user.pk, 'write_comment', review_id,
-                        'Write comment ' + Review.objects.get(pk=review_id))
-
+        try:
+            """ Install activity in database """
+            user_id = request.user.pk
+            content_review = Review.objects.get(pk=review_id).content
+            create_activity(user_id, 'write_comment', review_id,
+                            'Write comment ' + content_review)
+        except:
+            pass
         html = render_to_string('book/comment_review.html', {'review': obj.review, 'comment': obj})
         res = {'html': html}
         return JsonResponse(res)

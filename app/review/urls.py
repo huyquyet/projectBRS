@@ -11,5 +11,5 @@ urlpatterns = [
     url(r'^delete$', views.review_delete, name='review_delete'),
     url(r'^like', views.review_like, name='review_like'),
     url(r'^unlike', views.review_unlike, name='review_unlike'),
-    url(r'^like_unlike', views.review_like_unlike, name='review_like_unlike'),
+    # url(r'^like_unlike', views.review_like_unlike, name='review_like_unlike'),
 ]

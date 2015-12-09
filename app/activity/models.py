@@ -1,7 +1,7 @@
 # Create your models here.
 
 from django.db import models
-from django.utils import timezone
+from django.db.models import TimeField, DateField
 from mongoengine import IntField, ListField, EmbeddedDocument, DateTimeField, StringField, EmbeddedDocumentField, \
     BooleanField
 
@@ -29,9 +29,8 @@ class TypeActivity(models.Model):
 
 
 class Activity(EmbeddedDocument):
-    # time = DateTimeField(default=None)
-    # date = DateTimeField(default=None)
-    date_time = DateTimeField(default=timezone.now)
+    _id = IntField()
+    date_time = DateTimeField(None)
     type_activity = IntField()
     object_id = IntField()
     data = StringField()

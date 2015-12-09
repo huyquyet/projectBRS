@@ -255,12 +255,12 @@ function set_rating(id_book, rating, user_id) {
     })
 }
 
-function favorite_book(id_book) {
+function favorite_book(book_id) {
     $.ajax({
         url: '/book/user/add_favorite',
         type: 'POST',
         data: {
-            book_id: id_book
+            book_id: book_id
         },
         success: function (json) {
             if (json.result == true) {
@@ -276,6 +276,23 @@ function favorite_book(id_book) {
     })
 }
 
+function un_favorite_book(book_id, url, div_id) {
+    $.ajax({
+        url: '/book/user/un_favorite',
+        type: 'POST',
+        data: {
+            book_id: book_id
+        },
+        success: function (json) {
+            if (json.result == true) {
+                $('#un_favorite_' + book_id).html('<button type="button" class="btn btn-success">Favorite </button> ')
+            }
+        },
+        error: function () {
+            alert('Error');
+        }
+    })
+}
 function load_more_comment(id_review, start, end, number_comment) {
     var end_start = end;
     var end_end = end + (end - start);

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 {% load swampdragon_tags %}
-{% swampdragon_settings %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"/>
+
     <link rel="stylesheet" href="{% static 'user/style_user.css' %}"/>
     {#    <link href="{% static 'style.css' %}" rel=" stylesheet" type="text/css"/>#}
     {#    <!--<script rel="stylesheet"  href="{% static 'bootstrap/js/bootstrap.min.js' %}"/></script>-->#}
@@ -19,6 +19,7 @@
     <script src="{% static 'jquery.js' %}"></script>
 
     <!-- jQuery 2.1.4 -->
+    {% swampdragon_settings %}
     <script src="{% static 'admin/plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
 
     <script src="{% static 'user/user.js' %}"></script>

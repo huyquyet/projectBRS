@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from app.activity.models import Activities, Activity, TypeActivity
 from app.user.functions import check_user_activity, install_user_activity
@@ -8,19 +8,23 @@ __author__ = 'FRAMGIA\nguyen.huy.quyet'
 
 def action(user_id, type_activity, object_id, data):
     int_type_activity = TypeActivity.objects.get(name=type_activity).pk
-    # date_time = timezone.now()
-    date_time = datetime.datetime.now()
-    # date = date_time.date()
-    # time = date_time.time()
+    date_time = datetime.now()
 
     activities = Activities.objects.filter(_id=user_id)
 
     a = Activity()
-    a.date_time = date_time
+    a.date_time = []
+    # a.date = date_time.date()
+    # a.time = date_time.time()
     a.type_activity = int_type_activity
     a.object_id = object_id
     a.data = data
     a.status = True
+
+    print(a.time)
+    print(a.date)
+    print(date_time)
+    print(a.date_time)
 
     activities.update_one(push__action=a)
 

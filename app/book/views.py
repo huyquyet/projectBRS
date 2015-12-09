@@ -89,11 +89,12 @@ def add_rating(request):
                                                    book=Book.objects.get(pk=book_id))
         obj.rate = rating
         obj.save()
-
-        """ Install activity in database """
-        create_activity(request.user.pk, 'rating_book', book_id,
-                        'Rating ' + rating + 'star in ' + Book.objects.get(pk=book_id).title)
-
+        try:
+            """ Install activity in database """
+            create_activity(request.user.pk, 'rating_book', book_id,
+                            'Rating ' + rating + 'star in ' + Book.objects.get(pk=book_id).title)
+        except:
+            pass
         response_data['result'] = True
         response_data['number_point'] = Book.objects.get(id=book_id).get_rating_book()
         response_data['number_rating'] = Book.objects.get(id=book_id).rating_book.count()
@@ -214,6 +215,12 @@ def favorite_book(request):
         obj, create = Favorite.objects.get_or_create(user_profile=request.user.user_profile,
                                                      book=Book.objects.get(pk=book_id))
         obj.save()
+        try:
+            """ Install activity in database """
+            create_activity(request.user.pk, 'favorite', book_id,
+                            'Favorite book ' + Book.objects.get(pk=book_id).title)
+        except:
+            pass
         response_data['result'] = True
         return JsonResponse(response_data)
     else:
@@ -230,6 +237,21 @@ def return_favorite_book(user, book):
     except:
         return False
 
+
+@login_required()
+def un_favorite_book(request):
+    book_id = request.POST.get('book_id', False)
+    response_data = {}
+
+    if book_id and request.user:
+        obj = Favorite.objects.get(user_profile=request.user.user_profile,
+                                           book=Book.objects.get(pk=book_id))
+        obj.delete()
+        response_data['result'] = True
+        return JsonResponse(response_data)
+    else:
+        response_data['result'] = False
+        return JsonResponse(response_data)
 
 """
 -----------------------------------------------------------------------------------

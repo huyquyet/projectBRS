@@ -29,6 +29,7 @@ urlpatterns = [
     # Favorite book
 
     url(r'^user/add_favorite$', views.favorite_book, name='favorite_book'),
+    url(r'^user/un_favorite$', views.un_favorite_book, name='un_favorite_book'),
 
     #######################################
     #######################################
