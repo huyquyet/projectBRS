@@ -25,7 +25,8 @@
             <nav class="navbar navbar-static-top">
                 {#                                role="navigation"#}
                 <ul class=" nav navbar-nav" style="float: right;">
-                    <li><h4><a href="#" style="font-size: 18px;">Home </a>&nbsp;&nbsp;&nbsp;</h4></li>
+                    <li><h4><a href="{% url 'activity:activity_user_index' %}" style="font-size: 18px;">Home </a>&nbsp;&nbsp;&nbsp;
+                    </h4></li>
                     <li><h4><a href="{% url 'book:book_index' %}" style="font-size: 18px;">Book</a> &nbsp;&nbsp;&nbsp;
                     </h4></li>
                     <li><h4>Category &nbsp;&nbsp;&nbsp;</h4></li>
@@ -43,7 +44,7 @@
                                 <!-- Menu Toggle Button -->
                                 <a href="#" class="dropdown-toggle hover-a" data-toggle="dropdown" role="button"
                                    aria-haspopup="true" aria-expanded="false">
-                                    <span>{{ user.first_name }} {{ user.last_name }}</span>
+                                    <span>{{ user.first_name }} {{ user.last_name }} {{ user.pk }}</span>
                                     <span class="caret"></span>
                                 </a>
                                 {#                                </div>#}

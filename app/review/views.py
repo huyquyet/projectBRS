@@ -6,12 +6,9 @@ from django.shortcuts import get_object_or_404
 
 from app.activity.function import create_activity
 from app.book.models import Book
+from app.review.functions import return_redirect
 from app.review.models import Review, LikeReview
-
-
-def return_redirect(book_id):
-    slug_book = Book.objects.get(pk=book_id).slug
-    return HttpResponseRedirect(reverse_lazy("book:book_detail", kwargs={'slug': slug_book}))
+from app.user.functions import change_follow_level
 
 
 def review_create(request):
@@ -101,6 +98,12 @@ def review_like(request):
                             'Like review ' + Review.objects.get(pk=review_id).content)
         except:
             pass
+        try:
+            """ Change the follow level """
+            change_follow_level(follower=request.user.user_profile,
+                                followee=Review.objects.get(pk=review_id).user_profile)
+        except:
+            pass
         response_data['result'] = True
         response_data['like'] = Review.objects.get(id=review_id).like_review.all().count()
         return JsonResponse(response_data)
@@ -129,14 +132,3 @@ def review_unlike(request):
     else:
         response_data['result'] = False
         return JsonResponse(response_data)
-
-
-def return_list_review_of_user(user):
-    list_review = Review.objects.filter(user_profile=user.user_profile).order_by('-date')
-    for i in list_review:
-        i.point_rating = i.book.get_rating_book()
-        i.rating = i.book.rating_book.count()
-        i.review = i.book.review_book.count()
-        i.number_like_review = i.like_review.all().count()
-        i.number_comment_review = i.comment.all().count()
-    return list_review

@@ -15,7 +15,8 @@ from django.views.generic.detail import SingleObjectMixin
 from app.activity.function import create_activity
 from app.base.views import BaseView
 from app.book.views import return_list_book_read, return_list_book_favorite
-from app.review.views import return_list_review_of_user
+from app.review.functions import return_list_review_of_user
+from app.user.functions import change_follow_level
 from app.user.models import UserProfile, Follow
 
 
@@ -48,10 +49,6 @@ class UserLogin(FormView):
 
 UserLoginView = UserLogin.as_view()
 
-
-# class UserLogout(View):
-#     # @login_required()
-#     def post(self, request, *args, **kwargs):
 
 def UserLogoutView(request):
     auth.logout(request)
@@ -233,12 +230,19 @@ class UserHomePage(BaseView, SingleObjectMixin, ListView):
     template_name = 'user/follow/home_page.html'
     context_object_name = 'UserName'
 
+    # def dispatch(self, request, *args, **kwargs):
+    #
+    #     return super().dispatch(request, *args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().get(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         self.object = User.objects.get(username=self.kwargs['username'])
+        if self.object in return_list_following_of_user(self.request.user):
+            """ Change the follow level """
+            change_follow_level(follower=self.request.user.user_profile, followee=self.object.user_profile)
         return self.object
 
     def get_context_data(self, **kwargs):
@@ -273,8 +277,8 @@ def user_follower(request):
     user = request.user
     if followers_user_id and user is not None:
         obj, create = Follow.objects.get_or_create(follower=UserProfile.objects.get(user=request.user),
-                                                   followee=UserProfile.objects.get(
-                                                       user=User.objects.get(pk=followers_user_id)))
+                                                   followee=UserProfile.objects.get(user__id=followers_user_id))
+        obj.level = 1
         obj.save()
 
         """ Install activity in database """

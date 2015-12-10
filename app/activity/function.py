@@ -13,7 +13,8 @@ def action(user_id, type_activity, object_id, data):
     activities = Activities.objects.filter(_id=user_id)
 
     a = Activity()
-    a.date_time = []
+    a._id = user_id
+    a.date_time = date_time
     # a.date = date_time.date()
     # a.time = date_time.time()
     a.type_activity = int_type_activity
@@ -21,9 +22,6 @@ def action(user_id, type_activity, object_id, data):
     a.data = data
     a.status = True
 
-    print(a.time)
-    print(a.date)
-    print(date_time)
     print(a.date_time)
 
     activities.update_one(push__action=a)

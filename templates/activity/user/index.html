@@ -1,0 +1,19 @@
+{% extends 'user/layout/base_user.html' %}
+
+{% block content %}
+    chua cos gi
+    {% for action in actions %}
+        {{ action.id }}
+        <br>
+        {{ action.date_time |date:"H-i-s : d-m-Y"}}
+        <br>
+        {{ action.type_activity }}
+        <br>
+        {{ action.data }}
+        <br>
+    {% endfor %}
+
+{#    {{ actions }}#}
+{#    {{ user.pk }}#}
+
+{% endblock %}

@@ -9,6 +9,7 @@ from app.activity.function import create_activity
 from app.book.models import Book
 from app.comment.models import CommentReview, LikeComment
 from app.review.models import Review
+from app.user.functions import change_follow_level
 
 
 def return_redirect(book_id):
@@ -31,6 +32,12 @@ def comment_create(request):
             content_review = Review.objects.get(pk=review_id).content
             create_activity(user_id, 'write_comment', review_id,
                             'Write comment ' + content_review)
+        except:
+            pass
+        try:
+            """ Change the follow level """
+            change_follow_level(follower=request.user.user_profile,
+                                followee=Review.objects.get(pk=review_id).user_profile)
         except:
             pass
         html = render_to_string('book/comment_review.html', {'review': obj.review, 'comment': obj})
@@ -79,11 +86,19 @@ def comment_review_like(request):
         obj, create = LikeComment.objects.get_or_create(user_profile=request.user.user_profile,
                                                         comment=CommentReview.objects.get(pk=id_comment))
         obj.save()
+        try:
+            """ Install activity in database """
+            create_activity(request.user.pk, 'like_comment', id_comment,
+                            'Like comment ' + CommentReview.objects.get(pk=id_comment).content)
+        except:
+            pass
 
-        """ Install activity in database """
-        create_activity(request.user.pk, 'like_comment', id_comment,
-                        'Like comment ' + CommentReview.objects.get(pk=id_comment).content)
-
+        try:
+            """ Change level follow """
+            change_follow_level(follower=request.user.user_profile,
+                                followee=CommentReview.objects.get(pk=id_comment).user_profile)
+        except:
+            pass
         response_data['result'] = True
         response_data['like'] = CommentReview.objects.get(id=id_comment).get_total_like()
         return JsonResponse(response_data)

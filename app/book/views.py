@@ -1,4 +1,6 @@
 # Create your views here.
+from django.utils import timezone
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -10,6 +12,7 @@ from app.activity.function import create_activity
 from app.base.views import BaseView
 from app.book.models import Book, Rating, ReadReading, Favorite
 from app.review.views import return_all_of_book
+from app.user.models import Follow
 
 """
 ------------------------------------------------------------------------------
@@ -24,6 +27,22 @@ class BookIndex(BaseView, ListView):
     model = Book
     template_name = 'book/book_index.html'
     paginate_by = 12
+
+    def dispatch(self, request, *args, **kwargs):
+        time_now = timezone.now()
+
+        try:
+            user_id = self.request.user.pk
+            follows = Follow.objects.filter(follower__user__id=user_id)
+            for follow in follows:
+                time = time_now - follow.date_level
+                if time.seconds > 2 * 60 * 60:
+                    if follow.level < 5:
+                        follow.level += 1
+                        follow.save()
+        except:
+            pass
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super(BookIndex, self).get_context_data(**kwargs)
@@ -245,13 +264,14 @@ def un_favorite_book(request):
 
     if book_id and request.user:
         obj = Favorite.objects.get(user_profile=request.user.user_profile,
-                                           book=Book.objects.get(pk=book_id))
+                                   book=Book.objects.get(pk=book_id))
         obj.delete()
         response_data['result'] = True
         return JsonResponse(response_data)
     else:
         response_data['result'] = False
         return JsonResponse(response_data)
+
 
 """
 -----------------------------------------------------------------------------------

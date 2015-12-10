@@ -1,7 +1,6 @@
 # Create your models here.
 
 from django.db import models
-from django.db.models import TimeField, DateField
 from mongoengine import IntField, ListField, EmbeddedDocument, DateTimeField, StringField, EmbeddedDocumentField, \
     BooleanField
 

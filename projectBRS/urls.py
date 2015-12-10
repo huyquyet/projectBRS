@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^review/', include('app.review.urls', namespace='review')),
     url(r'^comment/', include('app.comment.urls', namespace='comment')),
     url(r'^send/', include('app.sendbybook.urls', namespace='send')),
+    url(r'^home/', include('app.activity.urls', namespace='activity')),
 ]
