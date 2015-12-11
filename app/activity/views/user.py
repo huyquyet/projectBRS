@@ -1,13 +1,10 @@
 from django.contrib.auth.decorators import login_required
-
 from django.utils.decorators import method_decorator
-
 from django.views.generic import ListView
-from mongoengine import DoesNotExist
 
+from app.activity.function import return_list_activity_user
 from app.activity.models import Activities, TypeActivity
 from app.base.views import BaseView
-from app.user.models import UserProfile, Follow
 
 __author__ = 'FRAMGIA\nguyen.huy.quyet'
 
@@ -37,17 +34,3 @@ class ActivityUserIndex(BaseView, ListView):
 
 
 ActivityUserIndexView = ActivityUserIndex.as_view()
-
-
-def return_list_activity_user(user_id):
-    profile_id = UserProfile.objects.get(user__id=user_id).pk
-    list_id_profile = Follow.objects.filter(follower=profile_id, level__lt=5).values_list('followee', flat=True)
-    list_id_user = [UserProfile.objects.get(pk=i).user.pk for i in list_id_profile]
-    activities = []
-    for i in list_id_user:
-        try:
-            activities += Activities.objects.get(_id=i).action
-        except DoesNotExist:
-            pass
-    activities.sort(key=lambda a: a.date_time, reverse=True)
-    return activities
