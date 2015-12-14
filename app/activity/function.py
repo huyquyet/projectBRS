@@ -1,6 +1,5 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from django.utils import timezone
 from mongoengine import DoesNotExist
 
 from app.activity.models import Activities, Activity, TypeActivity
@@ -46,30 +45,45 @@ def return_list_activity_user(user_id):
     list_id_profile = Follow.objects.filter(follower=profile_id, level__lt=5).values_list('followee', flat=True)
     list_id_user = [UserProfile.objects.get(pk=i).user.pk for i in list_id_profile]
     activities = []
-    minutes = 30  # Khoảng thời gian cho mỗi lần load
+    minutes = 5  # Khoảng thời gian cho mỗi lần load
     minutes_delta = minutes
     time_now = datetime.now()
-    time_delta = time_now - timedelta(minutes=minutes)
-    while len(activities) < 10:
-        for i in list_id_user:
-            try:
-                lens_action = len(Activities.objects.get(_id=i, action__date_time__gt=time_delta,
-                                                         action__date_time__lt=time_now).action)
-                while lens_action >= 0:
-                    activity = Activities.objects.get(_id=i).action[lens_action - 1]
-                    if (time_now - activity.date_time).total_seconds() < minutes * 60 and (
-                        time_now - activity.date_time).total_seconds() > (minutes - 30) * 60:
+    # time_delta = time_now - timedelta(minutes=minutes)
+    count_action = [0] * len(list_id_user)
+    array_check = [True] * len(list_id_user)
+    for i in range(len(list_id_user)):
+        try:
+            lens_action = len(Activities.objects.get(_id=list_id_user[i]).action)
+            # , action__date_time__gt=time_delta,action__date_time__lt=time_now
+            count_action[i] = lens_action
+            array_check[i] = False
+        except DoesNotExist:
+            array_check[i] = True
+            continue
+
+    while len(activities) <= 10:
+        for i in range(len(list_id_user)):
+            if count_action[i] is not None:
+                while count_action[i] > 0:
+                    activity = Activities.objects.get(_id=list_id_user[i]).action[count_action[i] - 1]
+                    if (time_now - activity.date_time).total_seconds() < minutes_delta * 60 and (
+                                time_now - activity.date_time).total_seconds() > (minutes_delta - 30) * 60:
                         activities.append(activity)
-                        lens_action -= 1
+                        count_action[i] -= 1
+                        if count_action[i] > 0:
+                            array_check[i] = False
+                        else:
+                            array_check[i] = True
                     else:
                         break
-            except DoesNotExist:
+            else:
                 continue
-        minutes_delta += 30
-        time_now = time_delta
-        time_delta = time_now - timedelta(minutes=minutes)
-
+        total_empty = True
+        for is_empty in array_check:
+            if is_empty is False:
+                total_empty = False
+        if total_empty:
+            break
+        minutes_delta += minutes
     activities.sort(key=lambda a: a.date_time, reverse=True)
     return activities
-
-

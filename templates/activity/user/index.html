@@ -3,17 +3,21 @@
 {% block content %}
     chua cos gi
     {% for action in actions %}
-        {{ action.id }}
         <br>
-        {{ action.date_time |date:"H-i-s : d-m-Y"}}
+        ----------------------------- New actvity -----------------------------------
         <br>
-        {{ action.type_activity }}
+        counter - {{ forloop.counter }}
         <br>
-        {{ action.data }}
+        id_user - {{ action.id }}
         <br>
+        time - {{ action.date_time |date:"H-i-s : d-m-Y" }}
+        <br>
+        type - {{ action.type_activity }}
+        <br>
+        data - {{ action.data }}
     {% endfor %}
 
-{#    {{ actions }}#}
-{#    {{ user.pk }}#}
+    {#    {{ actions }}#}
+    {#    {{ user.pk }}#}
 
 {% endblock %}
