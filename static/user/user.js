@@ -306,7 +306,7 @@ function load_more_comment(id_review, start, end, number_comment) {
             number_comment: number_comment
         },
         success: function (json) {
-            var data = json.data;
+            var data = json.data_1;
             for (var i = 0; i < data.length; i++) {
                 $('#display_comment_review_' + id_review).prepend(data[i]);
             }
@@ -326,3 +326,4 @@ function load_more_comment(id_review, start, end, number_comment) {
         }
     })
 }
+

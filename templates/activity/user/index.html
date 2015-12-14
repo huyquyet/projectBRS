@@ -2,22 +2,31 @@
 
 {% block content %}
     chua cos gi
-    {% for action in actions %}
-        <br>
-        ----------------------------- New actvity -----------------------------------
-        <br>
-        counter - {{ forloop.counter }}
-        <br>
-        id_user - {{ action.id }}
-        <br>
-        time - {{ action.date_time |date:"H-i-s : d-m-Y" }}
-        <br>
-        type - {{ action.type_activity }}
-        <br>
-        data - {{ action.data }}
-    {% endfor %}
+    <div id="action">
 
+    </div>
+    {#    <button type="button" class="btn btn-default"> Load more</button>#}
     {#    {{ actions }}#}
     {#    {{ user.pk }}#}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var count_action = [];
+            $.ajax({
+                url: 'activity',
+                type: 'GET',
+{#                data: '',#}
+                success: function (json) {
+                    count_action = json.count_action;
+                    var activity = json.activities;
+                    for (var i = 0; i < activity.length; i++) {
+                        $('#action').append(activity[i])
+                    }
+                },
+                error: function (json) {
 
+                }
+            })
+        });
+    </script>
 {% endblock %}
+

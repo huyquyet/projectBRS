@@ -1,5 +1,8 @@
 from datetime import datetime
 
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+
 from mongoengine import DoesNotExist
 
 from app.activity.models import Activities, Activity, TypeActivity
@@ -40,36 +43,57 @@ def create_activity(user_id, type_activity, object_id, data):
             action(user_id, type_activity, object_id, data)
 
 
-def return_list_activity_user(user_id):
+def return_array_number_action_of_activity(list_id_user):
+    count_action = [0] * len(list_id_user)
+    for i in range(len(list_id_user)):
+        try:
+            """ return num action of user """
+            lens_action = len(Activities.objects.get(_id=list_id_user[i]).action)
+            count_action[i] = lens_action
+        except DoesNotExist:
+            continue
+    return count_action
+
+
+def return_list_activity_user(user_id, time):
     profile_id = UserProfile.objects.get(user__id=user_id).pk
     list_id_profile = Follow.objects.filter(follower=profile_id, level__lt=5).values_list('followee', flat=True)
     list_id_user = [UserProfile.objects.get(pk=i).user.pk for i in list_id_profile]
     activities = []
-    minutes = 5  # Khoảng thời gian cho mỗi lần load
-    minutes_delta = minutes
-    time_now = datetime.now()
-    # time_delta = time_now - timedelta(minutes=minutes)
-    count_action = [0] * len(list_id_user)
-    array_check = [True] * len(list_id_user)
-    for i in range(len(list_id_user)):
-        try:
-            lens_action = len(Activities.objects.get(_id=list_id_user[i]).action)
-            # , action__date_time__gt=time_delta,action__date_time__lt=time_now
-            count_action[i] = lens_action
-            array_check[i] = False
-        except DoesNotExist:
-            array_check[i] = True
-            continue
 
-    while len(activities) <= 10:
+    """  Khoảng thời gian cho mỗi lần load  """
+    minutes = 10
+    minutes_delta = minutes + time
+    time_now = datetime.now()
+
+    """  Đếm số action cho mỗi user  """
+    # count_action = [0] * len(list_id_user)
+
+    """  Array check hết end action   """
+    array_check = [False] * len(list_id_user)
+
+    count_action = return_array_number_action_of_activity(list_id_user)
+
+    """ Lấy data khi nào đủ 5 bản ghi thì thôi """
+    while len(activities) <= 5:
         for i in range(len(list_id_user)):
             if count_action[i] is not None:
+
+                """ Dừng lại khi số phần tử trong mảng = 0  """
                 while count_action[i] > 0:
+
+                    """ Lấy về 1 object action  """
                     activity = Activities.objects.get(_id=list_id_user[i]).action[count_action[i] - 1]
+
+                    """ Kiểm tra xem object lấy về có nằm trong khoảng thời gian cần lấy hay ko """
                     if (time_now - activity.date_time).total_seconds() < minutes_delta * 60 and (
                                 time_now - activity.date_time).total_seconds() > (minutes_delta - 30) * 60:
+                        activity.time = minutes_delta
+                        activity.action = count_action[i]
                         activities.append(activity)
                         count_action[i] -= 1
+
+                        """ Nếu trong mảng vẫn còn phần tử """
                         if count_action[i] > 0:
                             array_check[i] = False
                         else:
@@ -86,4 +110,18 @@ def return_list_activity_user(user_id):
             break
         minutes_delta += minutes
     activities.sort(key=lambda a: a.date_time, reverse=True)
-    return activities
+    activities_r = []
+    for activitie in activities:
+        activitie.id = activitie._id
+        activitie.type_activity = TypeActivity.objects.get(pk=activitie.type_activity).name
+        # activitie.date_time = activitie.date_time
+        activities_r.append(render_to_string('activity/user/action.html', {'actions', activitie}))
+
+    response_data = {
+        'activities': activities_r,
+        'count_action': count_action
+    }
+    # response_data['activities'] = activities_r
+    # response_data['count_action'] = count_action
+    # return activities, list_id_user, count_action
+    return JsonResponse(response_data)

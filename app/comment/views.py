@@ -122,7 +122,7 @@ def load_more_comment(request):
         response_data.append(
             render_to_string('book/comment_review.html', {'review': comment.review, 'comment': comment}))
     data = {
-        'data': response_data
+        'data_1': response_data
     }
     return JsonResponse(data)
 
