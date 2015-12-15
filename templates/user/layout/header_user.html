@@ -15,8 +15,8 @@
     }
 
 </style>
-<div id="site_header">
-    <div class="mainContent">
+<div id="site_header" class="navbar-fixed-top">
+    <div class="mainContent col-lg-8  col-lg-offset-2">
         {#                    <div class="hold-transition skin-blue sidebar-mini">#}
         <div class="col-lg-2">
             <img src="{% static 'user/image/logo.png' %}" class="thumbnail" width="90%" height="47px;">
@@ -25,8 +25,10 @@
             <nav class="navbar navbar-static-top">
                 {#                                role="navigation"#}
                 <ul class=" nav navbar-nav" style="float: right;">
-                    <li><h4><a href="#" style="font-size: 18px;">Home </a>&nbsp;&nbsp;&nbsp;</h4></li>
-                    <li><h4><a href="{% url 'book:book_index' %}" style="font-size: 18px;">Book</a> &nbsp;&nbsp;&nbsp;</h4></li>
+                    <li><h4><a href="{% url 'activity:activity_user_index' %}" style="font-size: 18px;">Home </a>&nbsp;&nbsp;&nbsp;
+                    </h4></li>
+                    <li><h4><a href="{% url 'book:book_index' %}" style="font-size: 18px;">Book</a> &nbsp;&nbsp;&nbsp;
+                    </h4></li>
                     <li><h4>Category &nbsp;&nbsp;&nbsp;</h4></li>
                     <li><h4>Follow &nbsp;&nbsp;&nbsp;</h4></li>
                 </ul>
@@ -37,19 +39,24 @@
                 <nav class="navbar navbar-static-top" role="navigation">
                     <div id="navbar" class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
-                            <li class="dropdown">
+                            <li class="dropdown ">
+                                {#                                <div class="hover-a">#}
                                 <!-- Menu Toggle Button -->
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <span>{{ user.first_name }} {{ user.last_name }}</span><span class="caret"></span>
-
+                                <a href="#" class="dropdown-toggle hover-a" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    <span>{{ user.first_name }} {{ user.last_name }} {{ user.pk }}</span>
+                                    <span class="caret"></span>
                                 </a>
+                                {#                                </div>#}
                                 <ul class="dropdown-menu dropdown_menu">
 
                                     <li class="divider"></li>
                                     <li class="user-header">
                                         <div class="row" style="margin: 0">
                                             <div class="col-xs-4" style="padding:0;">
-                                                <img src="{{ user.user_profile.avata.url|default_if_none:'None' }}" alt="chua cos anh  id = {{ obj.user_profile.user.id }}" width="60px;">
+                                                <img src="{{ user.user_profile.avatar.url|default_if_none:'None' }}"
+                                                     alt="chua cos anh  id = {{ obj.user_profile.user.id }}"
+                                                     width="60px;">
                                             </div>
                                             <div class="col-xs-7" style="padding:0;">
                                                 <p style="font-size: 18px; text-align: left">
@@ -63,24 +70,30 @@
                                             </div>
                                             <div>
                                                 <div class="pull-left">
-                                                    <a href="{% url 'book:user_manager_book' user.username %}" class="btn btn-default btn-flat" style="width: 100px;">Book</a>
+                                                    <a href="{% url 'book:user_manager_book' user.username %}"
+                                                       class="btn btn-default btn-flat" style="width: 100px;">Book</a>
                                                 </div>
                                                 <div class="pull-right">
-                                                    <a href="{% url 'send:send_book_manager' %}" class="btn btn-default btn-flat" style="width: 100px;">Send book</a>
+                                                    <a href="{% url 'send:send_book_manager' %}"
+                                                       class="btn btn-default btn-flat" style="width: 100px;">Send
+                                                        book</a>
                                                 </div>
                                             </div>
                                             <div class="follow">
-                                                <a href="{% url 'user:user_manager_follow' user.username %}" class="btn btn-default btn-flat" style="width: 210px">Follow</a>
+                                                <a href="{% url 'user:user_manager_follow' user.username %}"
+                                                   class="btn btn-default btn-flat" style="width: 210px">Friend</a>
                                             </div>
                                         </div>
                                     </li>
 
                                     <li class="user-footer">
                                         <div class="pull-left">
-                                            <a href="{% url 'user:user_edit_profile' user.username %}" class="btn btn-default btn-flat">Profile</a>
+                                            <a href="{% url 'user:user_edit_profile' user.username %}"
+                                               class="btn btn-default btn-flat">Profile</a>
                                         </div>
                                         <div class="pull-right">
-                                            <a href="{% url 'user:user_logout' %}" class="btn btn-default btn-flat">Sign out</a>
+                                            <a href="{% url 'user:user_logout' %}" class="btn btn-default btn-flat">Sign
+                                                out</a>
                                         </div>
                                     </li>
                                 </ul>
@@ -92,7 +105,8 @@
                     </div>
                 </nav>
             {% else %}
-                <h5><a href="{% url 'user:user_register' %}" class="text-danger ">Register</a> &nbsp;&nbsp;&nbsp;<a href="{% url 'user:user_login' %}" class="text-success">Sign in</a></h5>
+                <h5><a href="{% url 'user:user_register' %}" class="text-danger ">Register</a> &nbsp;&nbsp;&nbsp;<a
+                        href="{% url 'user:user_login' %}" class="text-success">Sign in</a></h5>
             {% endif %}
         </div>
     </div>

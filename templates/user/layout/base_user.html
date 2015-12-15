@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+{% load swampdragon_tags %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"/>
+
     <link rel="stylesheet" href="{% static 'user/style_user.css' %}"/>
+    {#    <link href="{% static 'style.css' %}" rel=" stylesheet" type="text/css"/>#}
     {#    <!--<script rel="stylesheet"  href="{% static 'bootstrap/js/bootstrap.min.js' %}"/></script>-->#}
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -12,17 +15,38 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
     {#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>#}
-    {#    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>#}
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>    #}
+    {# <script src="{% static 'jquery.js' %}"></script>
+
     <!-- jQuery 2.1.4 -->
+    {% swampdragon_settings %}
     <script src="{% static 'admin/plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
+
+    <script src="{% static 'user/user.js' %}"></script>
     <!-- Bootstrap 3.3.5 -->
     <script src=" {% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <!-- AdminLTE App -->
-    <script src="{% static 'admin/dist/js/app.min.js' %}"></script>
+    <!--<script src="{% static 'admin/dist/js/app.min.js' %}"></script>   -->
     <!-- Theme style -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %} Trang index {% endblock %}</title>
+
+
+    <script type="text/javascript" src="{% static 'user/angular.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'swampdragon/js/dist/swampdragon.js' %}"></script>
+
+
+    <script type="text/javascript" src="{% static 'swampdragon/js/vendor/sockjs-0.3.4.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'swampdragon/js/legacy/swampdragon-vanilla.js' %}"></script>
+    <script type="text/javascript" src="{% static 'swampdragon/js/dist/datamapper.js' %}"></script>
+
+    <script type="text/javascript" src="https://127.0.0.1:9999/settings.js"></script>
+
+    <!-- notifications -->
+     {#<script type="text/javascript" src="{% static 'bookdetail.js' %}"></script>   #}
 </head>
 <body>
 <div class="container-fluid ">
@@ -31,7 +55,7 @@
             {% include 'user/layout/header_user.html' %}
         </header>
 
-        <div class="col-lg-12 brs-content">
+        <div class="col-lg-8 col-lg-offset-2 brs-content">
             <section>
                 <div class="col-lg-9">
                     {% block content %}

@@ -19,10 +19,11 @@ from projectBRS import settings
 
 urlpatterns = [
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': settings.DEBUG}),
-    url(r'^admin/', include('admin.urls', namespace='admin')),
-    url(r'^user/', include('user.urls', namespace='user')),
-    url(r'^book/', include('book.urls', namespace='book')),
-    url(r'^review/', include('review.urls', namespace='review')),
-    url(r'^comment/', include('comment.urls', namespace='comment')),
-    url(r'^send/', include('sendbybook.urls', namespace='send')),
+    url(r'^admin/', include('app.admin.urls', namespace='admin')),
+    url(r'^user/', include('app.user.urls', namespace='user')),
+    url(r'^book/', include('app.book.urls', namespace='book')),
+    url(r'^review/', include('app.review.urls', namespace='review')),
+    url(r'^comment/', include('app.comment.urls', namespace='comment')),
+    url(r'^send/', include('app.sendbybook.urls', namespace='send')),
+    url(r'^home/', include('app.activity.urls', namespace='activity')),
 ]

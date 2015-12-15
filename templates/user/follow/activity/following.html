@@ -8,8 +8,8 @@
             <div class="col-lg-6 thumbnail" style="width: 47%; margin-left: 2%; ">
                 <div class="user-follow">
                     <div class="col-lg-4">
-                        <a href="{% url 'user:user_home_page' obj.username %}"> <img src="{{ obj.user_profile.avata.url }}" class="thumbnail" width="100px" height="110px" style="margin-bottom: 5px;"
-                                                                                     alt="Avata"></a>
+                        <a href="{% url 'user:user_home_page' obj.username %}"> <img src="{{ obj.user_profile.avatar.url }}" class="thumbnail" width="100px" height="110px" style="margin-bottom: 5px;"
+                                                                                     alt="avatar"></a>
                     </div>
                     <div class="col-lg-8">
                         <div class="name-user text-success"><a href="{% url 'user:user_home_page' obj.username %}"><strong style="font-size: 18px;">{{ obj.first_name }} {{ obj.last_name }}</strong></a></div>

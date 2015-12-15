@@ -40,14 +40,17 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+
     # .models.Site',
-    'admin',
-    'user',
-    'book',
-    'sendbybook',
-    'category',
-    'review',
-    'comment',
+    'app.admin',
+    'app.user',
+    'app.book',
+    'app.sendbybook',
+    'app.category',
+    'app.review',
+    'app.comment',
+    'app.activity',
+    'swampdragon',
 
     # login facebook
     # 'allauth',
@@ -100,7 +103,18 @@ WSGI_APPLICATION = 'projectBRS.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-import dj_database_url
+# import dj_database_url
+
+# MongoDB settings
+MONGODB_DATABASES = {
+    'default': {'name': 'BRS'}
+}
+DJANGO_MONGOENGINE_OVERRIDE_ADMIN = True
+
+SESSION_ENGINE = 'django_mongoengine.sessions'
+
+DATABASE_ROUTERS = ['projectBRS.modelrouter.DatabaseAppsRouter', ]
+DATABASE_APPS_MAPPING = {'no_sql': 'no_sql'}
 
 DATABASES = {
     'default': {
@@ -110,9 +124,13 @@ DATABASES = {
         'PASSWORD': 'hoada921',
         'HOST': '127.0.0.1',
         'PORT': '3306',
+
+    },
+    'no_sql': {
+        'ENGINE': 'django.db.backends.dummy',
     }
 }
-# DATABASES['default'] = dj_database_url.config()
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -125,7 +143,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -151,4 +169,14 @@ LOGIN_URL = '/user/login'
 # SITE_ID = 1
 
 BOOK_DIR = 'books'
-AVATA_DIR = 'avata'
+
+AVATAR_DIR = 'avatar'
+
+COVER_DIR = 'cover'
+
+# APPEND_SLASH = False
+
+# SwampDragon settings
+SWAMP_DRAGON_CONNECTION = ('swampdragon.connections.sockjs_connection.DjangoSubscriberConnection', '/data')
+
+DRAGON_URL = 'http://127.0.0.1:9999/'
