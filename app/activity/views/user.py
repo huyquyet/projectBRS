@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
+
 from django.views.generic import TemplateView
 
 from app.activity.function import return_array_number_action_of_activity
@@ -52,13 +53,10 @@ def return_list_activity_user(request):
     minutes = 1
     minutes_delta = minutes
     time_now = datetime.now()
-
-    """  Đếm số action cho mỗi user  """
-    # count_action = [0] * len(list_id_user)
-
     """  Array check hết end action   """
     array_check = [False] * len(list_id_user)
 
+    """  Đếm số action cho mỗi user  """
     count_action = return_array_number_action_of_activity(list_id_user)
 
     """ Lấy data khi nào đủ 5 bản ghi thì thôi """
@@ -68,26 +66,29 @@ def return_list_activity_user(request):
             if count_action[i] is not None:
 
                 """ Dừng lại khi số phần tử trong mảng = 0  """
-                while count_action[i] > 0:
+                # while count_action[i] > 0:
 
-                    """ Lấy về 1 object action  """
-                    activity = Activities.objects.get(_id=list_id_user[i]).action[count_action[i] - 1]
+                """ Lấy về 1 object action  """
+                activities_1 = Activities.objects.get(_id=list_id_user[i])
+                activity1 = activities_1.action.filter(_id=5)[0].date_time
+                activity = activities_1.action.filter(date_time__gt=time_now)
+                # [count_action[i] - 1]
 
-                    """ Kiểm tra xem object lấy về có nằm trong khoảng thời gian cần lấy hay ko """
-                    if (time_now - activity.date_time).total_seconds() < minutes_delta * 60 and (
-                                time_now - activity.date_time).total_seconds() > (minutes_delta - 30) * 60:
-                        activity.time = minutes_delta
-                        activity.action = count_action[i]
-                        activities.append(activity)
-                        count_action[i] -= 1
+                """ Kiểm tra xem object lấy về có nằm trong khoảng thời gian cần lấy hay ko """
+                if (time_now - activity.date_time).total_seconds() < minutes_delta * 60 and (
+                            time_now - activity.date_time).total_seconds() > (minutes_delta - 30) * 60:
+                    activity.time = minutes_delta
+                    activity.action = count_action[i]
+                    activities.append(activity)
+                    count_action[i] -= 1
 
-                        """ Nếu trong mảng vẫn còn phần tử """
-                        if count_action[i] > 0:
-                            array_check[i] = False
-                        else:
-                            array_check[i] = True
+                    """ Nếu trong mảng vẫn còn phần tử """
+                    if count_action[i] > 0:
+                        array_check[i] = False
                     else:
-                        break
+                        array_check[i] = True
+                else:
+                    break
             else:
                 continue
         total_empty = True
@@ -105,16 +106,11 @@ def return_list_activity_user(request):
     for i in range(len(activities)):
         activities[i].id = activities[i]._id
         activities[i].type_activity = TypeActivity.objects.get(pk=activities[i].type_activity).name
-        # activitie.date_time = activitie.date_time
         activities_r.append(render_to_string('activity/user/action.html', {'action': activities[i], 'i': i}))
-        # a = render_to_string('activity/user/action.html', {'action': activities[i]})
-        # activities_r.append(activity)
 
     response_data = {
         'activities': activities_r,
         'count_action': count_action
     }
-    # response_data['activities'] = activities_r
-    # response_data['count_action'] = count_action
-    # return activities, list_id_user, count_action
+
     return JsonResponse(response_data)

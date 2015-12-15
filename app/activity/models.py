@@ -2,8 +2,8 @@
 
 from django.db import models
 from django.utils import timezone
-from mongoengine import IntField, EmbeddedDocument, DateTimeField, StringField, EmbeddedDocumentField, \
-    BooleanField, DictField, ListField
+from mongoengine import IntField, EmbeddedDocument, DateTimeField, StringField, BooleanField, EmbeddedDocumentListField, \
+    ListField, EmbeddedDocumentField
 
 from django_mongoengine.utils.module import Document
 
@@ -46,7 +46,8 @@ class DictKey(EmbeddedDocument):
 
 class Activities(Document):
     _id = IntField()
-    action = ListField(EmbeddedDocumentField(Activity))
+    action = EmbeddedDocumentListField(Activity)
+    # action = ListField(EmbeddedDocumentField(Activity))
     # action = DictField()
 
     class Meta:
