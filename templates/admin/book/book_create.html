@@ -15,14 +15,6 @@
                 {% csrf_token %}
                 <div style=""></div>
                 {{ form.as_ul }}
-                {#                {% for field in form %}#}
-                {#                    <div class="form-group {% if field.errors %} has-error {% endif %} has-feedback">#}
-                {#                        <span class="text-success">{{ field.name }}</span>#}
-                {#                        <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="form-control" placeholder="{{ field.name }}">#}
-                {#                        <span class="help-block">{{ field.errors }}</span>#}
-                {#                    </div>#}
-                {##}
-                {#                {% endfor %}#}
                 <button role="button" type="submit" class="btn btn-info">Create</button>
                 <a href="{% url 'admin:admin_book_index' %}" role="button" class="btn btn-danger">Cancel</a>
             </form>
