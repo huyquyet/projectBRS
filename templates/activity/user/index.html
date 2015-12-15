@@ -2,21 +2,29 @@
 
 {% block content %}
     chua cos gi
+    <div id="count_action">
+
+    </div>
     <div id="action">
 
     </div>
     {#    <button type="button" class="btn btn-default"> Load more</button>#}
     {#    {{ actions }}#}
     {#    {{ user.pk }}#}
+
+{% endblock %}
+{% block js %}
     <script type="text/javascript">
         $(document).ready(function () {
             var count_action = [];
             $.ajax({
                 url: 'activity',
                 type: 'GET',
-{#                data: '',#}
+                {#                data: '',#}
                 success: function (json) {
                     count_action = json.count_action;
+                     $('#count_action').append(count_action)    ;
+
                     var activity = json.activities;
                     for (var i = 0; i < activity.length; i++) {
                         $('#action').append(activity[i])

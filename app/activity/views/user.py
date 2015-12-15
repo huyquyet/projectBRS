@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView
+from django.views.generic import TemplateView
 
 from app.activity.function import return_array_number_action_of_activity
 from app.activity.models import Activities, TypeActivity
@@ -14,7 +14,7 @@ from app.user.models import UserProfile, Follow
 __author__ = 'FRAMGIA\nguyen.huy.quyet'
 
 
-class ActivityUserIndex(BaseView, ListView):
+class ActivityUserIndex(BaseView, TemplateView):
     model = Activities
     template_name = 'activity/user/index.html'
     # context_object_name = 'list_activity'
@@ -23,9 +23,9 @@ class ActivityUserIndex(BaseView, ListView):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-    def get_queryset(self):
-        self.queryset = Activities.objects.get(_id=self.request.user.pk)
-        return self.queryset
+    # def get_queryset(self):
+    #     self.queryset = Activities.objects.get(_id=self.request.user.pk)
+    #     return self.queryset
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -49,7 +49,7 @@ def return_list_activity_user(request):
     activities = []
 
     """  Khoảng thời gian cho mỗi lần load  """
-    minutes = 10
+    minutes = 1
     minutes_delta = minutes
     time_now = datetime.now()
 
@@ -62,7 +62,8 @@ def return_list_activity_user(request):
     count_action = return_array_number_action_of_activity(list_id_user)
 
     """ Lấy data khi nào đủ 5 bản ghi thì thôi """
-    while len(activities) <= 5:
+    time_now_1 = datetime.now()
+    while len(activities) <= 20:
         for i in range(len(list_id_user)):
             if count_action[i] is not None:
 
@@ -96,13 +97,18 @@ def return_list_activity_user(request):
         if total_empty:
             break
         minutes_delta += minutes
+    print(minutes_delta)
+    time_now_2 = datetime.now()
+    print(time_now_2 - time_now_1)
     activities.sort(key=lambda a: a.date_time, reverse=True)
     activities_r = []
-    for activity in activities:
-        activity.id = activity._id
-        activity.type_activity = TypeActivity.objects.get(pk=activity.type_activity).name
+    for i in range(len(activities)):
+        activities[i].id = activities[i]._id
+        activities[i].type_activity = TypeActivity.objects.get(pk=activities[i].type_activity).name
         # activitie.date_time = activitie.date_time
-        activities_r.append(render_to_string('activity/user/action.html', {'actions', activity}))
+        activities_r.append(render_to_string('activity/user/action.html', {'action': activities[i], 'i': i}))
+        # a = render_to_string('activity/user/action.html', {'action': activities[i]})
+        # activities_r.append(activity)
 
     response_data = {
         'activities': activities_r,

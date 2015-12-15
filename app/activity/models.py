@@ -1,8 +1,9 @@
 # Create your models here.
 
 from django.db import models
-from mongoengine import IntField, ListField, EmbeddedDocument, DateTimeField, StringField, EmbeddedDocumentField, \
-    BooleanField
+from django.utils import timezone
+from mongoengine import IntField, EmbeddedDocument, DateTimeField, StringField, EmbeddedDocumentField, \
+    BooleanField, DictField, ListField
 
 from django_mongoengine.utils.module import Document
 
@@ -39,9 +40,14 @@ class Activity(EmbeddedDocument):
         app_label = 'no_sql'
 
 
+class DictKey(EmbeddedDocument):
+    date_time = DateTimeField(timezone.now)
+
+
 class Activities(Document):
     _id = IntField()
     action = ListField(EmbeddedDocumentField(Activity))
+    # action = DictField()
 
     class Meta:
         app_label = 'no_sql'

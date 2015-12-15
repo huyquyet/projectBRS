@@ -2,7 +2,6 @@ from datetime import datetime
 
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-
 from mongoengine import DoesNotExist
 
 from app.activity.models import Activities, Activity, TypeActivity
@@ -109,19 +108,18 @@ def return_list_activity_user(user_id, time):
         if total_empty:
             break
         minutes_delta += minutes
+    print(minutes_delta)
     activities.sort(key=lambda a: a.date_time, reverse=True)
     activities_r = []
-    for activitie in activities:
-        activitie.id = activitie._id
-        activitie.type_activity = TypeActivity.objects.get(pk=activitie.type_activity).name
-        # activitie.date_time = activitie.date_time
-        activities_r.append(render_to_string('activity/user/action.html', {'actions', activitie}))
+    for i in range(len(activities)):
+        activities[i].id = activities[i]._id
+        activities[i].type_activity = TypeActivity.objects.get(pk=activities[i].type_activity).name
+        print(activities[i].id)
+        activities_r.append(render_to_string('activity/user/action.html', {'actions', activities[i]}))
+    print(activities_r)
 
     response_data = {
         'activities': activities_r,
         'count_action': count_action
     }
-    # response_data['activities'] = activities_r
-    # response_data['count_action'] = count_action
-    # return activities, list_id_user, count_action
     return JsonResponse(response_data)
