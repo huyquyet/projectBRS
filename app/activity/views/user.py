@@ -49,7 +49,7 @@ def return_list_activity_user(request):
     activities = []
 
     """  Khoảng thời gian cho mỗi lần load  """
-    minutes = 1
+    minutes = 240
     minutes_delta = minutes
     time_now = datetime.now()
 
@@ -75,7 +75,7 @@ def return_list_activity_user(request):
 
                     """ Kiểm tra xem object lấy về có nằm trong khoảng thời gian cần lấy hay ko """
                     if (time_now - activity.date_time).total_seconds() < minutes_delta * 60 and (
-                                time_now - activity.date_time).total_seconds() > (minutes_delta - 30) * 60:
+                                time_now - activity.date_time).total_seconds() > (minutes_delta - minutes) * 60:
                         activity.time = minutes_delta
                         activity.action = count_action[i]
                         activities.append(activity)
@@ -97,7 +97,7 @@ def return_list_activity_user(request):
         if total_empty:
             break
         minutes_delta += minutes
-    print(minutes_delta)
+    print(minutes_delta/minutes)
     time_now_2 = datetime.now()
     print(time_now_2 - time_now_1)
     activities.sort(key=lambda a: a.date_time, reverse=True)
