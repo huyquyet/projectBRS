@@ -71,7 +71,7 @@ def return_list_activity_user(request):
                 activities_1 = Activities.objects.get(_id=list_id_user[i])
                 activity1 = activities_1.action.filter(_id=5)[0].date_time
                 try:
-                    activity = activities_1.action.filter({"date_time": {"$gt": time_now}})
+                    activity = activities_1.action.filter(fuck_datetime=True)
                 except Exception as err:
                     raise (type(Exception))
                     # [count_action[i] - 1]
