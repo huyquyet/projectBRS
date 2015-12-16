@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
-
 from django.views.generic import TemplateView
 
 from app.activity.function import return_array_number_action_of_activity
@@ -71,8 +70,11 @@ def return_list_activity_user(request):
                 """ Lấy về 1 object action  """
                 activities_1 = Activities.objects.get(_id=list_id_user[i])
                 activity1 = activities_1.action.filter(_id=5)[0].date_time
-                activity = activities_1.action.filter(date_time__gt=time_now)
-                # [count_action[i] - 1]
+                try:
+                    activity = activities_1.action.filter({"date_time": {"$gt": time_now}})
+                except Exception as err:
+                    raise (type(Exception))
+                    # [count_action[i] - 1]
 
                 """ Kiểm tra xem object lấy về có nằm trong khoảng thời gian cần lấy hay ko """
                 if (time_now - activity.date_time).total_seconds() < minutes_delta * 60 and (
