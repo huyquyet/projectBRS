@@ -2,11 +2,14 @@ from django.db import models
 
 # Create your models here.
 from django.utils import timezone
+from swampdragon.models import SelfPublishModel
+from app.book.serializers import MoreCommentSerializer
 from app.review.models import Review
 from app.user.models import UserProfile
 
 
-class CommentReview(models.Model):
+class CommentReview(SelfPublishModel, models.Model):
+    serializer_class = MoreCommentSerializer
     review = models.ForeignKey(Review, related_name='comment')
     user_profile = models.ForeignKey(UserProfile, related_name='comment_review')
     content = models.TextField()

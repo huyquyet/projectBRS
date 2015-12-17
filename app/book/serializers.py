@@ -1,6 +1,5 @@
 from swampdragon.serializers.model_serializer import ModelSerializer
-
-from app.comment import CommentReview
+from app.comment.models import CommentReview
 
 __author__ = 'FRAMGIA\nguyen.huy.quyet'
 

@@ -1,17 +1,25 @@
-var commentList = document.getElementById('');
+window.addEventListener('load', function () {
+    Notification.requestPermission(function (status) {
+        // This allows to use Notification.permission with Chrome/Safari
+        if (Notification.permission !== status) {
+            Notification.permission = status;
+        }
+    });
+});
 
-// new channel message received
+// Subscribe once swampdragon is connected
+swampdragon.open(function () {
+// Once the connection is open subscribe to notification
+    swampdragon.subscribe('comment_review', 'comment');
+});
+
+
+// New channel message received
 swampdragon.onChannelMessage(function (channels, message) {
     // add new comment
     addCommentReview(message.data);
 });
 
-//SwampDragon connection open
-
-swampdragon.open(function () {
-// Once the connection is open subscribe to notification
-    swampdragon.subscribe('commentreview', 'commentreview');
-});
 
 // Add new  comment
 
@@ -19,9 +27,9 @@ function addCommentReview(data) {
     if (window.Notification && Notification.permission === 'granted') {
         new Notification(data);
     }
+    var commentList = document.getElementById('display_comment_review_' + data.id);
 
     $('#display_comment_review_' + data.id).append(data);
-
 
 }
 //
