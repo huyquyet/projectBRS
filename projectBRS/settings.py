@@ -52,6 +52,8 @@ INSTALLED_APPS = (
     'app.activity',
     'swampdragon',
 
+    'rest_framework',
+
     # login facebook
     # 'allauth',
     # 'allauth.account',
@@ -59,6 +61,18 @@ INSTALLED_APPS = (
     # ... include the providers you want to enable:
     # 'allauth.socialaccount.providers.facebook',
 )
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+
+    # Using generics view
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination'
+}
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`

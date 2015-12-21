@@ -39,4 +39,12 @@ urlpatterns = [
     url(r'^(?P<username>[\w-]+)/book/read$', views.BookManagerReadView, name='user_manager_book_read'),
     url(r'^(?P<username>[\w-]+)/book/reading$', views.BookManagerReadingView, name='user_manager_book_reading'),
     url(r'^(?P<username>[\w-]+)/book/favorite$', views.BookManagerFavoriteView, name='user_manager_book_favorite'),
+
+    #######################################
+    #######################################
+    # API Book
+    url(r'^api$', views.Book_api.as_view(), name='api_list_book'),
+    url(r'^api_list$', views.Book_API_ListView, name='api__generics_list_book'),
+    url(r'^api_create$', views.Book_API_CreateView, name='api__generics_create_book'),
+
 ]

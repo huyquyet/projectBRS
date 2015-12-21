@@ -1,16 +1,22 @@
 # Create your views here.
 from django.utils import timezone
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.generic import ListView, DetailView
 from django.views.generic.detail import SingleObjectMixin
+from rest_framework import generics
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from app.activity.function import create_activity
 from app.base.views import BaseView
 from app.book.models import Book, Rating, ReadReading, Favorite
+from app.book.serializers import BookSerializer
+from app.core.pagjnation import StandardResultsSetPagination
 from app.review.views import return_all_of_book
 from app.user.models import Follow
 
@@ -424,3 +430,36 @@ class BookManagerFavorite(BaseView, SingleObjectMixin, ListView):
 
 
 BookManagerFavoriteView = BookManagerFavorite.as_view()
+
+"""
+---------------------------------------------------------------------------------------
+API Book
+---------------------------------------------------------------------------------------
+"""
+
+
+class Book_api(APIView):
+    pagination_class = StandardResultsSetPagination
+
+    @permission_classes((IsAuthenticated,))
+    def get(self, request, *args, **kwargs):
+        book = Book.objects.all()
+        serializers = BookSerializer(book, many=True)
+        return Response(serializers.data)
+
+
+class Book_API_List(generics.ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    pagination_class = StandardResultsSetPagination
+
+
+Book_API_ListView = Book_API_List.as_view()
+
+
+class Book_API_Create(generics.CreateAPIView):
+    permission_classes = (IsAdminUser,)
+    serializer_class = BookSerializer
+
+
+Book_API_CreateView = Book_API_Create.as_view()
